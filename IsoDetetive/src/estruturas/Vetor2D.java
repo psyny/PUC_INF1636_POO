@@ -1,4 +1,4 @@
-package Ferramentas;
+package estruturas;
 
 public class Vetor2D {
 	public double x;
