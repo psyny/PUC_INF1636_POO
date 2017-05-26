@@ -1,4 +1,5 @@
 import estruturas.*;
+import interfaceGrafica.JanelaPrincipal;
 import isometrico.*;
 
 public class APP {
@@ -20,6 +21,8 @@ public class APP {
 		carVet_novo = Transformacoes.obterVetorCartesiano( isoVet );		
 		System.out.println(carVet_novo.x + "\t|\t" + carVet_novo.y);
 		
+		
+		JanelaPrincipal.inicializar();
 		
 	}
 
