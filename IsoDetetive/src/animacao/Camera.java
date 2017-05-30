@@ -17,9 +17,9 @@ public class Camera extends JScrollPane implements Runnable {
 	private Thread 					cameraThread;
 	private ArrayList<Component>  	scenes;
 	
-	private Vetor2D					cameraTarget;
-	private Vetor2D					cameraPosition;
-	private Vetor2D					cameraValidPosition;
+	private Vetor2D_double					cameraTarget;
+	private Vetor2D_double					cameraPosition;
+	private Vetor2D_double					cameraValidPosition;
 	private double					maxMoveSpeed = 50;
 	private double					minMoveSpeed = 0.5;
 	
@@ -35,9 +35,9 @@ public class Camera extends JScrollPane implements Runnable {
 		super();
 		this.scenes = new ArrayList<Component>();
 		this.scenes.add(viewPort);
-		this.cameraTarget = new Vetor2D( x , y );
-		this.cameraPosition = new Vetor2D( x , y );
-		this.cameraValidPosition = new Vetor2D( 0 , 0 );
+		this.cameraTarget = new Vetor2D_double( x , y );
+		this.cameraPosition = new Vetor2D_double( x , y );
+		this.cameraValidPosition = new Vetor2D_double( 0 , 0 );
 		this.setViewportView( viewPort );
 		this.getViewport().setScrollMode(JViewport.SIMPLE_SCROLL_MODE); // ???
 		//this.setHorizontalScrollBarPolicy( JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS );
@@ -68,8 +68,8 @@ public class Camera extends JScrollPane implements Runnable {
     	
     	if( this.fixedTarget == true ) {
 	    	// Set Position
-	    	Vetor2D offset = new Vetor2D( this.getSize().getWidth() / 2 , this.getSize().getHeight() / 2 );
-	    	Vetor2D effectiveTarget = new Vetor2D( this.cameraTarget.x - offset.x , this.cameraTarget.y - offset.y );
+	    	Vetor2D_double offset = new Vetor2D_double( this.getSize().getWidth() / 2 , this.getSize().getHeight() / 2 );
+	    	Vetor2D_double effectiveTarget = new Vetor2D_double( this.cameraTarget.x - offset.x , this.cameraTarget.y - offset.y );
 	    	
 			// Boundaries
 			if( effectiveTarget.x < 0 ) {
@@ -89,9 +89,9 @@ public class Camera extends JScrollPane implements Runnable {
 	    		this.cameraPosition.y = effectiveTarget.y;
 			} else {
 		    	// Calculate Move Speed
-		    	Vetor2D distance = this.cameraPosition.getDistanceToVector( effectiveTarget );
+		    	Vetor2D_double distance = this.cameraPosition.getDistanceToVector( effectiveTarget );
 		    	if( distance.getModulus() > 1 ) {
-		    		Vetor2D moveSpeed = new Vetor2D( distance.x / 50 , distance.y / 50 );
+		    		Vetor2D_double moveSpeed = new Vetor2D_double( distance.x / 50 , distance.y / 50 );
 		    		distance.normalize();
 		    		int xDir = 1;
 		    		int yDir = 1;
@@ -179,8 +179,8 @@ public class Camera extends JScrollPane implements Runnable {
 	
 	public void setPositionCenteredOn( int x , int y ) {
     	// Set Position
-    	Vetor2D offset = new Vetor2D( this.getSize().getWidth() / 2 , this.getSize().getHeight() / 2 );
-    	Vetor2D effectivePosition = new Vetor2D( x - offset.x , y - offset.y );
+    	Vetor2D_double offset = new Vetor2D_double( this.getSize().getWidth() / 2 , this.getSize().getHeight() / 2 );
+    	Vetor2D_double effectivePosition = new Vetor2D_double( x - offset.x , y - offset.y );
     	
 		// Boundaries
 		if( effectivePosition.x < 0 ) {

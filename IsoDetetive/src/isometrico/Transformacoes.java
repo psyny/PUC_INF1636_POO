@@ -1,6 +1,6 @@
 package isometrico;
 
-import estruturas.Vetor2D;
+import estruturas.Vetor2D_double;
 
 public class Transformacoes {
 	private static double rotacaoZ;
@@ -74,8 +74,8 @@ public class Transformacoes {
 	}
 	
 	// Transforma a posição cartesiana na posição isometrica equivalente
-	static public Vetor2D obterVetorIsometrico( Vetor2D carVet ) {
-		Vetor2D isoVet = new Vetor2D( 0 , 0 );
+	static public Vetor2D_double obterVetorIsometrico( Vetor2D_double carVet ) {
+		Vetor2D_double isoVet = new Vetor2D_double( 0 , 0 );
 		
 		// Multiplicando o vetor recebido pela matriz de transformação calculada
 		isoVet.x = ( carVet.x * Transformacoes.transMatriz_toIso[0][0] ) + ( carVet.y * Transformacoes.transMatriz_toIso[0][1] );
@@ -89,13 +89,13 @@ public class Transformacoes {
 	}
 	
 	// Transforma a posição cartesiana na posição isometrica equivalente
-	static public Vetor2D obterVetorIsometrico( double x , double y ) {
-		return Transformacoes.obterVetorIsometrico( new Vetor2D( x , y ) );
+	static public Vetor2D_double obterVetorIsometrico( double x , double y ) {
+		return Transformacoes.obterVetorIsometrico( new Vetor2D_double( x , y ) );
 	}
 	
 	// Transforma a posição cartesiana na posição isometrica equivalente
-	static public Vetor2D obterVetorCartesiano( Vetor2D isoVet ) {
-		Vetor2D carVet = new Vetor2D( 0 , 0 );
+	static public Vetor2D_double obterVetorCartesiano( Vetor2D_double isoVet ) {
+		Vetor2D_double carVet = new Vetor2D_double( 0 , 0 );
 		
 		// Multiplicando o vetor recebido pela matriz de transformação calculada
 		carVet.x = ( isoVet.x * Transformacoes.transMatriz_fromIso[0][0] ) + ( isoVet.y * Transformacoes.transMatriz_fromIso[0][1] );
@@ -109,22 +109,22 @@ public class Transformacoes {
 	}
 	
 	// Obtem caixa delimitadora de um vetor cartesiano transformado para isometrico
-	static public Vetor2D obterCaixaDelimitadora( Vetor2D carVet ) {
+	static public Vetor2D_double obterCaixaDelimitadora( Vetor2D_double carVet ) {
 		// Captura diagonal primeira e secundaria do vetor passado
-		Vetor2D carVet_DiagonalPrimaria = carVet;
-		Vetor2D carVet_DiagonalSecundaria = new Vetor2D( carVet.x * -1 , carVet.y );
+		Vetor2D_double carVet_DiagonalPrimaria = carVet;
+		Vetor2D_double carVet_DiagonalSecundaria = new Vetor2D_double( carVet.x * -1 , carVet.y );
 			
 		// Calcula suas transformações para o isometrico
-		Vetor2D isoVet_A = Transformacoes.obterVetorIsometrico( carVet_DiagonalPrimaria );
+		Vetor2D_double isoVet_A = Transformacoes.obterVetorIsometrico( carVet_DiagonalPrimaria );
 		isoVet_A.x = Math.abs( isoVet_A.x );
 		isoVet_A.y = Math.abs( isoVet_A.x );
 		
-		Vetor2D isoVet_B = Transformacoes.obterVetorIsometrico( carVet_DiagonalSecundaria );
+		Vetor2D_double isoVet_B = Transformacoes.obterVetorIsometrico( carVet_DiagonalSecundaria );
 		isoVet_B.x = Math.abs( isoVet_B.x );
 		isoVet_B.y = Math.abs( isoVet_B.x );
 		
 		// Obtem maiores componentes entre as duas diagonais e cria um novo vetor
-		Vetor2D isoVet = new Vetor2D( 0 , 0 );
+		Vetor2D_double isoVet = new Vetor2D_double( 0 , 0 );
 		if( isoVet_A.x > isoVet_B.x ) {
 			isoVet.x = isoVet_A.x;
 		}
@@ -143,7 +143,7 @@ public class Transformacoes {
 	}
 	
 	// Obtem caixa delimitadora de um vetor cartesiano transformado para isometrico
-	static public Vetor2D obterCaixaDelimitadora( double x , double y ) {
-		return Transformacoes.obterCaixaDelimitadora( new Vetor2D( x , y ) );
+	static public Vetor2D_double obterCaixaDelimitadora( double x , double y ) {
+		return Transformacoes.obterCaixaDelimitadora( new Vetor2D_double( x , y ) );
 	}
 }
