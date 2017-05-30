@@ -48,7 +48,7 @@ public abstract class Sprite extends JPanel {
 		parent.remove( this );
 	}
 	
-	public Vetor2D_double getDimension() {
+	public Vetor2D_int getDimension() {
 		return this.lastFrame.size;
 	}
 	
@@ -63,10 +63,10 @@ public abstract class Sprite extends JPanel {
     	this.setPreferredSize( new Dimension( sizeX , sizeY ) );
 
         g.drawImage( this.lastFrame.image , 0 , 0 , sizeX , sizeY , 
-        		(int)this.lastFrame.origin.x, 
-        		(int)this.lastFrame.origin.y,
-        		(int)(this.lastFrame.size.x + this.lastFrame.origin.x) , 
-        		(int)(this.lastFrame.size.y + this.lastFrame.origin.y),
+        		this.lastFrame.origin.x, 
+        		this.lastFrame.origin.y,
+        		this.lastFrame.size.x + this.lastFrame.origin.x, 
+        		this.lastFrame.size.y + this.lastFrame.origin.y,
         		null);
     }
     

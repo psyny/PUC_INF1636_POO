@@ -1,10 +1,10 @@
 package estruturas;
 
 public class Vetor2D_int {
-	public double x;
-	public double y;
+	public int x;
+	public int y;
 	
-	public Vetor2D_int( double x , double y ) {
+	public Vetor2D_int( int x , int y ) {
 		this.x = x;
 		this.y = y;
 	}
@@ -26,8 +26,8 @@ public class Vetor2D_int {
 		double abs = this.getModulus();
 		
 		if( abs > 0 ) {
-			this.x = this.x / abs;
-			this.y = this.y / abs;
+			this.x = (int)(this.x / abs);
+			this.y = (int)(this.y / abs);
 		} else {
 			this.x = 0;
 			this.y = 0;
