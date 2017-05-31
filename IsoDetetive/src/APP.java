@@ -1,10 +1,10 @@
+import animacao.*;
 import estruturas.*;
-import interfaceGrafica.JanelaPrincipal;
-import isometrico.*;
+import interfaceGrafica.*;
 
 public class APP {
 	public static void main(String[] args) {
-		Transformacoes.inicializar( 45 , 60 );
+		Isometria.inicializar( 45 , 60 );
 		
 		JanelaPrincipal.inicializar();
 		

@@ -1,49 +1,53 @@
-package isometrico;
+package animacao;
 
 import estruturas.Vetor2D_double;
 
-public class Transformacoes {
+public class Isometria {
 	private static double rotacaoZ;
 	private static double rotacaoX;
 	private static double escala;
 	private static double[][] transMatriz_toIso;
 	private static double[][] transMatriz_fromIso;
 	private static boolean inicializado = false;
+	
+	{
+		Isometria.inicializar(0, 0);
+	}
 
 	
 	static public void inicializar( double rotacaoZ_graus , double rotacaoX_graus ) {
-		Transformacoes.inicializar( rotacaoZ_graus, rotacaoX_graus , 1.0 );
+		Isometria.inicializar( rotacaoZ_graus, rotacaoX_graus , 1.0 );
 	}
 	
 	static public void inicializar( double rotacaoZ_graus , double rotacaoX_graus , double escala ) {
-		Transformacoes.inicializado = true;
-		Transformacoes.escala = escala;
+		Isometria.inicializado = true;
+		Isometria.escala = escala;
 		
 		// Estruturas
 		double[][] MatA = new double[2][2];
 		double[][] MatB = new double[2][2];
 		double[][] MatC;
-		Transformacoes.transMatriz_toIso = new double[2][2];
-		Transformacoes.transMatriz_fromIso = new double[2][2];
+		Isometria.transMatriz_toIso = new double[2][2];
+		Isometria.transMatriz_fromIso = new double[2][2];
 		
 		// Conversões para radiano 
-		Transformacoes.rotacaoZ = Math.PI * rotacaoZ_graus / 180;
-		Transformacoes.rotacaoX = Math.PI * rotacaoX_graus / 180;
+		Isometria.rotacaoZ = Math.PI * rotacaoZ_graus / 180;
+		Isometria.rotacaoX = Math.PI * rotacaoX_graus / 180;
 			
 		// Matriz de Transformação A: Rotação em torno de Z ( plano da tela )
-		MatA[0][0] = Math.cos( Transformacoes.rotacaoZ );
-		MatA[0][1] = Math.sin( Transformacoes.rotacaoZ ) * -1;
-		MatA[1][0] = Math.sin( Transformacoes.rotacaoZ );
-		MatA[1][1] = Math.cos( Transformacoes.rotacaoZ );
+		MatA[0][0] = Math.cos( Isometria.rotacaoZ );
+		MatA[0][1] = Math.sin( Isometria.rotacaoZ ) * -1;
+		MatA[1][0] = Math.sin( Isometria.rotacaoZ );
+		MatA[1][1] = Math.cos( Isometria.rotacaoZ );
 		
 		// Matriz de Transformação B: Rotação em torno de X ( escala ) 
 		MatB[0][0] = 1;
 		MatB[0][1] = 0;
 		MatB[1][0] = 0;
-		MatB[1][1] = Math.cos( Transformacoes.rotacaoX );
+		MatB[1][1] = Math.cos( Isometria.rotacaoX );
 		
 		// Matriz C: Composição: MatB * MatA		
-		MatC = Transformacoes.transMatriz_toIso;
+		MatC = Isometria.transMatriz_toIso;
 		MatC[0][0] = ( MatA[0][0] * MatB[0][0] ) + ( MatA[1][0] * MatB[0][1] );
 		MatC[0][1] = ( MatA[0][1] * MatB[0][0] ) + ( MatA[1][1] * MatB[0][1] );
 		MatC[1][0] = ( MatA[0][0] * MatB[1][0] ) + ( MatA[1][0] * MatB[1][1] );
@@ -57,16 +61,16 @@ public class Transformacoes {
 		MatA[0][0] = 1;
 		MatA[0][1] = 0;
 		MatA[1][0] = 0;
-		MatA[1][1] = 1.0 / Math.cos( Transformacoes.rotacaoX );
+		MatA[1][1] = 1.0 / Math.cos( Isometria.rotacaoX );
 		
 		// Matriz de Transformação B2 ( inversa de A ): Rotação em torno de X ( escala ) 
-		MatB[0][0] = Math.cos( Transformacoes.rotacaoZ * -1 );
-		MatB[0][1] = Math.sin( Transformacoes.rotacaoZ * -1 ) * -1;
-		MatB[1][0] = Math.sin( Transformacoes.rotacaoZ * -1 );
-		MatB[1][1] = Math.cos( Transformacoes.rotacaoZ * -1 );
+		MatB[0][0] = Math.cos( Isometria.rotacaoZ * -1 );
+		MatB[0][1] = Math.sin( Isometria.rotacaoZ * -1 ) * -1;
+		MatB[1][0] = Math.sin( Isometria.rotacaoZ * -1 );
+		MatB[1][1] = Math.cos( Isometria.rotacaoZ * -1 );
 		
 		// Matriz C: Composição: MatB * MatA		
-		MatC = Transformacoes.transMatriz_fromIso;
+		MatC = Isometria.transMatriz_fromIso;
 		MatC[0][0] = ( MatA[0][0] * MatB[0][0] ) + ( MatA[1][0] * MatB[0][1] );
 		MatC[0][1] = ( MatA[0][1] * MatB[0][0] ) + ( MatA[1][1] * MatB[0][1] );
 		MatC[1][0] = ( MatA[0][0] * MatB[1][0] ) + ( MatA[1][0] * MatB[1][1] );
@@ -78,19 +82,19 @@ public class Transformacoes {
 		Vetor2D_double isoVet = new Vetor2D_double( 0 , 0 );
 		
 		// Multiplicando o vetor recebido pela matriz de transformação calculada
-		isoVet.x = ( carVet.x * Transformacoes.transMatriz_toIso[0][0] ) + ( carVet.y * Transformacoes.transMatriz_toIso[0][1] );
-		isoVet.y = ( carVet.x * Transformacoes.transMatriz_toIso[1][0] ) + ( carVet.y * Transformacoes.transMatriz_toIso[1][1] );
+		isoVet.x = ( carVet.x * Isometria.transMatriz_toIso[0][0] ) + ( carVet.y * Isometria.transMatriz_toIso[0][1] );
+		isoVet.y = ( carVet.x * Isometria.transMatriz_toIso[1][0] ) + ( carVet.y * Isometria.transMatriz_toIso[1][1] );
 		
 		// Considerando a escala...
-		isoVet.x *= Transformacoes.escala;
-		isoVet.y *= Transformacoes.escala;
+		isoVet.x *= Isometria.escala;
+		isoVet.y *= Isometria.escala;
 		
 		return isoVet;
 	}
 	
 	// Transforma a posição cartesiana na posição isometrica equivalente
 	static public Vetor2D_double obterVetorIsometrico( double x , double y ) {
-		return Transformacoes.obterVetorIsometrico( new Vetor2D_double( x , y ) );
+		return Isometria.obterVetorIsometrico( new Vetor2D_double( x , y ) );
 	}
 	
 	// Transforma a posição cartesiana na posição isometrica equivalente
@@ -98,12 +102,12 @@ public class Transformacoes {
 		Vetor2D_double carVet = new Vetor2D_double( 0 , 0 );
 		
 		// Multiplicando o vetor recebido pela matriz de transformação calculada
-		carVet.x = ( isoVet.x * Transformacoes.transMatriz_fromIso[0][0] ) + ( isoVet.y * Transformacoes.transMatriz_fromIso[0][1] );
-		carVet.y = ( isoVet.x * Transformacoes.transMatriz_fromIso[1][0] ) + ( isoVet.y * Transformacoes.transMatriz_fromIso[1][1] );
+		carVet.x = ( isoVet.x * Isometria.transMatriz_fromIso[0][0] ) + ( isoVet.y * Isometria.transMatriz_fromIso[0][1] );
+		carVet.y = ( isoVet.x * Isometria.transMatriz_fromIso[1][0] ) + ( isoVet.y * Isometria.transMatriz_fromIso[1][1] );
 		
 		// Considerando a escala...
-		carVet.x *= Transformacoes.escala;
-		carVet.y *= Transformacoes.escala;
+		carVet.x *= Isometria.escala;
+		carVet.y *= Isometria.escala;
 		
 		return carVet;
 	}
@@ -115,11 +119,11 @@ public class Transformacoes {
 		Vetor2D_double carVet_DiagonalSecundaria = new Vetor2D_double( carVet.x * -1 , carVet.y );
 			
 		// Calcula suas transformações para o isometrico
-		Vetor2D_double isoVet_A = Transformacoes.obterVetorIsometrico( carVet_DiagonalPrimaria );
+		Vetor2D_double isoVet_A = Isometria.obterVetorIsometrico( carVet_DiagonalPrimaria );
 		isoVet_A.x = Math.abs( isoVet_A.x );
 		isoVet_A.y = Math.abs( isoVet_A.x );
 		
-		Vetor2D_double isoVet_B = Transformacoes.obterVetorIsometrico( carVet_DiagonalSecundaria );
+		Vetor2D_double isoVet_B = Isometria.obterVetorIsometrico( carVet_DiagonalSecundaria );
 		isoVet_B.x = Math.abs( isoVet_B.x );
 		isoVet_B.y = Math.abs( isoVet_B.x );
 		
@@ -144,6 +148,6 @@ public class Transformacoes {
 	
 	// Obtem caixa delimitadora de um vetor cartesiano transformado para isometrico
 	static public Vetor2D_double obterCaixaDelimitadora( double x , double y ) {
-		return Transformacoes.obterCaixaDelimitadora( new Vetor2D_double( x , y ) );
+		return Isometria.obterCaixaDelimitadora( new Vetor2D_double( x , y ) );
 	}
 }

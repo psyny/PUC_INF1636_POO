@@ -17,9 +17,9 @@ public class Camera extends JScrollPane implements Runnable {
 	private Thread 					cameraThread;
 	private ArrayList<Component>  	scenes;
 	
-	private Vetor2D_double					cameraTarget;
-	private Vetor2D_double					cameraPosition;
-	private Vetor2D_double					cameraValidPosition;
+	private Vetor2D_double			cameraTarget;
+	private Vetor2D_double			cameraPosition;
+	private Vetor2D_double			cameraValidPosition;
 	private double					maxMoveSpeed = 50;
 	private double					minMoveSpeed = 0.5;
 	
@@ -27,7 +27,7 @@ public class Camera extends JScrollPane implements Runnable {
 	private boolean					fixedTarget = true;
 	private boolean					animated = true;
 	
-	private ArrayList<Animavel>	animableList = new ArrayList<Animavel>();
+	private ArrayList<Animavel>		animableList = new ArrayList<Animavel>();
 	
 	
 	
@@ -54,6 +54,7 @@ public class Camera extends JScrollPane implements Runnable {
     }	
 	
     private void threadCycle( long passed ) {
+    	// Anima a Cena 
     	// synchronized( Singletons.gameCamera ) {	
 	    	for( Component comp : this.scenes ) {
 	    		if (comp instanceof Animavel ) {
@@ -62,10 +63,12 @@ public class Camera extends JScrollPane implements Runnable {
 	    	}
     	// }
     	
+    	// Anima outros elementos gráficos
     	for( Animavel anim : this.animableList ) {
     		anim.passTime( passed );
     	}
     	
+    	// Controle da posição da camera
     	if( this.fixedTarget == true ) {
 	    	// Set Position
 	    	Vetor2D_double offset = new Vetor2D_double( this.getSize().getWidth() / 2 , this.getSize().getHeight() / 2 );

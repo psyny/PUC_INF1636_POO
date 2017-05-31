@@ -1,0 +1,11 @@
+houseTiles.png
+
+Clean Tiles	; Set Name
+1		; Set ID code
+0,0 		; Set start position
+128,128		; Single tile size
+128,128		; Advancement step ( usually = tile size )
+1,1		; Number of rows and cols of Tiles in Image
+-1		; Total number of tiles ( -1 set to rows*cols )
+
+#		; End of File Mark

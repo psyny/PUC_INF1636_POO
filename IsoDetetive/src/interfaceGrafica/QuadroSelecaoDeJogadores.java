@@ -24,8 +24,7 @@ public class QuadroSelecaoDeJogadores extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e)  {
-			//JanelaPrincipal.carregarQuadro( new QuadroSelecaoDeJogadores() );
-			System.out.println("TODO: Listener de iniciar jogo");
+			JanelaPrincipal.carregarQuadro( new QuadroJogo() );
 		}
 	}
 	
