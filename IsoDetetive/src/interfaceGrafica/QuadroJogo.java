@@ -8,11 +8,19 @@ import javax.swing.JPanel;
 
 import animacao.*;
 import estruturas.*;
+import jogo.GeradorDeTabuleiros;
+import jogo.*;
 
 public class QuadroJogo extends JLayeredPane {
 	
 	
 	public QuadroJogo() {
+		// Carregando arquivos pertinentes ao jogo
+		Tabuleiro tabuleiro = GeradorDeTabuleiros.carregarDoArquivo();	
+		Vetor2D_int tamanhoVirtualDoTabuleiro = new Vetor2D_int( tabuleiro.colunas * 64 , tabuleiro.linhas * 64 );
+		Vetor2D_int deslocamentoVertical = new Vetor2D_int( 0 , tamanhoVirtualDoTabuleiro.y );
+		
+		// Configurações principais
 		JanelaPrincipal.definirLayoutManager( null );
 		
 		setBackground( new Color(0,255,255) );
@@ -64,7 +72,6 @@ public class QuadroJogo extends JLayeredPane {
 		testActor3.addTileSprite( "houseTiles.txt" , new Vetor2D_int(0,0) , 0 );
 
 		mainScene.addActor( testActor3 , 5 );
-        
-
+		
 	}
 }

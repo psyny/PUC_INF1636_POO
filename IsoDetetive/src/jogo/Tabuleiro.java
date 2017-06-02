@@ -7,22 +7,20 @@ import estruturas.*;
 
 
 public class Tabuleiro {
-	public ArrayList<ArrayList<Casa>> cells;
+	public ArrayList<ArrayList<Casa>> casas;
 	
-	public int rows;
-	public int cols;
+	public int linhas;
+	public int colunas;
 	
-	public int waterQtd = 0;
-	
-	public Vetor2D_int cellDimensions = new Vetor2D_int( 20 , 20 );
+	public Vetor2D_int cellDimensions = new Vetor2D_int( 1 , 1 );
 	
 	public Tabuleiro( int rows , int cols ) {
-		this.rows = rows;
-		this.cols = cols;
+		this.linhas = rows;
+		this.colunas = cols;
 		
 		for( int y = 0 ; y < rows ; y++ ) {
 			ArrayList<Casa> newRow = new ArrayList<Casa>();
-			cells.add( newRow );
+			casas.add( newRow );
 			for( int x = 0 ; x < cols ; x++ ) {
 				newRow.add( new Casa( x , y ) );
 			}	
@@ -30,22 +28,22 @@ public class Tabuleiro {
 	}
 	
 	public Tabuleiro( ArrayList<ArrayList<Casa>> cells ) {
-		this.cells = cells;
-		this.rows = cells.size();
-		this.cols = cells.get(0).size();
+		this.casas = cells;
+		this.linhas = cells.size();
+		this.colunas = cells.get(0).size();
 	}
 	
 	public boolean isInGrid( int x , int y ) {
 		if( x < 0 ) {
 			return false;
 		}
-		if( x >= this.cols ) {
+		if( x >= this.colunas ) {
 			return false;
 		}
 		if( y < 0 ) {
 			return false;
 		}
-		if( y >= this.rows ) {
+		if( y >= this.linhas ) {
 			return false;
 		}
 		return true;
@@ -56,7 +54,7 @@ public class Tabuleiro {
 			return null;
 		}
 		
-		return this.cells.get(y).get(x);
+		return this.casas.get(y).get(x);
 	}
 	
 	public ArrayList<Casa> getNeighbors( int x , int y ) {

@@ -12,8 +12,7 @@ public class Casa {
 
 
 	public Casa( int x , int y ) {
-		this.position.x = x;
-		this.position.y = y;
+		this.position = new Vetor2D_int( x , y );
 		this.type = CasaType.CORREDOR;
 	}
 	
