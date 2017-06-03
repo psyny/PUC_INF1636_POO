@@ -9,14 +9,17 @@ import java.util.Scanner;
 import estruturas.*;
 
 public class GeradorDeTabuleiros {
+	//Construtor de GeradorDeTabuleiros
 	public GeradorDeTabuleiros() {
 		GeradorDeTabuleiros.carregarDoArquivo();
 	}
 	
+	//Carrega o mapa do aquivo "tabuleiro_oficial.txt"
 	public static Tabuleiro carregarDoArquivo() {
 		return GeradorDeTabuleiros.carregarDoArquivo( "tabuleiro_oficial.txt" );
 	}
 	
+	//Carrega o tabuleiro do aquivo com nome = fileName. retorna um Tabuleiro preenchido
 	public static Tabuleiro carregarDoArquivo( String fileName ) {
 	    Scanner file;
 	    file = null;
