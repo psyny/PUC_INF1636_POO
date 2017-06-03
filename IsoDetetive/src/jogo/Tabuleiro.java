@@ -9,8 +9,8 @@ import estruturas.*;
 public class Tabuleiro {
 	public ArrayList<ArrayList<Casa>> casas;
 	
-	public int linhas;
-	public int colunas;
+	private int linhas;
+	private int colunas;
 	
 	public Vetor2D_int cellDimensions = new Vetor2D_int( 1 , 1 );
 	
@@ -34,6 +34,14 @@ public class Tabuleiro {
 		this.linhas = cells.size();
 		this.colunas = cells.get(0).size();
 	}
+	
+	public int objeterQtdLinhas() {
+		return this.linhas;
+	}
+	
+	public int objeterQtdColunas() {
+		return this.linhas;
+	}	
 	
 	//Checa se dois inteiros fazem parte do tabuleiro
 	public boolean isInGrid( int x , int y ) {
@@ -95,5 +103,4 @@ public class Tabuleiro {
 		return neighbors;
 	}
 	
-
 }

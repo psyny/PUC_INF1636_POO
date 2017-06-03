@@ -56,51 +56,6 @@ public class Actor_Physics extends Actor implements Animavel {
 		this.innerSprites = new ArrayList<innerSprite>();
 	}
 
-	public void addSprite( String fileName , Vetor2D_int relativePosition , int layer ) {
-		AnimatedSprite aSpr;
-		aSpr = new AnimatedSprite( fileName );
-		aSpr.playAnimation();
-
-		this.addSprite( aSpr , relativePosition, layer );
-	}
-	
-	public void addSprite( String fileName , Vetor2D_int relativePosition , int layer , boolean animated) {
-		Sprite aSpr;
-		
-		if( animated == true ) {
-			aSpr = new AnimatedSprite( fileName );
-			((AnimatedSprite)aSpr).playAnimation();
-		} else {
-			aSpr = new TileSetSprite( fileName );
-		}
-
-		this.addSprite( aSpr , relativePosition, layer);
-	}
-	
-	public void addSprite( Sprite sprite , Vetor2D_int relativePosition , int layer ) {
-		Vetor2D_int spriteSize = sprite.getDimension();
-		if( spriteSize.x > this.projectionSize.x ) {
-			this.projectionSize.x = spriteSize.x;
-			this.updateLocation();
-		}
-		if( spriteSize.y > this.projectionSize.y ) {
-			this.projectionSize.y = spriteSize.y;
-			this.updateLocation();
-		}
-		
-		innerSprite newInnerSprite = new innerSprite( relativePosition , sprite );
-		this.innerSprites.add( newInnerSprite );
-		sprite.insertInto( this );
-		this.setLayer( sprite , layer);
-		
-		Vetor2D_int spritePosition =  new Vetor2D_int( 0 , 0 );
-		spritePosition.x = ( this.projectionSize.x / 2 ) + relativePosition.x - ( sprite.getDimension().x / 2 ) ;
-		spritePosition.y = ( this.projectionSize.y / 2 ) + relativePosition.y - ( sprite.getDimension().y / 2 ) ;
-		
-		sprite.setBounds(spritePosition.x, spritePosition.y, spriteSize.x, spriteSize.y);
-		
-		//sprite.setLocation( spritePosition.x , spritePosition.y  );
-	}
 	
 	@Override
 	public void passTime(long time) {	

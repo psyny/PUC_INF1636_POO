@@ -5,7 +5,7 @@ Default		; Set Name
 0,0 		; Set start position
 128,64		; Single tile size
 128,64		; Advancement step ( usually = tile size )
-1,1		; Number of rows and cols of Tiles in Image
+1,4		; Number of rows and cols of Tiles in Image
 -1		; Total number of tiles ( -1 set to rows*cols )
 
 Color		; Set Name

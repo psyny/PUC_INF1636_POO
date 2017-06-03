@@ -27,7 +27,8 @@ public class Actor extends JLayeredPane implements Animavel {
 	public Vetor2D_double 	projectionPosition 	= new Vetor2D_double( 0 , 0 );
 	public Vetor2D_int 		projectionSize 		= new Vetor2D_int( 0 , 0 );
 	
-	public Container parent = null;
+	public Container 		parentContainer = null;
+	public Scene			parentScene = null;
 	
 	private ArrayList<innerSprite> innerSprites;
 	
@@ -57,24 +58,28 @@ public class Actor extends JLayeredPane implements Animavel {
 	}
 
 	// Adiciona um sprite animado a este ator
-	public void addAnimatedSprite( String fileName , Vetor2D_int relativePosition , int layer ) {
+	public AnimatedSprite addAnimatedSprite( String fileName , Vetor2D_int relativePosition , int layer ) {
 		AnimatedSprite aSpr;
 		aSpr = new AnimatedSprite( fileName );
 		aSpr.playAnimation();
 
 		this.addSprite( aSpr , relativePosition, layer );
+		
+		return aSpr;
 	}
 
 	// Adiciona um sprite de tile a este ator	
-	public void addTileSprite( String fileName , Vetor2D_int relativePosition , int layer ) {
+	public TileSetSprite addTileSprite( String fileName , Vetor2D_int relativePosition , int layer ) {
 		TileSetSprite tSpr;
 		tSpr = new TileSetSprite( fileName );
 
 		this.addSprite( tSpr , relativePosition, layer );
+		
+		return tSpr;
 	}
 	
 	// Adiciona um sprite qualquer a este ator	
-	public void addSprite( Sprite sprite , Vetor2D_int relativePosition , int layer ) {
+	public Sprite addSprite( Sprite sprite , Vetor2D_int relativePosition , int layer ) {
 		Vetor2D_int spriteSize = sprite.getDimension();
 		if( spriteSize.x > this.projectionSize.x ) {
 			this.projectionSize.x = spriteSize.x;
@@ -95,6 +100,8 @@ public class Actor extends JLayeredPane implements Animavel {
 		spritePosition.y = ( this.projectionSize.y / 2 ) + relativePosition.y - ( sprite.getDimension().y / 2 ) ;
 		
 		sprite.setBounds(spritePosition.x, spritePosition.y, spriteSize.x, spriteSize.y);
+		
+		return sprite;
 	}
 	
 	@Override
@@ -110,11 +117,11 @@ public class Actor extends JLayeredPane implements Animavel {
 		}
 
 		// Remove Ator
-		if( this.parent != null ) {
+		if( this.parentContainer != null ) {
 			if( this.getComponents().length == 0 ) {
 				this.setVisible(false);
 				Toolkit.getDefaultToolkit().sync();
-				this.parent.remove(this);
+				this.parentContainer.remove(this);
 			}
 		}
 		
@@ -141,7 +148,14 @@ public class Actor extends JLayeredPane implements Animavel {
 	private void updateLocation() {
 		this.setSize( this.projectionSize.x , this.projectionSize.y );
 		
-		Vetor2D_double centerPosition = Isometria.obterVetorIsometrico( virtualPosition );	
+		Vetor2D_int centerPosition;
+		if( this.parentScene != null ) {
+			centerPosition = this.parentScene.getProjection(virtualPosition);
+		} 
+		else {
+			centerPosition = new Vetor2D_int( (int)this.virtualPosition.x , (int)this.virtualPosition.y );
+		}
+		
 		this.projectionPosition.x = centerPosition.x - ( this.projectionSize.x / 2 );
 		this.projectionPosition.y = centerPosition.y - ( this.projectionSize.y / 2 );
 		

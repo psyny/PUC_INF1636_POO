@@ -43,10 +43,13 @@ public class GeradorDeTabuleiros {
 	    boolean breakFlag = false;
 	    
 	    // Load Data
+	    int y = -1;
     	while( file.hasNextLine() ) {
     		// Ignore empty lines
     		line 		= file.nextLine().trim();
     		breakFlag 	= false;
+    		y++;
+    		
 	    	while( line.length() < 1 ) {
 	    		if( file.hasNextLine() == false ) {
 	    			breakFlag = true;
@@ -66,11 +69,11 @@ public class GeradorDeTabuleiros {
 	    	ArrayList<Casa> novaLinhaDeCasas = new ArrayList<Casa>();
 	    	casas.add( 0 ,  novaLinhaDeCasas );
 	    	
-	    	for( int i = 0 ; i < line.length() ; i++ ) {
-	    		Casa novaCasa = new Casa( 0 , 0 );
+	    	for( int x = 0 ; x < line.length() ; x++ ) {
+	    		Casa novaCasa = new Casa( x , y );
 	    		novaLinhaDeCasas.add( novaCasa );
 	    		
-	    		switch( line.charAt(i) ) {
+	    		switch( line.charAt(x) ) {
 	    		case '#':
 	    			novaCasa.type = CasaType.VACUO;
 	    			break;	  
