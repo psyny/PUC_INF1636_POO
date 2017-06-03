@@ -14,6 +14,7 @@ public class Tabuleiro {
 	
 	public Vetor2D_int cellDimensions = new Vetor2D_int( 1 , 1 );
 	
+	//Construtor do Tabuleiro
 	public Tabuleiro( int rows , int cols ) {
 		this.linhas = rows;
 		this.colunas = cols;
@@ -27,12 +28,14 @@ public class Tabuleiro {
 		}
 	}
 	
+	//Construtor do Tabuleiro
 	public Tabuleiro( ArrayList<ArrayList<Casa>> cells ) {
 		this.casas = cells;
 		this.linhas = cells.size();
 		this.colunas = cells.get(0).size();
 	}
 	
+	//Checa se dois inteiros fazem parte do tabuleiro
 	public boolean isInGrid( int x , int y ) {
 		if( x < 0 ) {
 			return false;
@@ -49,6 +52,7 @@ public class Tabuleiro {
 		return true;
 	}
 	
+	//Retorna a casa contida no (x, y) do tabuleiro
 	public Casa getCell( int x , int y ) {
 		if( this.isInGrid(x, y) == false ) {
 			return null;
@@ -57,6 +61,7 @@ public class Tabuleiro {
 		return this.casas.get(y).get(x);
 	}
 	
+	//Retorna os vizinhos da casa contida no (x, y) do tabuleiro
 	public ArrayList<Casa> getNeighbors( int x , int y ) {
 		ArrayList<Casa> neighbors = new ArrayList<Casa>();
 
