@@ -190,4 +190,5 @@ public class GeradorDeTabuleiros {
 	    // Criando novo tabueliro
 	    return new Tabuleiro( casas );
 	}
+
 }

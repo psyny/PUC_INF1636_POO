@@ -1,9 +1,9 @@
 package jogo;
 
 import java.util.ArrayList;
+
+import atores.AtorPiso;
 import estruturas.*;
-
-
 
 
 public class Tabuleiro {
@@ -42,6 +42,40 @@ public class Tabuleiro {
 	public int objeterQtdColunas() {
 		return this.linhas;
 	}	
+	
+	// Coleta dados essenciais
+	public void scanGameInfo() {
+		// Localiza dados 
+		for( ArrayList<Casa> linha : this.casas ) {
+			for( Casa casa : linha ) {
+				switch( casa.type ) {
+					case INICIO_L:
+						Personagem.definirCasaInicial( PersonagemEnum.L , casa.position );
+						break;
+					
+					case INICIO_SHERLOCK:
+						Personagem.definirCasaInicial( PersonagemEnum.SHERLOCK , casa.position );
+						break;
+						
+					case INICIO_CARMEN:
+						Personagem.definirCasaInicial( PersonagemEnum.CARMEN , casa.position );
+						break;
+						
+					case INICIO_PANTERA:
+						Personagem.definirCasaInicial( PersonagemEnum.PANTERA , casa.position );
+						break;
+						
+					case INICIO_EDMORT:
+						Personagem.definirCasaInicial( PersonagemEnum.EDMORT , casa.position );
+						break;
+						
+					case INICIO_BATMAN:
+						Personagem.definirCasaInicial( PersonagemEnum.BATMAN , casa.position );
+						break;	
+				}
+			}
+		}
+	}
 	
 	//Checa se dois inteiros fazem parte do tabuleiro
 	public boolean isInGrid( int x , int y ) {

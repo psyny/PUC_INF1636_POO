@@ -28,9 +28,6 @@ public class CenaIsometrica extends Scene {
 		Vetor2D_double limites = Isometria.obterCaixaDelimitadora( this.tamanhoVirtual );
 		this.tamanhoProjecao = new Vetor2D_int( (int)limites.x , (int)limites.y );	
 		
-		System.out.println("Tamanho virtual: " + tamanhoVirtual.x + " , " + tamanhoVirtual.y);
-		System.out.println("Tamanho da cena: " + limites.x + " , " + limites.y);
-		
 		int largura 	= this.margem_direita + this.margem_esquerda + this.tamanhoProjecao.x;
 		int altura 		= this.margem_superior + this.margem_inferior + this.tamanhoProjecao.y; 
 		
