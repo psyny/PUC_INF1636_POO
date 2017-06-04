@@ -57,7 +57,7 @@ public class JanelaTabuleiro extends JFrame {
 		panel.setBackground(Color.WHITE);
 		
 		dado = new JButton("Dado");
-		dado.setBounds(253, 263, 90, 130);
+		dado.setBounds(270, 280, 90, 130);
 		dado.addActionListener(new dadoController());
 		panel.add(dado);
 		

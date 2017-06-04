@@ -6,6 +6,8 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -93,7 +95,7 @@ public class Grid extends JPanel{
 	{
 		public Point position;
 		public String type;
-		public boolean free;
+		public boolean free = true;
 		
 		public Map(Point p, String s)
 		{
@@ -103,21 +105,28 @@ public class Grid extends JPanel{
 		
 		public boolean isRoom()
 		{
-			if(type != "." && type != "#")
+			if(type.equals(".") && !type.equals("#"))
 				return true;
 			return false;
 		}
 		
 		public boolean isDoor()
 		{
-			if(type == "a" || type == "b" || type == "c" || type == "d" || type == "e" || type == "f" || type == "g" || type == "h" || type == "i")
+			if(type.equals("a") || type.equals("b") || type.equals("c") || type.equals("d") || type.equals("e") || type.equals("f") || type.equals("g") || type.equals("h") || type.equals("i"))
 				return true;
 			return false;
 		}
 		
 		public boolean isFloor()
 		{
-			if(type == ".")
+			if(type.equals("."))
+				return true;
+			return false;
+		}
+		
+		public boolean isSecretPassage()
+		{
+			if(type.equals("a") || type.equals("c") || type.equals("f") || type.equals("i"))
 				return true;
 			return false;
 		}
@@ -128,56 +137,47 @@ public class Grid extends JPanel{
 			{
 				case ".":
 					return Color.BLACK;
-					break;
+					
+				case "#":
+					return Color.WHITE;
 					
 				case "A":
 					return Color.BLUE;
-					break;
 				
 				case "B":
 					return Color.GREEN;
-					break;
 					
 				case "C":
 					return Color.RED;
-					break;
 					
 				case "D":
 					return Color.CYAN;
-					break;
-					
+
 				case "E":
 					return Color.MAGENTA;
-					break;
 					
 				case "F":
 					return Color.ORANGE;
-					break;
 					
 				case "G":
 					return Color.PINK;
-					break;
 					
 				case "H":
 					return Color.YELLOW;
-					break;
 					
 				case "I":
-					return Color.;
-					break;
+					return Color.BLUE;
 					
 				case "Z":
-					return Color.DARK_GRAY;
-					break;
+					return Color.WHITE;
 					
 				default:
 					return Color.LIGHT_GRAY;
-					break;
 			}
 		}
 	}
 	
-	public static ArrayList<Map> buildMap(String fileName)
+	public ArrayList<Map> buildMap(String fileName)
 	{
 		mapa = new ArrayList<Map>();
 		
@@ -191,7 +191,7 @@ public class Grid extends JPanel{
 			{
 				for(String casa : sCurrentLine.split(""))
 				{
-					mapa.add(new Point(i, j), casa);
+					mapa.add(new Map(new Point(j, i), casa));
 					j++;
 				}
 				j = 0;
@@ -211,12 +211,12 @@ public class Grid extends JPanel{
 		this.size = size;
 		this.frame = frame;
 		
-		ArrayList<Map> mapa = buildMap("tabuleiro_oficial.txt") 
+		ArrayList<Map> mapa = buildMap("tabuleiro_oficial.txt");
 		
-		Jogador batman = new Jogador(new Point(10, 5), "Batman", Color.BLACK);
-		Jogador pantera_cor_de_rosa = new Jogador(new Point(3, 6), "Pantera cor de Rosa", Color.PINK);
-		Jogador Sherlock = new Jogador(new Point(20, 3), "Sherlock Homes", Color.ORANGE);
-		Jogador EdMort = new Jogador(new Point(5, 20), "Ed Mort", Color.WHITE);
+		Jogador batman = new Jogador(new Point(10, 9), "Batman", Color.BLACK);
+		Jogador pantera_cor_de_rosa = new Jogador(new Point(3, 7), "Pantera cor de Rosa", Color.PINK);
+		Jogador Sherlock = new Jogador(new Point(20, 6), "Sherlock Homes", Color.ORANGE);
+		Jogador EdMort = new Jogador(new Point(5, 18), "Ed Mort", Color.GREEN);
 		
 		jogadorDaVez = batman;
 		
@@ -255,7 +255,7 @@ public class Grid extends JPanel{
 		int larg = tile_size;
 		int alt = tile_size;
 		
-		Rectangle2D rectangle=new Rectangle2D.Double(posX, posY, larg, alt);
+		Rectangle2D rectangle=new Rectangle2D.Double(posX, posY, larg - 1, alt - 1);
 		g2d.setColor(map.getColor());
 		g2d.draw(rectangle);
 	}
@@ -269,7 +269,7 @@ public class Grid extends JPanel{
 		int larg = jogador.size.width;
 		int alt = jogador.size.height;
 		
-		Rectangle2D rectangle=new Rectangle2D.Double(posX, posY, larg, alt);
+		Rectangle2D rectangle=new Rectangle2D.Double(posX + 2, posY + 2, larg, alt);
 		g2d.setColor(jogador.cor);
 		g2d.fill(rectangle);
 	}
@@ -277,42 +277,46 @@ public class Grid extends JPanel{
 	public boolean canGo(Point origem, Point destino)
 	{
 		int moves = frame.valor_Dado;
-		Map dest, orig;
+		Map dest = null, orig = null;
+		
 		for(Map map : mapa)
 		{
-			if(map.position == destino)
+			if(map.position.equals(destino))
 				dest = map;
-			if(map.position == origem)
+			if(map.position.equals(origem))
 				orig = map;
 		}
 		
-		if(manhDist(origem, destino) <= moves && ( dest.isFloor() || dest.isDoor() ) && dest.free)
+		if(dest != null && orig != null)
 		{
-			orig.free = true;
-			dest.free = false;
-			return true;
+			if(manhDist(origem, destino) <= moves && ( dest.isFloor() || dest.isDoor() ) && dest.free)
+			{
+				orig.free = true;
+				dest.free = false;
+				return true;
+			}
+			
+			if(passagemSecreta(origem, destino))
+				return true;
 		}
-		
-		if(passagemSecreta(origem, destino))
-			return true;
 			
 		return false;
 	}
 	
 	public boolean passagemSecreta(Point origem, Point destino)
 	{
-		Map dest, orig;
+		Map dest = null, orig = null;
 		for(Map map : mapa)
 		{
-			if(map.position == destino)
+			if(map.position.equals(destino))
 				dest = map;
-			if(map.position == origem)
+			if(map.position.equals(origem))
 				orig = map;
 		}
 		
-		if(orig.type == "a" || orig.type == "c" || orig.type == "f" || orig.type == "i")
+		if(dest != null && orig != null)
 		{
-			if(dest.type == "a" || dest.type == "c" || dest.type == "f" || dest.type == "i")
+			if(orig.isSecretPassage() && dest.isSecretPassage())
 			{
 				if(dest.free)
 				{
