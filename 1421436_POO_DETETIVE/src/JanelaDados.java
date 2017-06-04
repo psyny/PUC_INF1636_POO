@@ -25,6 +25,8 @@ public class JanelaDados extends JFrame
 	
 	public Dado d1, d2;
 	
+	public JTextField forceMove;
+	
 	class andarController implements ActionListener
 	{
 		JFrame frame;
@@ -37,11 +39,18 @@ public class JanelaDados extends JFrame
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
-			Main.janelaTabuleiro.valor_Dado = d1.getValor() + d2.getValor();
-			frame.setVisible(false);
+			try{
+				Main.janelaTabuleiro.valor_Dado = java.lang.Integer.parseInt(forceMove.getText());
+			}
+			catch{
+				Main.janelaTabuleiro.valor_Dado = d1.getValor() + d2.getValor();	
+			}
+			finally{
+				frame.setVisible(false);
+			}
 		}
 	}
-
+	
 	public JanelaDados(String s)
 	{
 		super(s);
@@ -75,12 +84,13 @@ public class JanelaDados extends JFrame
 		panel.add(dado2_lable);
 		
 		andar = new JButton("Andar");
-		
-		andar.setBounds(60, 120, 80, 30);
-		
+		andar.setBounds(100, 120, 80, 30);
 		andar.addActionListener(new andarController(this));
-		
 		panel.add(andar);
+		
+		forceMove = new JTextField();
+		forceMove.setBounds(20, 120, 60, 30);
+		add(forceMove)
 		
 		getContentPane().add(panel);
 
