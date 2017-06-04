@@ -11,10 +11,10 @@ public class Jogador {
 	}
 	
 	public Jogador( PersonagemEnum personagem , String nomeJogador  ) {
-		this.personagem = Personagem.obterPersonagem(personagem);
+		this.personagem = PersonagemLista.getInstance().obterPersonagem( personagem );
 		
 		this.nome 		= nomeJogador;
-		this.emJogo = false;
+		this.emJogo 	= false;
 	}
 	
 	

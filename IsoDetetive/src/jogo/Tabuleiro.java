@@ -50,27 +50,27 @@ public class Tabuleiro {
 			for( Casa casa : linha ) {
 				switch( casa.type ) {
 					case INICIO_L:
-						Personagem.definirCasaInicial( PersonagemEnum.L , casa.position );
+						PersonagemLista.getInstance().obterPersonagem(  PersonagemEnum.L ).definirCasaInicial( casa.position );
 						break;
 					
 					case INICIO_SHERLOCK:
-						Personagem.definirCasaInicial( PersonagemEnum.SHERLOCK , casa.position );
+						PersonagemLista.getInstance().obterPersonagem( PersonagemEnum.SHERLOCK ).definirCasaInicial( casa.position );
 						break;
 						
 					case INICIO_CARMEN:
-						Personagem.definirCasaInicial( PersonagemEnum.CARMEN , casa.position );
+						PersonagemLista.getInstance().obterPersonagem( PersonagemEnum.CARMEN ).definirCasaInicial( casa.position );
 						break;
 						
 					case INICIO_PANTERA:
-						Personagem.definirCasaInicial( PersonagemEnum.PANTERA , casa.position );
+						PersonagemLista.getInstance().obterPersonagem( PersonagemEnum.PANTERA ).definirCasaInicial(  casa.position );
 						break;
 						
 					case INICIO_EDMORT:
-						Personagem.definirCasaInicial( PersonagemEnum.EDMORT , casa.position );
+						PersonagemLista.getInstance().obterPersonagem( PersonagemEnum.EDMORT ).definirCasaInicial(  casa.position );
 						break;
 						
 					case INICIO_BATMAN:
-						Personagem.definirCasaInicial( PersonagemEnum.BATMAN , casa.position );
+						PersonagemLista.getInstance().obterPersonagem( PersonagemEnum.BATMAN ).definirCasaInicial( casa.position );
 						break;	
 				}
 			}

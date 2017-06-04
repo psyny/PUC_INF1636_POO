@@ -8,8 +8,8 @@ public class AtorPiso extends Actor {
 	private TileSetSprite spritePiso;
 	
 
-	public AtorPiso(int sizeX, int sizeY) {
-		super(sizeX, sizeY);
+	public AtorPiso() {
+		super(128, 128);
 		this.spritePiso = addTileSprite( "houseTiles.txt" , new Vetor2D_int(0,0) , 0 );	
 	}
 	

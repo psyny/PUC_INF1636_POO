@@ -1,0 +1,11 @@
+player_black.png
+
+Idle		; animation name
+1		; animation ID code
+0,0 		; animation frame start position
+128,128		; single frame size
+128,128		; advancement step ( usually frame size )
+1,1		; number of rows and cols of frames
+1		; total number of frames ( usually rows*cols )
+1000		; frame change speed ( millis )
+

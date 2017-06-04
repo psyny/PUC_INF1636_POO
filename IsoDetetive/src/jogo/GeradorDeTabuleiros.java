@@ -67,7 +67,7 @@ public class GeradorDeTabuleiros {
 	    	
 	    	// Create new entry
 	    	ArrayList<Casa> novaLinhaDeCasas = new ArrayList<Casa>();
-	    	casas.add( 0 ,  novaLinhaDeCasas );
+	    	casas.add( novaLinhaDeCasas );
 	    	
 	    	for( int x = 0 ; x < line.length() ; x++ ) {
 	    		Casa novaCasa = new Casa( x , y );

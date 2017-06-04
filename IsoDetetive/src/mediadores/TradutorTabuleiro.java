@@ -35,7 +35,7 @@ public class TradutorTabuleiro {
 				AtorPiso piso = this.gerarPisoParaTipo( casa.type );
 				this.cenaTabuleiro.addActor( piso , 0 );	
 				
-				Vetor2D_double atorPos = new Vetor2D_double( casa.position.x * casa_largura , casa.position.y * casa_altura );
+				Vetor2D_double atorPos = this.obterCentroDaCasa( casa );
 				
 				piso.setVirtualPosition( atorPos.x , atorPos.y );
 			}
@@ -43,7 +43,7 @@ public class TradutorTabuleiro {
 	}
 	
 	private AtorPiso gerarPisoParaTipo( CasaType tipo ) {
-		AtorPiso piso = new AtorPiso( 200 , 200 );
+		AtorPiso piso = new AtorPiso();
 		
 		switch( tipo ) {
 			default:
@@ -102,4 +102,17 @@ public class TradutorTabuleiro {
 		
 		return piso;
 	} 
+	
+
+	public Vetor2D_double obterCentroDaCasa( Casa casa ) {
+		Vetor2D_double centro = new Vetor2D_double( casa.position.x * casa_largura , casa.position.y * casa_altura );
+
+		return centro;
+	}
+	
+	public Vetor2D_double obterCentroDaCasa( int x , int y ) {
+		Casa casa = this.tabuleiro.getCell(x, y);
+	
+		return this.obterCentroDaCasa(casa);
+	}
 } 

@@ -10,12 +10,14 @@ import animacao.*;
 import atores.*;
 import estruturas.*;
 import jogo.*;
+import mediadores.TradutorJogadores;
 import mediadores.TradutorTabuleiro;
 
 public class QuadroJogo extends JLayeredPane {
 	public QuadroJogo() {
 		// Carregando arquivos pertinentes ao jogo
 		Tabuleiro tabuleiro = GeradorDeTabuleiros.carregarDoArquivo();	
+		tabuleiro.scanGameInfo();
 				
 		// Configurações principais
 		JanelaPrincipal.definirLayoutManager( null );
@@ -37,12 +39,21 @@ public class QuadroJogo extends JLayeredPane {
         
         cenaPrincipal.adicionarCena( cenaTabuleiro , 0);
         
+        // Cena dos atores ( jogadores, dado, paredes, etc ):
+        CenaAtores cenaAtores = new CenaAtores( 0 , 0 , (int)cenaTabuleiro.obterTamanhoVirtual().x , (int)cenaTabuleiro.obterTamanhoVirtual().y );
+        cenaAtores.definirMargens( 100 , 100 , 100, 100);
+
+        cenaPrincipal.adicionarCena( cenaAtores , 1);
+        
+        // Mediador
+        TradutorJogadores tradutorJogadores = new TradutorJogadores( cenaAtores , tradutorTabuleiro  );
+        tradutorJogadores.adicionarJogadores();
+        
         // Cena de Testes     
 		Scene cenaTeste = new CenaIsometrica( 0 , 0 , 300 , 300 );	
 		cenaPrincipal.adicionarCena( cenaTeste , 1 );
         
 		// Camera
-		
 		Camera gameCamera = new Camera( cenaPrincipal , 0 , 0 ); 
         gameCamera.setBounds(0, 0, 1000 , 700 );
         gameCamera.setTarget( 0 , 0 );
@@ -51,6 +62,9 @@ public class QuadroJogo extends JLayeredPane {
         
         add( gameCamera );
         setLayer( gameCamera , 10 );
+        
+        // Carregar Configuracoes de Jogador
+        
         
         
         
@@ -68,6 +82,8 @@ public class QuadroJogo extends JLayeredPane {
 		testActor.addAnimatedSprite( "testExplosion.txt" , new Vetor2D_int(0,0) , 0 );
 		
 		cenaTeste.addActor( testActor , 10 );
+		
+		
 		
 		
 	}

@@ -102,6 +102,10 @@ public class CenaIsometrica extends Scene {
 		return this.margem_inferior;
 	}
 	
+	public Vetor2D_double obterTamanhoVirtual() {
+		return this.tamanhoVirtual;
+	}
+	
 	public Vetor2D_int getProjection( Vetor2D_double virtualPosition ) {
 		Vetor2D_double posicaoProjetada = Isometria.obterVetorIsometrico( virtualPosition );
 		posicaoProjetada.x += this.margem_esquerda + this.origem.x;

@@ -13,6 +13,12 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import jogo.ControladoraDoJogo;
+import jogo.Jogador;
+import jogo.Personagem;
+import jogo.PersonagemEnum;
+import jogo.PersonagemLista;
+
 public class QuadroSelecaoDeJogadores extends JPanel {
 	private JList lista_de_personagens;
 	private JButton start;	
@@ -24,6 +30,13 @@ public class QuadroSelecaoDeJogadores extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e)  {
+			// Configurar Jogadores - TEMPORARIO
+			for( PersonagemEnum personagemEnum : PersonagemEnum.values() ) {
+				Jogador jogador = new Jogador( personagemEnum );
+				ControladoraDoJogo.getInstance().adicionarJogador( jogador );	
+			}
+			
+			
 			JanelaPrincipal.carregarQuadro( new QuadroJogo() );
 		}
 	}
@@ -41,10 +54,12 @@ public class QuadroSelecaoDeJogadores extends JPanel {
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
 			List lista = list.getSelectedValuesList();
-			if(lista.size() >= 3)
+			if(lista.size() >= 3) {
 				button.setEnabled(true);
-			else
+			}	
+			else {
 				button.setEnabled(false);
+			}
 		}
 	}
 	
@@ -64,13 +79,13 @@ public class QuadroSelecaoDeJogadores extends JPanel {
 		
 		
 		DefaultListModel<String> listModel = new DefaultListModel<String>();
-		listModel.addElement("Batman");
-		listModel.addElement("L");
-		listModel.addElement("Carmen San-diego");
-		listModel.addElement("Sherlock Homes");
-		listModel.addElement("Ed Mort");
-		listModel.addElement("Pantera Cor de Rosa");
-		
+		listModel.addElement( PersonagemLista.getInstance().obterPersonagem(  PersonagemEnum.L ).obterNome() );
+		listModel.addElement( PersonagemLista.getInstance().obterPersonagem( PersonagemEnum.SHERLOCK ).obterNome() );
+		listModel.addElement( PersonagemLista.getInstance().obterPersonagem( PersonagemEnum.CARMEN ).obterNome() );
+		listModel.addElement( PersonagemLista.getInstance().obterPersonagem( PersonagemEnum.PANTERA ).obterNome() );
+		listModel.addElement( PersonagemLista.getInstance().obterPersonagem( PersonagemEnum.EDMORT ).obterNome() );
+		listModel.addElement( PersonagemLista.getInstance().obterPersonagem( PersonagemEnum.BATMAN ).obterNome() );
+
 		// ---------------		
 		
 		lista_de_personagens = new JList(listModel);
