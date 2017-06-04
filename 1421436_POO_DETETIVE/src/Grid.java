@@ -18,10 +18,12 @@ public class Grid extends JPanel{
 	
 	public JanelaTabuleiro frame;
 	
-	public int tile_size = 23;
+	public int tile_size = 25;
 	
 	public ArrayList<Jogador> listaDeJogadores = new ArrayList<Jogador>();
 	public Jogador jogadorDaVez;
+	
+	public ArrayList<Map> mapa;
 	
 	class MouseController implements MouseListener
 	{
@@ -91,6 +93,7 @@ public class Grid extends JPanel{
 	{
 		public Point position;
 		public String type;
+		public boolean free;
 		
 		public Map(Point p, String s)
 		{
@@ -118,12 +121,97 @@ public class Grid extends JPanel{
 				return true;
 			return false;
 		}
+		
+		public Color getColor()
+		{
+			switch(type)
+			{
+				case ".":
+					return Color.BLACK;
+					break;
+					
+				case "A":
+					return Color.BLUE;
+					break;
+				
+				case "B":
+					return Color.GREEN;
+					break;
+					
+				case "C":
+					return Color.RED;
+					break;
+					
+				case "D":
+					return Color.CYAN;
+					break;
+					
+				case "E":
+					return Color.MAGENTA;
+					break;
+					
+				case "F":
+					return Color.ORANGE;
+					break;
+					
+				case "G":
+					return Color.PINK;
+					break;
+					
+				case "H":
+					return Color.YELLOW;
+					break;
+					
+				case "I":
+					return Color.;
+					break;
+					
+				case "Z":
+					return Color.DARK_GRAY;
+					break;
+					
+				default:
+					return Color.LIGHT_GRAY;
+					break;
+			}
+		}
+	}
+	
+	public static ArrayList<Map> buildMap(String fileName)
+	{
+		mapa = new ArrayList<Map>();
+		
+		try{
+			BufferedReader file = new BufferedReader(new FileReader(fileName));
+			
+			String sCurrentLine;
+			int i = 0, j = 0;
+		
+			while ((sCurrentLine = file.readLine()) != null) 
+			{
+				for(String casa : sCurrentLine.split(""))
+				{
+					mapa.add(new Point(i, j), casa);
+					j++;
+				}
+				j = 0;
+				i++;
+			}
+		}
+		catch(Exception e)
+		{
+			
+		}
+		
+		return mapa;
 	}
 	
 	public Grid(Dimension size, JanelaTabuleiro frame)
 	{
 		this.size = size;
 		this.frame = frame;
+		
+		ArrayList<Map> mapa = buildMap("tabuleiro_oficial.txt") 
 		
 		Jogador batman = new Jogador(new Point(10, 5), "Batman", Color.BLACK);
 		Jogador pantera_cor_de_rosa = new Jogador(new Point(3, 6), "Pantera cor de Rosa", Color.PINK);
@@ -151,6 +239,25 @@ public class Grid extends JPanel{
 		for (Jogador jogador : listaDeJogadores) {
 			drawJogador(g, jogador);
 		}
+		
+		for(Map map : mapa)
+		{
+			drawCasa(g, map);
+		}
+	}
+	
+	public void drawCasa(Graphics g, Map map)
+	{
+		Graphics2D g2d=(Graphics2D) g;
+		
+		int posX = map.position.x * tile_size;
+		int posY = map.position.y * tile_size;
+		int larg = tile_size;
+		int alt = tile_size;
+		
+		Rectangle2D rectangle=new Rectangle2D.Double(posX, posY, larg, alt);
+		g2d.setColor(map.getColor());
+		g2d.draw(rectangle);
 	}
 	
 	public void drawJogador(Graphics g, Jogador jogador)
@@ -170,8 +277,52 @@ public class Grid extends JPanel{
 	public boolean canGo(Point origem, Point destino)
 	{
 		int moves = frame.valor_Dado;
-		if(manhDist(origem, destino) <= moves)
+		Map dest, orig;
+		for(Map map : mapa)
+		{
+			if(map.position == destino)
+				dest = map;
+			if(map.position == origem)
+				orig = map;
+		}
+		
+		if(manhDist(origem, destino) <= moves && ( dest.isFloor() || dest.isDoor() ) && dest.free)
+		{
+			orig.free = true;
+			dest.free = false;
 			return true;
+		}
+		
+		if(passagemSecreta(origem, destino))
+			return true;
+			
+		return false;
+	}
+	
+	public boolean passagemSecreta(Point origem, Point destino)
+	{
+		Map dest, orig;
+		for(Map map : mapa)
+		{
+			if(map.position == destino)
+				dest = map;
+			if(map.position == origem)
+				orig = map;
+		}
+		
+		if(orig.type == "a" || orig.type == "c" || orig.type == "f" || orig.type == "i")
+		{
+			if(dest.type == "a" || dest.type == "c" || dest.type == "f" || dest.type == "i")
+			{
+				if(dest.free)
+				{
+					dest.free = false;
+					orig.free = true;
+					return true;
+				}
+			}
+		}
+		
 		return false;
 	}
 	
