@@ -21,8 +21,8 @@ import javax.swing.JPanel;
 
 public class JanelaTabuleiro extends JFrame {
 	
-	public final int LARG_DEFAULT = 576;
-	public final int ALT_DEFAULT = 604;
+	public final int LARG_DEFAULT = 600;
+	public final int ALT_DEFAULT = 625;
 	
 	private JPanel panel = new JPanel();
 	
@@ -64,13 +64,13 @@ public class JanelaTabuleiro extends JFrame {
 		Grid grid_jogadores = new Grid(new Dimension(LARG_DEFAULT, ALT_DEFAULT), this);
 		panel.add(grid_jogadores);
 		
-		ImageIcon i = new ImageIcon("Tabuleiro-Clue-C.jpg");
+		/*ImageIcon i = new ImageIcon("Tabuleiro-Clue-C.jpg");
 		JLabel l=new JLabel();
 		l.setIcon(i);
 		l.setBackground(Color.RED);
 		l.setOpaque(true);
 		l.setBounds(0, 0, LARG_DEFAULT, ALT_DEFAULT);
-		panel.add(l);
+		panel.add(l);*/
 		
 		getContentPane().add(panel);
 		
