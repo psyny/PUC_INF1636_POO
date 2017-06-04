@@ -2,6 +2,8 @@ package jogo;
 
 public enum CasaType {
 	CORREDOR,
+	VACUO,
+	CENTRO,
 	
 	COZINHA,
 	COZINHA_PORTA,

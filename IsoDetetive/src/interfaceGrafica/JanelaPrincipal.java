@@ -26,7 +26,7 @@ public class JanelaPrincipal extends JFrame {
 	public Vetor2D_int tamanho;
 	
 	
-	
+	//Contrutor de JanelaPrincipal
 	private JanelaPrincipal() {
 		tamanho = new Vetor2D_int( 1024 , 768 );
 		
@@ -37,7 +37,7 @@ public class JanelaPrincipal extends JFrame {
     	setLocationRelativeTo(null);
 	}
 	
-	
+	//inicializador statico da JanelaPrincipal, que inicializa a variavel static singleton
 	public static void inicializar() {
 		EventQueue.invokeLater(new Runnable() {
 
@@ -59,26 +59,30 @@ public class JanelaPrincipal extends JFrame {
 		} ); // EventQueue end
 	}
 	
-	
+	//Remove todos os componentes do mainContentPane
 	private static void removerTodoConteudo() {
 		JanelaPrincipal.singleton.mainContentPane.removeAll();	
 	}
 	
+	//Repinta e Revalida o mainContentPane
 	private static void revalidar() {
 		JanelaPrincipal.singleton.mainContentPane.repaint();
 		JanelaPrincipal.singleton.mainContentPane.validate();
 	}
 	
+	//Limpa o mainContentPane e dpois adiciona um componente ao ele, e repinta
 	public static void carregarQuadro( Component cmp ) {
 		JanelaPrincipal.removerTodoConteudo();
 		JanelaPrincipal.singleton.mainContentPane.add( cmp );
 		JanelaPrincipal.revalidar();
 	}
 	
+	//Define o LayoutManager do mainContentPane
 	public static void definirLayoutManager( LayoutManager mgr ) {
 		JanelaPrincipal.singleton.mainContentPane.setLayout( mgr );
 	}
 	
+	//Define o LayoutManager para FlowLayout
 	public static void resetarLayoutManager() {
 		JanelaPrincipal.singleton.mainContentPane.setLayout( new FlowLayout() );
 	}

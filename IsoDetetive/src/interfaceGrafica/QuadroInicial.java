@@ -26,6 +26,7 @@ public class QuadroInicial extends JPanel {
 		}
 	}
 
+	// Listener que carrega o fileChooser para carregar um jogo existente
 	class actList_carregarJogo implements ActionListener {
 		JFrame frame;
 		
@@ -39,16 +40,18 @@ public class QuadroInicial extends JPanel {
 		}
 	}
 	
-	
+	//Construtor do QuadroInicial
 	public QuadroInicial() {
 		setBackground( new Color(255,255,255) );
 		setLayout( null );
 		
+		//Adiciona o botão de novo jogo
 		JButton btn_novoJogo = new JButton("Novo Jogo");
 		btn_novoJogo.setBounds( 0 , 0, 100, 100);
 		btn_novoJogo.addActionListener( new actList_novoJogo() );
 		add(btn_novoJogo);
 		
+		//Adiciona o botão de carregar um jogo
 		JButton btn_carregarJogo = new JButton("Continuar");
 		btn_carregarJogo.setBounds( 100 , 0, 100, 100);
 		btn_carregarJogo.addActionListener( new actList_carregarJogo() );

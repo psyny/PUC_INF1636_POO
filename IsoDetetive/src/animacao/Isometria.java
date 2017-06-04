@@ -8,7 +8,6 @@ public class Isometria {
 	private static double escala;
 	private static double[][] transMatriz_toIso;
 	private static double[][] transMatriz_fromIso;
-	private static boolean inicializado = false;
 	
 	{
 		Isometria.inicializar(0, 0);
@@ -20,7 +19,6 @@ public class Isometria {
 	}
 	
 	static public void inicializar( double rotacaoZ_graus , double rotacaoX_graus , double escala ) {
-		Isometria.inicializado = true;
 		Isometria.escala = escala;
 		
 		// Estruturas
@@ -121,11 +119,11 @@ public class Isometria {
 		// Calcula suas transformações para o isometrico
 		Vetor2D_double isoVet_A = Isometria.obterVetorIsometrico( carVet_DiagonalPrimaria );
 		isoVet_A.x = Math.abs( isoVet_A.x );
-		isoVet_A.y = Math.abs( isoVet_A.x );
+		isoVet_A.y = Math.abs( isoVet_A.y );
 		
 		Vetor2D_double isoVet_B = Isometria.obterVetorIsometrico( carVet_DiagonalSecundaria );
 		isoVet_B.x = Math.abs( isoVet_B.x );
-		isoVet_B.y = Math.abs( isoVet_B.x );
+		isoVet_B.y = Math.abs( isoVet_B.y );
 		
 		// Obtem maiores componentes entre as duas diagonais e cria um novo vetor
 		Vetor2D_double isoVet = new Vetor2D_double( 0 , 0 );
