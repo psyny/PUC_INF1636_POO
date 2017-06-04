@@ -1,21 +1,45 @@
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.geom.Rectangle2D;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class JanelaTabuleiro extends JFrame {
 	
-	public final int LARG_DEFAULT = 800;
-	public final int ALT_DEFAULT = 600;
+	public final int LARG_DEFAULT = 600;
+	public final int ALT_DEFAULT = 625;
 	
 	private JPanel panel = new JPanel();
+	
+	public JButton dado;
+	
+	public int valor_Dado = 0;
+	
+	public class dadoController implements ActionListener
+	{
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Main.janelaDados = new JanelaDados("Dados");
+			Main.janelaDados.setVisible(true);
+		}
+		
+	}
 	
 	public JanelaTabuleiro(String s)
 	{
@@ -32,13 +56,21 @@ public class JanelaTabuleiro extends JFrame {
 		
 		panel.setBackground(Color.WHITE);
 		
-		ImageIcon i = new ImageIcon("Tabuleiro-Original.jpg");
+		dado = new JButton("Dado");
+		dado.setBounds(253, 263, 90, 130);
+		dado.addActionListener(new dadoController());
+		panel.add(dado);
+		
+		Grid grid_jogadores = new Grid(new Dimension(LARG_DEFAULT, ALT_DEFAULT), this);
+		panel.add(grid_jogadores);
+		
+		/*ImageIcon i = new ImageIcon("Tabuleiro-Clue-C.jpg");
 		JLabel l=new JLabel();
 		l.setIcon(i);
 		l.setBackground(Color.RED);
 		l.setOpaque(true);
 		l.setBounds(0, 0, LARG_DEFAULT, ALT_DEFAULT);
-		panel.add(l);
+		panel.add(l);*/
 		
 		getContentPane().add(panel);
 		
