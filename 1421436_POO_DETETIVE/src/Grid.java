@@ -87,6 +87,39 @@ public class Grid extends JPanel{
 		}
 	}
 	
+	class Map
+	{
+		public Point position;
+		public String type;
+		
+		public Map(Point p, String s)
+		{
+			position = p;
+			type = s;
+		}
+		
+		public boolean isRoom()
+		{
+			if(type != "." && type != "#")
+				return true;
+			return false;
+		}
+		
+		public boolean isDoor()
+		{
+			if(type == "a" || type == "b" || type == "c" || type == "d" || type == "e" || type == "f" || type == "g" || type == "h" || type == "i")
+				return true;
+			return false;
+		}
+		
+		public boolean isFloor()
+		{
+			if(type == ".")
+				return true;
+			return false;
+		}
+	}
+	
 	public Grid(Dimension size, JanelaTabuleiro frame)
 	{
 		this.size = size;
