@@ -73,4 +73,8 @@ public class CenaComposta extends JLayeredPane implements Animavel {
     		}
     	}
 	}	
+	
+	public boolean isDestroyed() {
+		return false;
+	}
 }

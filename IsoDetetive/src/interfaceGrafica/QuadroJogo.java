@@ -1,6 +1,8 @@
 package interfaceGrafica;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLayeredPane;
@@ -13,14 +15,60 @@ import jogo.*;
 import mediadores.TradutorJogadores;
 import mediadores.TradutorTabuleiro;
 
+
+
+
 public class QuadroJogo extends JLayeredPane {
+	private class painelDeControles extends JPanel {
+		public painelDeControles() {
+			this.setBackground( new Color(255,0,0));
+			this.setOpaque( true );
+			this.setLayout( null );
+		}
+	}
+	
+	// Listener que carrega proxima janela de jogo iniciado
+	private class actList_dado implements ActionListener {
+		private Actor dado = null;
+		private Scene cena = null;
+		
+		
+		public actList_dado( Scene cena ) {
+			this.cena = cena;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e)  {
+			if( dado == null ) {
+				this.criarDado();
+			} else {
+				this.deletarDado();
+			}
+		}
+		
+		private void criarDado() {
+			dado = new Actor( 200 , 200 );
+			dado.setLocation( 500, 500 );   
+			dado.addAnimatedSprite( "dice.txt" , new Vetor2D_int(0,0) , 0 );
+			dado.getAnimatedSprite().playAnimation(100);
+			cena.addActor( dado , 10 );
+		}
+		
+		private void deletarDado() {
+			//this.dado.setToDestroy();
+			this.dado.getAnimatedSprite().playAnimation(10, LoopType.END_STOP );
+			this.dado.setToDestroy( null );
+			this.dado = null;
+		}
+	}
+	
 	public QuadroJogo() {
 		// Carregando arquivos pertinentes ao jogo
 		Tabuleiro tabuleiro = GeradorDeTabuleiros.carregarDoArquivo();	
 		tabuleiro.scanGameInfo();
 				
 		// Configurações principais
-		JanelaPrincipal.definirLayoutManager( null );
+		JanelaPrincipal.getInstance().definirLayoutManager( null );
 		
 		setBackground( new Color(0,255,255) );
 		setOpaque( true );
@@ -63,8 +111,19 @@ public class QuadroJogo extends JLayeredPane {
         add( gameCamera );
         setLayer( gameCamera , 10 );
         
-        // Carregar Configuracoes de Jogador
+        // Layer dos controles de jogo
+        JPanel controlsPane = new painelDeControles();
+        controlsPane.setBounds(0, 0, 500, 50);
         
+        JButton bt_dado = new JButton("Dado");
+        bt_dado.setBounds(0, 0, 100, 30);
+        bt_dado.addActionListener( new actList_dado(cenaAtores) );
+        controlsPane.add( bt_dado );
+        
+        add( controlsPane );
+        setLayer( controlsPane , 20 );
+        
+       
         
         
         
@@ -79,8 +138,8 @@ public class QuadroJogo extends JLayeredPane {
 		
 		Actor testActor = new Actor( 200 , 200 );
 		testActor.setLocation( 200, 100 );   
-		testActor.addAnimatedSprite( "testExplosion.txt" , new Vetor2D_int(0,0) , 0 );
-		
+		testActor.addAnimatedSprite( "dice.txt" , new Vetor2D_int(0,0) , 0 );
+		testActor.getAnimatedSprite().playAnimation(100);
 		cenaTeste.addActor( testActor , 10 );
 		
 		

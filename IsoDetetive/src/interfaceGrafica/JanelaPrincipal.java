@@ -15,12 +15,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import estruturas.Vetor2D_int;
+import jogo.ControladoraDoJogo;
 
 
-
-
-
-public class JanelaPrincipal extends JFrame {
+public class JanelaPrincipal extends JFrame {	
 	public static JanelaPrincipal singleton = null;	
 	public Container mainContentPane;
 	public Vetor2D_int tamanho;
@@ -36,7 +34,7 @@ public class JanelaPrincipal extends JFrame {
     	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	setLocationRelativeTo(null);
 	}
-	
+
 	//inicializador statico da JanelaPrincipal, que inicializa a variavel static singleton
 	public static void inicializar() {
 		EventQueue.invokeLater(new Runnable() {
@@ -50,7 +48,7 @@ public class JanelaPrincipal extends JFrame {
 				
 
 				// Exibe a janela inicial
-				JanelaPrincipal.carregarQuadro( new QuadroInicial() );
+				JanelaPrincipal.singleton.carregarQuadro( new QuadroInicial() );
 				
 				// Finalmente, exibe a janela
 				JanelaPrincipal.singleton.setVisible( true );
@@ -60,30 +58,35 @@ public class JanelaPrincipal extends JFrame {
 	}
 	
 	//Remove todos os componentes do mainContentPane
-	private static void removerTodoConteudo() {
-		JanelaPrincipal.singleton.mainContentPane.removeAll();	
+	private void removerTodoConteudo() {
+		this.mainContentPane.removeAll();	
 	}
 	
 	//Repinta e Revalida o mainContentPane
-	private static void revalidar() {
-		JanelaPrincipal.singleton.mainContentPane.repaint();
-		JanelaPrincipal.singleton.mainContentPane.validate();
+	private void revalidar() {
+		this.mainContentPane.repaint();
+		this.mainContentPane.validate();
 	}
 	
 	//Limpa o mainContentPane e dpois adiciona um componente ao ele, e repinta
-	public static void carregarQuadro( Component cmp ) {
-		JanelaPrincipal.removerTodoConteudo();
-		JanelaPrincipal.singleton.mainContentPane.add( cmp );
-		JanelaPrincipal.revalidar();
+	public void carregarQuadro( Component cmp ) {
+		this.removerTodoConteudo();
+		this.mainContentPane.add( cmp );
+		this.revalidar();
 	}
 	
 	//Define o LayoutManager do mainContentPane
-	public static void definirLayoutManager( LayoutManager mgr ) {
-		JanelaPrincipal.singleton.mainContentPane.setLayout( mgr );
+	public void definirLayoutManager( LayoutManager mgr ) {
+		this.mainContentPane.setLayout( mgr );
 	}
 	
 	//Define o LayoutManager para FlowLayout
-	public static void resetarLayoutManager() {
-		JanelaPrincipal.singleton.mainContentPane.setLayout( new FlowLayout() );
+	public void resetarLayoutManager() {
+		JanelaPrincipal.getInstance().mainContentPane.setLayout( new FlowLayout() );
 	}
+	
+	public static JanelaPrincipal getInstance() {
+		return JanelaPrincipal.singleton;
+	}
+	
 }

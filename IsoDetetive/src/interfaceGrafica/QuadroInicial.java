@@ -22,7 +22,7 @@ public class QuadroInicial extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e)  {
-			JanelaPrincipal.carregarQuadro( new QuadroSelecaoDeJogadores() );
+			JanelaPrincipal.getInstance().carregarQuadro( new QuadroSelecaoDeJogadores() );
 		}
 	}
 

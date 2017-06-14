@@ -7,7 +7,7 @@ Test Explosion		; animation name
 64,64		; advancement step ( usually frame size )
 4,4		; number of rows and cols of frames
 16		; total number of frames ( usually rows*cols )
-10		; frame change speed ( millis )
+100		; frame change speed ( millis )
 
 
 Test Explosion		; animation name
@@ -17,7 +17,7 @@ Test Explosion		; animation name
 64,64		; advancement step ( usually frame size )
 4,4		; number of rows and cols of frames
 16		; total number of frames ( usually rows*cols )
-10		; frame change speed ( millis )
+100		; frame change speed ( millis )
 
 Test Explosion2		; animation name
 11		; animation ID code

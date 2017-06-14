@@ -13,6 +13,7 @@ public class Scene extends JLayeredPane implements Animavel {
 	public double scale;
 	
 	protected ArrayList<Actor> toAdd = new ArrayList<Actor>();
+	protected ArrayList<Component> toRemove = new ArrayList<Component>();
 
 	public Scene( ) {
 		this.setLayout( null );
@@ -45,7 +46,6 @@ public class Scene extends JLayeredPane implements Animavel {
 	
 	public void addActor( Actor actor , int layer ) {
 		actor.desiredLayer = layer;
-		actor.parentContainer = this;
 		actor.parentScene = this;
 		
 		this.toAdd.add( actor );
@@ -70,19 +70,34 @@ public class Scene extends JLayeredPane implements Animavel {
     
 	@Override
 	public void passTime(long time) {
-		
+		// Anima os componenetes internos
     	for( Component comp : this.getComponents() ) {
     		if (comp instanceof Animavel ) {
-    			((Animavel) comp).passTime( time );
+    			if( ((Animavel) comp).isDestroyed() == false ) {
+    				((Animavel) comp).passTime( time );
+    			} else {
+    				this.toRemove.add( comp );
+    			}
     		}
     	}
-    
+    	
+    	// Remove os componentes marcados para remocao 
+    	for( Component comp : this.toRemove ) {
+    		this.remove(comp);
+    	}
+    	
+    	// Adiciona os novos atores
     	for( Actor act : this.toAdd ) {
-    		
-	    		this.add( act );
-	    		this.setLayer( act , ((act.getProjectionCenter().y / 20 ) + act.desiredLayer ));
+    			if( act.isDestroyed() == false) { 
+		    		this.add( act );
+		    		this.setLayer( act , ((act.getProjectionCenter().y / 20 ) + act.desiredLayer ));
+    			}
     	}
     	
 		this.toAdd.clear();
 	}	
+	
+	public boolean isDestroyed() {
+		return false;
+	}
 }

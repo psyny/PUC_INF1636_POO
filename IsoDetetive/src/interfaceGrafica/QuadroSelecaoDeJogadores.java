@@ -24,7 +24,7 @@ public class QuadroSelecaoDeJogadores extends JPanel {
 	private JButton start;	
 	
 	// Listener que carrega proxima janela de jogo iniciado
-	class actList_iniciarJogo implements ActionListener {
+	private class actList_iniciarJogo implements ActionListener {
 		public actList_iniciarJogo() {
 		}
 
@@ -37,12 +37,12 @@ public class QuadroSelecaoDeJogadores extends JPanel {
 			}
 			
 			
-			JanelaPrincipal.carregarQuadro( new QuadroJogo() );
+			JanelaPrincipal.getInstance().carregarQuadro( new QuadroJogo() );
 		}
 	}
 	
 	// Listener de mudanças na lista de personagens
-	class listener_ListaDePesonagens implements ListSelectionListener {
+	private class listener_ListaDePesonagens implements ListSelectionListener {
 		public JList list;
 		public JButton button;
 		

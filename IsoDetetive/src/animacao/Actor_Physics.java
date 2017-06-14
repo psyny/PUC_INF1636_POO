@@ -144,7 +144,7 @@ public class Actor_Physics extends Actor implements Animavel {
 	
 
 	
-	public void destroyFx( ) {
+	public void setToDestroy( ) {
 		if( this.destroing == false ) {
 			this.destroing = true;
 		}

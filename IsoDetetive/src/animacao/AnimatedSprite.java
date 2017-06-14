@@ -224,7 +224,7 @@ public class AnimatedSprite extends Sprite implements Animavel {
 			boolean finishedLoop = false;
 			
 			while( ( this.animState.currentFrameTime * this.speedScale ) > this.animState.currentAnimation.defaultSpeed ) {
-				this.animState.currentFrameTime = this.animState.currentAnimation.defaultSpeed - this.animState.currentFrameTime;
+				this.animState.currentFrameTime -= this.animState.currentAnimation.defaultSpeed;
 				
 				int lastFrame = this.animState.currentAnimationFrame;
 				this.animState.currentAnimationFrame += frameDirection;			
@@ -381,5 +381,13 @@ public class AnimatedSprite extends Sprite implements Animavel {
 	
 	public int getCurrentAnimationID() {
 		return this.animState.currentAnimation.id;
+	}
+	
+	public boolean isPaused() {
+		return this.animState.paused;
+	}
+	
+	public boolean isDestroyed() {
+		return false;
 	}
 }

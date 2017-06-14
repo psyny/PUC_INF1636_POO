@@ -1,0 +1,65 @@
+dice.png
+
+Still01		; animation name
+1		; animation ID code
+0,0 		; animation frame start position
+170,170		; single frame size
+0,0		; advancement step ( usually frame size )
+1,1		; number of rows and cols of frames
+1		; total number of frames ( usually rows*cols )
+1000		; frame change speed ( millis )
+
+Still02		; animation name
+2		; animation ID code
+170,0 		; animation frame start position
+170,170		; single frame size
+0,0		; advancement step ( usually frame size )
+1,1		; number of rows and cols of frames
+1		; total number of frames ( usually rows*cols )
+1000		; frame change speed ( millis )
+
+Still03		; animation name
+3		; animation ID code
+340,0 		; animation frame start position
+170,170		; single frame size
+0,0		; advancement step ( usually frame size )
+1,1		; number of rows and cols of frames
+1		; total number of frames ( usually rows*cols )
+1000		; frame change speed ( millis )
+
+Still04		; animation name
+4		; animation ID code
+510,0 		; animation frame start position
+170,170		; single frame size
+0,0		; advancement step ( usually frame size )
+1,1		; number of rows and cols of frames
+1		; total number of frames ( usually rows*cols )
+1000		; frame change speed ( millis )
+
+Still05		; animation name
+5		; animation ID code
+680,0 		; animation frame start position
+170,170		; single frame size
+0,0		; advancement step ( usually frame size )
+1,1		; number of rows and cols of frames
+1		; total number of frames ( usually rows*cols )
+1000		; frame change speed ( millis )
+
+Still06		; animation name
+6		; animation ID code
+850,0 		; animation frame start position
+170,170		; single frame size
+0,0		; advancement step ( usually frame size )
+1,1		; number of rows and cols of frames
+1		; total number of frames ( usually rows*cols )
+1000		; frame change speed ( millis )
+
+Flying		; animation name
+100		; animation ID code
+0,170 		; animation frame start position
+170,170		; single frame size
+170,170		; advancement step ( usually frame size )
+4,6		; number of rows and cols of frames
+-1		; total number of frames ( usually rows*cols )
+40		; frame change speed ( millis )
+#		; End of File Mark

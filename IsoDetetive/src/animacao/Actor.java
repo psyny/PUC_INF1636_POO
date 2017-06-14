@@ -21,22 +21,30 @@ class innerSprite {
 }
 
 public class Actor extends JLayeredPane implements Animavel {
+	public enum DestroyStyle {
+		NONE,
+		DESTROYED,
+		DELAY,
+		ANIMATION
+	}
+	
+	
 	public Vetor2D_double	virtualPosition		= new Vetor2D_double( 0 , 0 );
 	public double			virtualHeight		= 0;
 	
 	public Vetor2D_double 	projectionPosition 	= new Vetor2D_double( 0 , 0 );
 	public Vetor2D_int 		projectionSize 		= new Vetor2D_int( 0 , 0 );
 	
-	public Container 		parentContainer = null;
 	public Scene			parentScene = null;
 	
 	private ArrayList<innerSprite> innerSprites;
 	
 	public int desiredLayer = 0;
 	
-	private boolean 	destroing 		= false;
-	private long		destroyDelay 	= 0;
-	private long		destroyCounter	= 0;
+	protected DestroyStyle	destroyStyle	= DestroyStyle.NONE;
+	protected AnimatedSprite destroyAfter 	= null;
+	protected long			destroyDelay 	= 0;
+	protected long			destroyCounter	= 0;
 	
 
 	public Actor( int sizeX , int sizeY ) {
@@ -45,6 +53,7 @@ public class Actor extends JLayeredPane implements Animavel {
 		this.projectionSize.x = sizeX;
 		this.projectionSize.y = sizeY;
 	}
+	
 	
 	private void init() {
 		this.setVisible( true );
@@ -56,6 +65,8 @@ public class Actor extends JLayeredPane implements Animavel {
 		
 		this.innerSprites = new ArrayList<innerSprite>();
 	}
+	
+
 
 	// Adiciona um sprite animado a este ator
 	public AnimatedSprite addAnimatedSprite( String fileName , Vetor2D_int relativePosition , int layer ) {
@@ -107,22 +118,29 @@ public class Actor extends JLayeredPane implements Animavel {
 	@Override
 	public void passTime(long time) {	
 		// Em processo de destruição
-		if( this.destroing == true ) {
-			this.destroyCounter += time;
-			if( this.destroyCounter >= this.destroyDelay  ) {
-				this.setVisible(false);
-				//Toolkit.getDefaultToolkit().sync();
-				return;
-			}
-		}
-
-		// Remove Ator
-		if( this.parentContainer != null ) {
-			if( this.getComponents().length == 0 ) {
-				this.setVisible(false);
-				Toolkit.getDefaultToolkit().sync();
-				this.parentContainer.remove(this);
-			}
+		switch( this.destroyStyle ) {
+			case NONE:
+				break;
+			
+			case DELAY:
+				this.destroyCounter += time;
+				if( this.destroyCounter >= this.destroyDelay  ) {
+					this.destroyRoutine();
+					return;
+				}
+				break;
+				
+			case ANIMATION:
+				if( this.destroyAfter == null ){
+					this.destroyRoutine();
+				} else {
+					if( this.destroyAfter.isPaused() == true) {
+						this.destroyRoutine();
+						return;
+					}
+				}
+				break;
+			
 		}
 		
 		// Anima os sprites internos
@@ -198,9 +216,48 @@ public class Actor extends JLayeredPane implements Animavel {
 		}	
 	}
 	
-	public void destroyFx( ) {
-		if( this.destroing == false ) {
-			this.destroing = true;
+	public void setToDestroy() {
+		this.setToDestroy(0);
+	
+	}
+	
+	public void setToDestroy( long delay_ms ) {
+		this.destroyStyle = DestroyStyle.DELAY;
+		this.destroyDelay = delay_ms;	
+	}
+	
+	public void setToDestroy( AnimatedSprite aSpr ) {
+		if( aSpr == null ) {
+			this.destroyAfter = this.getAnimatedSprite();
+		} else {
+			this.destroyAfter = aSpr;
 		}
+		this.destroyStyle = DestroyStyle.ANIMATION;
+	}
+	
+	
+	public boolean isDestroyed() {
+		if( this.destroyStyle == DestroyStyle.DESTROYED ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	
+	public void clearActor() {
+		for( innerSprite spr : innerSprites ) {
+			spr.sprite.delete();
+		}
+		this.innerSprites.clear();
+		this.removeAll();
+		this.revalidate();
+	}
+	
+	private void destroyRoutine() {
+		this.setVisible(false);
+		this.clearActor();
+		this.destroyStyle = DestroyStyle.DESTROYED;
+		//Toolkit.getDefaultToolkit().sync();
 	}
 }
