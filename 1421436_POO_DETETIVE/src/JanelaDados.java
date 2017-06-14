@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 
 public class JanelaDados extends JFrame
@@ -39,10 +40,10 @@ public class JanelaDados extends JFrame
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
-			try{
+			try {
 				Main.janelaTabuleiro.valor_Dado = java.lang.Integer.parseInt(forceMove.getText());
-			}
-			catch{
+			} 
+			catch (Exception e2) {
 				Main.janelaTabuleiro.valor_Dado = d1.getValor() + d2.getValor();	
 			}
 			finally{
@@ -90,7 +91,7 @@ public class JanelaDados extends JFrame
 		
 		forceMove = new JTextField();
 		forceMove.setBounds(20, 120, 60, 30);
-		add(forceMove)
+		add(forceMove);
 		
 		getContentPane().add(panel);
 
