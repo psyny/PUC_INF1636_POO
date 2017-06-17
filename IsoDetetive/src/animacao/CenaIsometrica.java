@@ -113,4 +113,13 @@ public class CenaIsometrica extends Scene {
 		
 		return new Vetor2D_int( (int)posicaoProjetada.x , (int)posicaoProjetada.y );
 	}
+	
+	public Vetor2D_int getIsometricOffset() {
+		Vetor2D_int vet = new Vetor2D_int(0,0);
+		
+		vet.x = this.margem_esquerda + this.origem.x;
+		vet.y = this.margem_superior + this.origem.y;
+		
+		return vet;
+	}
 }
