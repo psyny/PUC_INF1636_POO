@@ -3,9 +3,9 @@ package jogo;
 import estruturas.Vetor2D_int;
 
 public class Personagem {
-	private PersonagemEnum 	personagem;
-	private String 			nome;
-	private Vetor2D_int		casaInicial;
+	protected PersonagemEnum 	personagem;
+	protected String 			nome;
+	protected Vetor2D_int		casaInicial;
 	
 	public Personagem( PersonagemEnum per ) {
 		this.personagem = per;

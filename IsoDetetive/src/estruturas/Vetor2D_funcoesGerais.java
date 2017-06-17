@@ -1,10 +1,14 @@
 package estruturas;
 
-public abstract class Vetor2D_funcoesGerais {
-
+public abstract class Vetor2D_funcoesGerais {	
+	
 	public static double getModulus( double x , double y ) {
 		return Math.sqrt( ( x * x ) + ( y * y ) );		
 	}
+	
+	public static double getModulus( double x , double y , double z ) {
+		return Math.sqrt( ( x * x ) + ( y * y ) + ( z * z ) );		
+	}	
 	
 	public static double getDirectionRAD( double x , double y ) {
 		double direction = 0;

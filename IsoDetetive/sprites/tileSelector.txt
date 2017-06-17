@@ -1,0 +1,21 @@
+tileSelector.png
+
+Marked		; animation name
+1		; animation ID code
+0,0 		; animation frame start position
+128,64 		; single frame size
+128,64		; advancement step ( usually frame size )
+5,4		; number of rows and cols of frames
+20		; total number of frames ( usually rows*cols )
+50		; frame change speed ( millis )
+
+
+Selected	; animation name
+2		; animation ID code
+0,320 		; animation frame start position
+128,64 		; single frame size
+128,64		; advancement step ( usually frame size )
+5,4		; number of rows and cols of frames
+20		; total number of frames ( usually rows*cols )
+50		; frame change speed ( millis )
+#		; End of File Mark

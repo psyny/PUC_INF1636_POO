@@ -3,6 +3,11 @@ package estruturas;
 public class Vetor2D_double {
 	public double x;
 	public double y;
+
+	public Vetor2D_double( ) {
+		this.x = 0;
+		this.y = 0;
+	}	
 	
 	public Vetor2D_double( double x , double y ) {
 		this.x = x;

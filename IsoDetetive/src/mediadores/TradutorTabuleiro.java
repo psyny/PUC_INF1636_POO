@@ -3,8 +3,10 @@ package mediadores;
 import java.util.ArrayList;
 
 import animacao.Actor;
+import atores.AtorJogador;
 import atores.AtorPiso;
 import atores.CenaTabuleiro;
+import atores.Marcador;
 import estruturas.Vetor2D_double;
 import estruturas.Vetor2D_int;
 import jogo.Casa;
@@ -12,10 +14,10 @@ import jogo.CasaType;
 import jogo.Tabuleiro;
 
 public class TradutorTabuleiro {
-	private Tabuleiro 		tabuleiro;
-	private CenaTabuleiro 	cenaTabuleiro;
-	private int 			casa_largura;
-	private int				casa_altura;
+	protected Tabuleiro 		tabuleiro;
+	protected CenaTabuleiro 	cenaTabuleiro;
+	protected int 				casa_largura;
+	protected int				casa_altura;
 	
 	public TradutorTabuleiro( Tabuleiro tabuleiro , CenaTabuleiro cenaTabuleiro , int casa_largura , int casa_altura ) {
 		this.tabuleiro 		= tabuleiro;
@@ -115,4 +117,6 @@ public class TradutorTabuleiro {
 	
 		return this.obterCentroDaCasa(casa);
 	}
+	
+
 } 

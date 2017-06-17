@@ -29,8 +29,7 @@ public class Actor extends JLayeredPane implements Animavel {
 	}
 	
 	
-	public Vetor2D_double	virtualPosition		= new Vetor2D_double( 0 , 0 );
-	public double			virtualHeight		= 0;
+	public Vetor3D_double	virtualPosition		= new Vetor3D_double( 0 , 0 , 0 );
 	
 	public Vetor2D_double 	projectionPosition 	= new Vetor2D_double( 0 , 0 );
 	public Vetor2D_int 		projectionSize 		= new Vetor2D_int( 0 , 0 );
@@ -115,7 +114,6 @@ public class Actor extends JLayeredPane implements Animavel {
 		return sprite;
 	}
 	
-	@Override
 	public void passTime(long time) {	
 		// Em processo de destruição
 		switch( this.destroyStyle ) {
@@ -152,7 +150,7 @@ public class Actor extends JLayeredPane implements Animavel {
 	}
 	
 	public void setVirtualPosition( double x , double y , double z ) {
-		this.virtualHeight = z;
+		this.virtualPosition.z = z;
 		this.setVirtualPosition(x, y);
 	}
 		
@@ -168,14 +166,16 @@ public class Actor extends JLayeredPane implements Animavel {
 		
 		Vetor2D_int centerPosition;
 		if( this.parentScene != null ) {
-			centerPosition = this.parentScene.getProjection(virtualPosition);
+			centerPosition = this.parentScene.getProjection(virtualPosition.getVetor2D());
+			centerPosition.y -= this.virtualPosition.z;
 		} 
 		else {
 			centerPosition = new Vetor2D_int( (int)this.virtualPosition.x , (int)this.virtualPosition.y );
+			centerPosition.y -= this.virtualPosition.z;
 		}
 		
 		this.projectionPosition.x = centerPosition.x - ( this.projectionSize.x / 2 );
-		this.projectionPosition.y = centerPosition.y - ( this.projectionSize.y / 2 );
+		this.projectionPosition.y = centerPosition.y - ( this.projectionSize.y / 2 )  - this.virtualPosition.z;
 		
 		super.setLocation( (int)this.projectionPosition.x , (int)this.projectionPosition.y );
 	}	
@@ -185,7 +185,7 @@ public class Actor extends JLayeredPane implements Animavel {
 		this.setSize( this.projectionSize.x , this.projectionSize.y );		
 		
 		this.projectionPosition.x = x - ( this.projectionSize.x / 2 );
-		this.projectionPosition.y = y - ( this.projectionSize.y / 2 );
+		this.projectionPosition.y = y - ( this.projectionSize.y / 2 ) - this.virtualPosition.z;
 		
 		super.setLocation( (int)this.projectionPosition.x , (int)this.projectionPosition.y );
 	}

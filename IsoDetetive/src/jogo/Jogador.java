@@ -1,10 +1,10 @@
 package jogo;
 
 public class Jogador {
-	private Casa 	posicao;
-	private String 	nome;
-	private Personagem personagem;
-	private boolean	emJogo;
+	protected Casa 	posicao;
+	protected String 	nome;
+	protected Personagem personagem;
+	protected boolean	emJogo;
 	
 	public Jogador( PersonagemEnum personagem ) {
 		this( personagem , "<SEM NOME>" );
@@ -14,7 +14,7 @@ public class Jogador {
 		this.personagem = PersonagemLista.getInstance().obterPersonagem( personagem );
 		
 		this.nome 		= nomeJogador;
-		this.emJogo 	= false;
+		this.emJogo 	= true;
 	}
 	
 	

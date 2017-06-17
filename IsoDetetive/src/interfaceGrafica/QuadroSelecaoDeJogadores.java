@@ -30,12 +30,11 @@ public class QuadroSelecaoDeJogadores extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e)  {
-			// Configurar Jogadores - TEMPORARIO
+			// TODO: Configurar Jogadores - TEMPORARIO
 			for( PersonagemEnum personagemEnum : PersonagemEnum.values() ) {
 				Jogador jogador = new Jogador( personagemEnum );
 				ControladoraDoJogo.getInstance().adicionarJogador( jogador );	
 			}
-			
 			
 			JanelaPrincipal.getInstance().carregarQuadro( new QuadroJogo() );
 		}

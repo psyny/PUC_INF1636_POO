@@ -61,8 +61,8 @@ class animationState {
 
 
 @SuppressWarnings("serial")
-public class AnimatedSprite extends Sprite implements Animavel {
-	
+public class AnimatedSprite extends Sprite implements Animavel , AnimationEndObserved {
+	private ArrayList<AnimationEndObserver> animationEndObserverList = new ArrayList<AnimationEndObserver>();
 	private ArrayList<animationData> animations = new ArrayList<animationData>();
 
 	private animationState 	animState;
@@ -252,6 +252,7 @@ public class AnimatedSprite extends Sprite implements Animavel {
 					
 					if( this.animState.currentLoop >= this.loopLimit ) {
 						this.animState.paused = true;
+						this.animationEndNotityObservers();
 						this.animState.currentAnimationFrame = lastFrame;
 						
 						if( this.loopType == LoopType.END_DIE ) {
@@ -390,4 +391,20 @@ public class AnimatedSprite extends Sprite implements Animavel {
 	public boolean isDestroyed() {
 		return false;
 	}
+	
+	
+	// OBSERVER PATTERN Method Group
+		public void animationEndRegister(AnimationEndObserver observer) {
+			this.animationEndObserverList.add(observer);
+		}
+		
+		public void animationEndUnRegister(AnimationEndObserver observer) {
+			this.animationEndObserverList.remove(observer);
+		}
+		
+		private void animationEndNotityObservers() {
+			for( AnimationEndObserver ob : this.animationEndObserverList ) {
+				ob.animationEndNotify(this);
+			}
+		}	
 }
