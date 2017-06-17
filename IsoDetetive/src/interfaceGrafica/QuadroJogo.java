@@ -101,7 +101,7 @@ public class QuadroJogo extends JLayeredPane {
 		}
 		
 		private void deletarMarcadores() {
-			//tradutorMovimentacao.desmarcarCasas();
+			tradutorMovimentacao.desmarcarCasas();
 		}
 
 	}	
