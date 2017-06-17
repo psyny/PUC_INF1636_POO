@@ -17,6 +17,13 @@ public class Jogador {
 		this.emJogo 	= true;
 	}
 	
+	public void definirPosicao( Casa casa ) {
+		posicao = casa;
+	}
+	
+	public Casa obterPosicao() {
+		return posicao;
+	}
 	
 	public Personagem obterPersonagem() {
 		return this.personagem;

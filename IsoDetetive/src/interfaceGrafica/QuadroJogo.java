@@ -95,9 +95,9 @@ public class QuadroJogo extends JLayeredPane {
 		
 		private void gerarMarcadores() {
 			ControladoraDoJogo.getInstance().iniciarProximaJogada();
-			//ControladoraDoJogo.getInstance().rolarDadoParaMovimentacao(3);
+			ControladoraDoJogo.getInstance().rolarDadoParaMovimentacao(3);
 			
-			//tradutorMovimentacao.marcarCasas();
+			tradutorMovimentacao.marcarCasas();
 		}
 		
 		private void deletarMarcadores() {

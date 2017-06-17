@@ -5,11 +5,11 @@ import estruturas.Vetor2D_int;
 public class Personagem {
 	protected PersonagemEnum 	personagem;
 	protected String 			nome;
-	protected Vetor2D_int		casaInicial;
+	protected Casa				casaInicial;
 	
 	public Personagem( PersonagemEnum per ) {
 		this.personagem = per;
-		this.casaInicial = new Vetor2D_int(0,0);
+		this.casaInicial = null;
 		
 		switch( per ) {
 			case L:
@@ -40,12 +40,11 @@ public class Personagem {
 	
 
 		
-	public void definirCasaInicial( Vetor2D_int pos ) {
-		this.casaInicial.x = pos.x;
-		this.casaInicial.y = pos.y;
+	public void definirCasaInicial( Casa casa ) {
+		casaInicial = casa;
 	}
 	
-	public Vetor2D_int obterCasaInicial() {
+	public Casa obterCasaInicial() {
 		return this.casaInicial;
 	}
 	

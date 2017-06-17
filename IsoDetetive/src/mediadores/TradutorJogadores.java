@@ -34,9 +34,11 @@ public class TradutorJogadores {
 			atores.atorJogador = new AtorJogador( jogador.obterPersonagem().obterEnum() );
 			this.cenaAtores.addActor( atores.atorJogador , 10 );
 
-			Vetor2D_int casaInicial = jogador.obterPersonagem().obterCasaInicial();
+		
+			Casa casaInicial = jogador.obterPersonagem().obterCasaInicial();
+			jogador.definirPosicao( casaInicial );
 
-			Vetor2D_double posicao = this.tradutorTabuleiro.obterCentroDaCasa( casaInicial.x , casaInicial.y );
+			Vetor2D_double posicao = this.tradutorTabuleiro.obterCentroDaCasa( casaInicial.position.x , casaInicial.position.y );
 			atores.atorJogador.setVirtualPosition( posicao.x , posicao.y );
 		}
 	}
