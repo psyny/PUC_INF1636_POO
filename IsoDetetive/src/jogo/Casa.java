@@ -9,11 +9,13 @@ public class Casa {
 	// Apenas para Consulta
 	public Vetor2D_int 	position;//Posição da Casa
 	public CasaType 	type;//Tipo da Casa
-
+	public Casa			casaAnterior;//Casa Anterior
+	
 	//Construtor de Cada
 	public Casa( int x , int y ) {
 		this.position = new Vetor2D_int( x , y );
 		this.type = CasaType.CORREDOR;
+		this.casaAnterior = null;
 	}
 	
 

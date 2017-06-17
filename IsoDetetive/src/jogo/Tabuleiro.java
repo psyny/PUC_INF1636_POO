@@ -279,10 +279,14 @@ public class Tabuleiro {
 		public ArrayList<Casa> obterCasasNaDistancia( ArrayList<Casa> casasDeOrigem , int distancia ) {
 			// TODO, no momento retornamos apenas uma lista arbitraria de casas
 			
-			ArrayList<Casa> casas = new ArrayList<Casa>();
+			ArrayList<Casa> casas = new ArrayList<Casa>(casasDeOrigem);
 			ArrayList<Casa> fronteira = new ArrayList<Casa>(casasDeOrigem);
 			ArrayList<Casa> fronteiraTemp = new ArrayList<Casa>();
 			ArrayList<Casa> vizinhos = new ArrayList<Casa>();
+			
+			for (Casa casa : casasDeOrigem) {
+				casa.casaAnterior = null;
+			}
 			
 			while(distancia > 0) {
 				for (Casa casa : fronteira) {
@@ -290,6 +294,7 @@ public class Tabuleiro {
 					
 					for (Casa casaVizinha : vizinhos) {
 						if(casas.indexOf(casaVizinha) == -1) {
+							casaVizinha.casaAnterior = casa;
 							casas.add(casaVizinha);
 							fronteiraTemp.add(casaVizinha);
 						}
