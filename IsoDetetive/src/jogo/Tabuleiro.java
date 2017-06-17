@@ -56,27 +56,27 @@ public class Tabuleiro {
 			for( Casa casa : linha ) {
 				switch( casa.type ) {
 					case INICIO_L:
-						PersonagemLista.getInstance().obterPersonagem(  PersonagemEnum.L ).definirCasaInicial( casa.position );
+						PersonagemLista.getInstance().obterPersonagem(  PersonagemEnum.L ).definirCasaInicial( casa );
 						break;
 					
 					case INICIO_SHERLOCK:
-						PersonagemLista.getInstance().obterPersonagem( PersonagemEnum.SHERLOCK ).definirCasaInicial( casa.position );
+						PersonagemLista.getInstance().obterPersonagem( PersonagemEnum.SHERLOCK ).definirCasaInicial( casa );
 						break;
 						
 					case INICIO_CARMEN:
-						PersonagemLista.getInstance().obterPersonagem( PersonagemEnum.CARMEN ).definirCasaInicial( casa.position );
+						PersonagemLista.getInstance().obterPersonagem( PersonagemEnum.CARMEN ).definirCasaInicial( casa );
 						break;
 						
 					case INICIO_PANTERA:
-						PersonagemLista.getInstance().obterPersonagem( PersonagemEnum.PANTERA ).definirCasaInicial(  casa.position );
+						PersonagemLista.getInstance().obterPersonagem( PersonagemEnum.PANTERA ).definirCasaInicial(  casa );
 						break;
 						
 					case INICIO_EDMORT:
-						PersonagemLista.getInstance().obterPersonagem( PersonagemEnum.EDMORT ).definirCasaInicial(  casa.position );
+						PersonagemLista.getInstance().obterPersonagem( PersonagemEnum.EDMORT ).definirCasaInicial(  casa );
 						break;
 						
 					case INICIO_BATMAN:
-						PersonagemLista.getInstance().obterPersonagem( PersonagemEnum.BATMAN ).definirCasaInicial( casa.position );
+						PersonagemLista.getInstance().obterPersonagem( PersonagemEnum.BATMAN ).definirCasaInicial( casa );
 						break;	
 				}
 			}
@@ -143,6 +143,74 @@ public class Tabuleiro {
 		
 		return neighbors;
 	}
+	
+	//Retorna os vizinhos da casa contida no (x, y) do tabuleiro
+		public ArrayList<Casa> getNeighbors( Casa casa ) {
+			ArrayList<Casa> neighbors = new ArrayList<Casa>();
+
+			Casa center = this.getCell( casa.position.x , casa.position.y );
+			if( center == null ) {
+				return neighbors;
+			}
+			
+			Casa nei;
+			
+			nei = this.getCell(casa.position.x+1, casa.position.y);
+			if( nei != null ) {
+				neighbors.add( nei );
+			}
+			
+			nei = this.getCell(casa.position.x-1, casa.position.y);
+			if( nei != null ) {
+				neighbors.add( nei );
+			}
+			
+			nei = this.getCell(casa.position.x, casa.position.y+1);
+			if( nei != null ) {
+				neighbors.add( nei );
+			}
+
+			nei = this.getCell(casa.position.x, casa.position.y-1);
+			if( nei != null ) {
+				neighbors.add( nei );
+			}		
+			
+			return neighbors;
+		}
+		
+	//Retorna os vizinhos da casa contida no (x, y) do tabuleiro
+			public ArrayList<Casa> getFreeNeighbors( Casa casa ) {
+				ArrayList<Casa> neighbors = new ArrayList<Casa>();
+
+				Casa center = this.getCell( casa.position.x , casa.position.y );
+				if( center == null ) {
+					return neighbors;
+				}
+				
+				Casa nei;
+				
+				nei = this.getCell(casa.position.x+1, casa.position.y);
+				if( nei != null && isFree(nei)) {
+					neighbors.add( nei );
+				}
+				
+				nei = this.getCell(casa.position.x-1, casa.position.y);
+				if( nei != null && isFree(nei)) {
+					neighbors.add( nei );
+				}
+				
+				nei = this.getCell(casa.position.x, casa.position.y+1);
+				if( nei != null && isFree(nei)) {
+					neighbors.add( nei );
+				}
+
+				nei = this.getCell(casa.position.x, casa.position.y-1);
+				if( nei != null && isFree(nei)) {
+					neighbors.add( nei );
+				}		
+				
+				return neighbors;
+			}
 			
 	
 	// Checa se a casa esta livre para movimentar-se para ela
@@ -210,15 +278,27 @@ public class Tabuleiro {
 	// Obtem casas acessiveis a partir da casa X
 		public ArrayList<Casa> obterCasasNaDistancia( ArrayList<Casa> casasDeOrigem , int distancia ) {
 			// TODO, no momento retornamos apenas uma lista arbitraria de casas
-			ArrayList<Casa> casas = new ArrayList<Casa>();
 			
-			for( int x = 0 ; x <= 10 ; x++ ) {
-				for( int y = 0 ; y <= x ; y++ ) {
-					Casa casa = getFreeCell( x , y );
-					if( casa != null ) {
-						casas.add( casa );
-					}		
+			ArrayList<Casa> casas = new ArrayList<Casa>();
+			ArrayList<Casa> fronteira = new ArrayList<Casa>(casasDeOrigem);
+			ArrayList<Casa> fronteiraTemp = new ArrayList<Casa>();
+			ArrayList<Casa> vizinhos = new ArrayList<Casa>();
+			
+			while(distancia > 0) {
+				for (Casa casa : fronteira) {
+					vizinhos = getFreeNeighbors(casa);
+					
+					for (Casa casaVizinha : vizinhos) {
+						if(casas.indexOf(casaVizinha) == -1) {
+							casas.add(casaVizinha);
+							fronteiraTemp.add(casaVizinha);
+						}
+					}	
 				}
+				
+				fronteira = new ArrayList<Casa>(fronteiraTemp);
+				fronteiraTemp.clear();
+				distancia--;
 			}
 			
 			return casas;
