@@ -13,11 +13,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import jogo.ControladoraDoJogo;
-import jogo.Jogador;
-import jogo.Personagem;
-import jogo.PersonagemEnum;
-import jogo.PersonagemLista;
+import jogo.*;
 
 public class QuadroSelecaoDeJogadores extends JPanel {
 	private JList lista_de_personagens;

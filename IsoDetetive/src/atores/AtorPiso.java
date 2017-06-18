@@ -30,9 +30,12 @@ public class AtorPiso extends Actor {
 	
 	public void adicionarSujeira() {
 		this.spriteSujeira = addTileSprite( "floorMarks.txt" , new Vetor2D_int(0,0) , 1 );	
-		this.spriteSujeira.setRandomTile(1);
-		
-		
+		this.spriteSujeira.setRandomTile(1);	
 	}
-
+	
+	public void adicionarTapeteDeEntrada( int setID , int tile ) {
+		this.spriteSujeira = addTileSprite( "entrances.txt" , new Vetor2D_int(0,0) , 1 );	
+		this.spriteSujeira.setTile(setID, tile);
+	}
+ 
 }

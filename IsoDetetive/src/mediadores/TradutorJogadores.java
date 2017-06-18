@@ -13,13 +13,13 @@ public class TradutorJogadores {
 		public AtorJogador 	atorJogador;
 	}
 	
-	protected CenaAtores 			cenaAtores;
-	protected TradutorTabuleiro 	tradutorTabuleiro;
 	protected ArrayList<AtoresDoJogador> atoresDosJogadores;
 	
-	public TradutorJogadores( CenaAtores cenaAtores , TradutorTabuleiro tradutorTabuleiro ) {
-		this.cenaAtores = cenaAtores;
-		this.tradutorTabuleiro = tradutorTabuleiro;
+	public TradutorJogadores( ) {
+		// Checa se os objetos necessarios foram registrados no fluxo de jogo
+		MediadorFluxoDeJogo.getInstance().checarRegistroCenaAtores();
+		MediadorFluxoDeJogo.getInstance().checarRegistroTradutorTabuleiro();
+		MediadorFluxoDeJogo.getInstance().checarRegistroTabuleiro();
 	}
 	
 	public void adicionarJogadores() {
@@ -32,13 +32,13 @@ public class TradutorJogadores {
 			atores.jogador = jogador;
 			
 			atores.atorJogador = new AtorJogador( jogador.obterPersonagem().obterEnum() );
-			this.cenaAtores.addActor( atores.atorJogador , 10 );
+			MediadorFluxoDeJogo.getInstance().cenaAtores.addActor( atores.atorJogador , 10 );
 
 		
 			Casa casaInicial = jogador.obterPersonagem().obterCasaInicial();
 			jogador.definirPosicao( casaInicial );
 
-			Vetor2D_double posicao = this.tradutorTabuleiro.obterCentroDaCasa( casaInicial.position.x , casaInicial.position.y );
+			Vetor2D_double posicao = MediadorFluxoDeJogo.getInstance().tradutorTabuleiro.obterCentroDaCasa( casaInicial.position.x , casaInicial.position.y );
 			atores.atorJogador.setVirtualPosition( posicao.x , posicao.y );
 			
 			atoresDosJogadores.add(atores);
@@ -50,10 +50,10 @@ public class TradutorJogadores {
 			if( atoresJogador.jogador == jogador ) {
 				System.out.println("AAA");
 				
-				Casa casa = tradutorTabuleiro.tabuleiro.getCell( novaCasa.x , novaCasa.y );
+				Casa casa = MediadorFluxoDeJogo.getInstance().tabuleiro.getCell( novaCasa.x , novaCasa.y );
 				jogador.definirPosicao( casa );
 				
-				Vetor2D_double novaPosicao = tradutorTabuleiro.obterCentroDaCasa(casa);
+				Vetor2D_double novaPosicao = MediadorFluxoDeJogo.getInstance().tradutorTabuleiro.obterCentroDaCasa(casa);
 				atoresJogador.atorJogador.setVirtualPosition( novaPosicao.x , novaPosicao.y );
 			}
 		}

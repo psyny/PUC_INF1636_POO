@@ -15,6 +15,7 @@ import atores.*;
 import estruturas.*;
 import jogo.*;
 import mediadores.TradutorMovimentacao;
+import mediadores.MediadorFluxoDeJogo;
 import mediadores.TradutorJogadores;
 import mediadores.TradutorTabuleiro;
 
@@ -31,111 +32,20 @@ public class QuadroJogo extends JLayeredPane {
 	}
 	
 	// Lister TEMPORARIO, so para testes de destruição de atores
-	private class actList_dado implements ActionListener , AnimationEndObserver {
-		private Dado dado1 = null;
-		private Dado dado2 = null;
-		private Scene cena = null;
-		private TradutorTabuleiro tradutorTabuleiro;
-		private TradutorMovimentacao tradutorMovimentacao;
-		
-		
-		public actList_dado( Scene cena , TradutorTabuleiro tradutorTabuleiro ,  TradutorMovimentacao tradutorMovimentacao ) {
-			this.cena = cena;
-			this.tradutorTabuleiro = tradutorTabuleiro;
-			this.tradutorMovimentacao = tradutorMovimentacao;
-		}
-
+	private class actList_dado implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e)  {
-			if( dado1 == null ) {
-				this.criarDados();
-			} else {
-				this.deletarDados();
-			}
-		}
-		
-		private void criarDados() {
-			dado1 = new Dado();;
-			cena.addActor( dado1 , 10 );
-			
-			dado2 = new Dado();;
-			cena.addActor( dado2 , 10 );
-			
-			dado1.animationEndRegister(this);
-			
-			int valorAleatorio1 = (int)(Math.random()*6 + 1);
-			int valorAleatorio2 = (int)(Math.random()*6 + 1);
-
-			tradutorMovimentacao.desmarcarCasas();	
-			ControladoraDoJogo.getInstance().iniciarProximaJogada();
-			Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
-			
-			Casa casa = jogadorDaVez.obterPosicao();
-			Vetor2D_double centro1 = tradutorTabuleiro.obterCentroDaCasa(casa);
-			Vetor2D_double centro2 = tradutorTabuleiro.obterCentroDaCasa(casa);
-			
-			centro1.x += 100;
-			centro2.x -= 100;
-			
-			dado1.Lancar( centro1 , valorAleatorio1 );
-			dado2.Lancar( centro2 , valorAleatorio2 );
-			
-			ControladoraDoJogo.getInstance().rolarDadoParaMovimentacao( valorAleatorio1 + valorAleatorio2 );
-		}
-		
-		private void deletarDados() {
-			//this.dado.setToDestroy();
-			tradutorMovimentacao.desmarcarCasas();	
-			this.dado1.setToDestroy( 0 );
-			this.dado2.setToDestroy( 0 );
-			this.dado1 = null;
-			this.dado2 = null;
-		}
-
-		@Override
-		public void animationEndNotify(AnimationEndObserved observed) {
-			tradutorMovimentacao.marcarCasas();		
+			MediadorFluxoDeJogo.getInstance().iniciarJogadaDaVez();
+			MediadorFluxoDeJogo.getInstance().rolarDados();
 		}
 	}
 	
-	// Lister TEMPORARIO, so para testes de marcadores
-	private class actList_marcador implements ActionListener {
-		private TradutorMovimentacao tradutorMovimentacao;
-		private boolean marcado = false;
-		
-		
-		public actList_marcador( TradutorMovimentacao tradutorMovimentacao ) {
-			this.tradutorMovimentacao = tradutorMovimentacao;
-		}
 
-		@Override
-		public void actionPerformed(ActionEvent e)  {
-			if( marcado == false ) {
-				this.gerarMarcadores();
-				marcado = true;
-			} else {
-				this.deletarMarcadores();
-				marcado = false;
-			}
-		}
-		
-		private void gerarMarcadores() {
-			ControladoraDoJogo.getInstance().iniciarProximaJogada();
-			ControladoraDoJogo.getInstance().rolarDadoParaMovimentacao(3);
-			
-			tradutorMovimentacao.marcarCasas();
-		}
-		
-		private void deletarMarcadores() {
-			tradutorMovimentacao.desmarcarCasas();
-		}
-
-	}	
-	
 	
 	public QuadroJogo() {
 		// Carregando arquivos pertinentes ao jogo
-		Tabuleiro tabuleiro = GeradorDeTabuleiros.carregarDoArquivo();	
+		Tabuleiro tabuleiro = GeradorDeTabuleiros.carregarDoArquivo();
+		MediadorFluxoDeJogo.getInstance().tabuleiro = tabuleiro;
 		tabuleiro.scanGameInfo();
 				
 		// Configurações principais
@@ -151,24 +61,29 @@ public class QuadroJogo extends JLayeredPane {
         
         // Cena do tabueiro ( piso ):
         CenaTabuleiro cenaTabuleiro = new CenaTabuleiro( 0 , 0 , 1 , 1 );
+        MediadorFluxoDeJogo.getInstance().cenaTabuleiro = cenaTabuleiro;
 		cenaTabuleiro.definirMargens( 100 , 100 , 100, 100);
 		
-        TradutorTabuleiro tradutorTabuleiro = new TradutorTabuleiro( tabuleiro , cenaTabuleiro , 63 , 63 );
+        TradutorTabuleiro tradutorTabuleiro = new TradutorTabuleiro( 63 , 63 );
+        MediadorFluxoDeJogo.getInstance().tradutorTabuleiro = tradutorTabuleiro;
         tradutorTabuleiro.popularTabuleiroGrafico();
         
         cenaPrincipal.adicionarCena( cenaTabuleiro , 0);
         
         // Cena dos atores ( jogadores, dado, paredes, etc ):
         CenaAtores cenaAtores = new CenaAtores( 0 , 0 , (int)cenaTabuleiro.obterTamanhoVirtual().x , (int)cenaTabuleiro.obterTamanhoVirtual().y );
+        MediadorFluxoDeJogo.getInstance().cenaAtores = cenaAtores;
         cenaAtores.definirMargens( 100 , 100 , 100, 100);
 
         cenaPrincipal.adicionarCena( cenaAtores , 1);
         
         // Mediadores
-        TradutorJogadores tradutorJogadores = new TradutorJogadores( cenaAtores , tradutorTabuleiro  );
+        TradutorJogadores tradutorJogadores = new TradutorJogadores();
+        MediadorFluxoDeJogo.getInstance().tradutorJogadores = tradutorJogadores;
         tradutorJogadores.adicionarJogadores();
         
-        TradutorMovimentacao tradutorMovimentacao = new TradutorMovimentacao( tradutorJogadores );
+        TradutorMovimentacao tradutorMovimentacao = new TradutorMovimentacao();
+        MediadorFluxoDeJogo.getInstance().tradutorMovimentacao = tradutorMovimentacao;
         
         
         // Cena de Testes     
@@ -191,13 +106,8 @@ public class QuadroJogo extends JLayeredPane {
         
         JButton bt_dado = new JButton("Dado");
         bt_dado.setBounds(0, 0, 100, 30);
-        bt_dado.addActionListener( new actList_dado(cenaAtores , tradutorTabuleiro , tradutorMovimentacao ) );
+        bt_dado.addActionListener( new actList_dado() );
         controlsPane.add( bt_dado );
-        
-        JButton bt_marcadores = new JButton("Marcadores");
-        bt_marcadores.setBounds(100, 0, 100, 30);
-        bt_marcadores.addActionListener( new actList_marcador(tradutorMovimentacao) );
-        controlsPane.add( bt_marcadores );        
         
         add( controlsPane );
         setLayer( controlsPane , 20 );

@@ -14,28 +14,30 @@ import jogo.CasaType;
 import jogo.Tabuleiro;
 
 public class TradutorTabuleiro {
-	protected Tabuleiro 		tabuleiro;
-	protected CenaTabuleiro 	cenaTabuleiro;
 	protected int 				casa_largura;
 	protected int				casa_altura;
 	
-	public TradutorTabuleiro( Tabuleiro tabuleiro , CenaTabuleiro cenaTabuleiro , int casa_largura , int casa_altura ) {
-		this.tabuleiro 		= tabuleiro;
-		this.cenaTabuleiro 	= cenaTabuleiro;
+	public TradutorTabuleiro( int casa_largura , int casa_altura ) {
+		// Checa se os objetos necessarios foram registrados no fluxo de jogo
+		MediadorFluxoDeJogo.getInstance().checarRegistroCenaTabuleiro();
+		MediadorFluxoDeJogo.getInstance().checarRegistroTabuleiro();
+		
 		this.casa_largura	= casa_largura;
 		this.casa_altura 	= casa_altura;
 	}
 	
 	public void popularTabuleiroGrafico() {
 		// Definir tamanho virtual da cena tabuleiro
-		Vetor2D_int tamanhoVirtualDoTabuleiro = new Vetor2D_int( tabuleiro.objeterQtdColunas() * casa_largura , tabuleiro.objeterQtdLinhas() * casa_altura );
-		cenaTabuleiro.definirTamanhoVirtual( tamanhoVirtualDoTabuleiro.x , tamanhoVirtualDoTabuleiro.y );
+		int tamanho_x = MediadorFluxoDeJogo.getInstance().tabuleiro.objeterQtdColunas() * casa_largura;
+		int tamanho_y = MediadorFluxoDeJogo.getInstance().tabuleiro.objeterQtdLinhas() * casa_altura;
+		Vetor2D_int tamanhoVirtualDoTabuleiro = new Vetor2D_int( tamanho_x , tamanho_y );
+		MediadorFluxoDeJogo.getInstance().cenaTabuleiro.definirTamanhoVirtual( tamanhoVirtualDoTabuleiro.x , tamanhoVirtualDoTabuleiro.y );
 		
 		// Popular cena com os atores ( tiles ) gráficos
-		for( ArrayList<Casa> linha : this.tabuleiro.casas ) {
+		for( ArrayList<Casa> linha : MediadorFluxoDeJogo.getInstance().tabuleiro.casas ) {
 			for( Casa casa : linha ) {
 				AtorPiso piso = this.gerarPisoParaTipo( casa.type );
-				this.cenaTabuleiro.addActor( piso , 0 );	
+				MediadorFluxoDeJogo.getInstance().cenaTabuleiro.addActor( piso , 0 );	
 				
 				Vetor2D_double atorPos = this.obterCentroDaCasa( casa );
 				
@@ -102,13 +104,51 @@ public class TradutorTabuleiro {
 				
 		}
 		
+		
+		// Adicionar outros efeitos visuais
 		switch( tipo ) {
 			default:
 				break;
 				
 			case CORREDOR:
 				piso.talvezAdicionarSujeira(5);
-				break;					
+				break;	
+				
+			case COZINHA_PORTA:
+				piso.adicionarTapeteDeEntrada(2, 7);
+				break;
+				
+			case SL_MUSICA_PORTA:
+				piso.adicionarTapeteDeEntrada(2, 9);
+				break;
+				
+			case SL_INVERNO_PORTA:
+				piso.adicionarTapeteDeEntrada(2, 1);
+				break;
+				
+			case SL_JANTAR_PORTA:
+				piso.adicionarTapeteDeEntrada(2, 10);
+				break;
+				
+			case SL_JOGOS_PORTA:
+				piso.adicionarTapeteDeEntrada(2, 4);
+				break;
+				
+			case SL_ESTAR_PORTA:
+				piso.adicionarTapeteDeEntrada(2, 11);
+				break;
+				
+			case ENTRADA_PORTA:
+				piso.adicionarTapeteDeEntrada(2, 2);
+				break;
+				
+			case BIBLIOTECA_PORTA:
+				piso.adicionarTapeteDeEntrada(2, 3);
+				break;	
+				
+			case ESCRITORIO_PORTA:
+				piso.adicionarTapeteDeEntrada(2, 6);
+				break;	
 				
 			case COZINHA:
 			case SL_MUSICA:	
@@ -135,7 +175,7 @@ public class TradutorTabuleiro {
 	}
 	
 	public Vetor2D_double obterCentroDaCasa( int x , int y ) {
-		Casa casa = this.tabuleiro.getCell(x, y);
+		Casa casa = MediadorFluxoDeJogo.getInstance().tabuleiro.getCell(x, y);
 	
 		return this.obterCentroDaCasa(casa);
 	}

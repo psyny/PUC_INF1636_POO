@@ -19,15 +19,16 @@ import jogo.Jogador;
 import jogo.Tabuleiro;
 
 public class TradutorMovimentacao implements CasaSelecionadaObserver , MouseListener {
-	private TradutorJogadores 	tradutorJogadores;
-
 	private ArrayList<Marcador>	casasMarcadas = new ArrayList<Marcador>();
 	
-	public TradutorMovimentacao( TradutorJogadores tradutorJogadores ) {
-		this.tradutorJogadores = tradutorJogadores;
+	public TradutorMovimentacao( ) {
+		// Checa se os objetos necessarios foram registrados no fluxo de jogo
+		MediadorFluxoDeJogo.getInstance().checarRegistroCenaTabuleiro();
+		MediadorFluxoDeJogo.getInstance().checarRegistroTradutorTabuleiro();
+		MediadorFluxoDeJogo.getInstance().checarRegistroTradutorJogadores();
 		
-		tradutorJogadores.tradutorTabuleiro.cenaTabuleiro.casaSelecionadaObservedRegister(this);
-		tradutorJogadores.tradutorTabuleiro.cenaTabuleiro.addMouseListener(this);
+		MediadorFluxoDeJogo.getInstance().cenaTabuleiro.casaSelecionadaObservedRegister(this);
+		MediadorFluxoDeJogo.getInstance().cenaTabuleiro.addMouseListener(this);
 	}
 	
 	public void marcarCasas() {
@@ -37,9 +38,9 @@ public class TradutorMovimentacao implements CasaSelecionadaObserver , MouseList
 			marcador.casaReferente.y = casa.position.y;
 			
 			casasMarcadas.add( marcador );	
-			tradutorJogadores.tradutorTabuleiro.cenaTabuleiro.addActor( marcador , 1 );
+			MediadorFluxoDeJogo.getInstance().cenaTabuleiro.addActor( marcador , 1 );
 
-			Vetor2D_double posicao = tradutorJogadores.tradutorTabuleiro.obterCentroDaCasa( casa.position.x , casa.position.y );
+			Vetor2D_double posicao = MediadorFluxoDeJogo.getInstance().tradutorTabuleiro.obterCentroDaCasa( casa.position.x , casa.position.y );
 			marcador.setVirtualPosition( posicao.x , posicao.y , 0 );
 		}
 	}
@@ -70,7 +71,7 @@ public class TradutorMovimentacao implements CasaSelecionadaObserver , MouseList
 			return;
 		}	
 		
-		Vetor2D_int casaDestino = tradutorJogadores.tradutorTabuleiro.cenaTabuleiro.ultimaCasaApontada;
+		Vetor2D_int casaDestino = MediadorFluxoDeJogo.getInstance().cenaTabuleiro.ultimaCasaApontada;
 		
 		// Checa se é possivel ir para a casa desejada
 		boolean exitFlag = true;
@@ -86,7 +87,7 @@ public class TradutorMovimentacao implements CasaSelecionadaObserver , MouseList
 
 		// Vai para a casa desejada
 		Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
-		this.tradutorJogadores.reposicionarJogador( jogadorDaVez , casaDestino );
+		MediadorFluxoDeJogo.getInstance().tradutorJogadores.reposicionarJogador( jogadorDaVez , casaDestino );
 	}
 
 	@Override
