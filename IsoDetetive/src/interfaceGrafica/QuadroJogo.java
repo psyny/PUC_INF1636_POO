@@ -168,7 +168,6 @@ public class QuadroJogo extends JLayeredPane {
         setLayer( controlsPane , 20 );
         
         
-        
         // Animacao de Teste - Diretor por Sprites
         
 		AnimatedSprite testAnim = new AnimatedSprite( "testExplosion.txt" );
