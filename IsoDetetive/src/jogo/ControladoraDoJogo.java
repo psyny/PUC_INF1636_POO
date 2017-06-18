@@ -124,15 +124,7 @@ public class ControladoraDoJogo {
 	private void calcularMovimentacaoPossivel() {
 		ArrayList<Casa> casasPossiveis;
 		
-		// A movimentação é calculada de forma diferente dependendo se o jogador está em uma sala ou não
-		if( jogadorDaVez.posicao.isRoom() == false ) {
-			casasPossiveis = tabuleiro.obterCasasNaDistancia( jogadorDaVez.posicao , valorDoDado );
-		} else {
-			ArrayList<Casa> casasOrigem = new ArrayList<Casa>();
-			CasaType tipoPorta = Casa.tipoSalaParaTipoPorta( jogadorDaVez.posicao.type );
-			casasOrigem = tabuleiro.obterCasasDoTipo( tipoPorta );
-			casasPossiveis = tabuleiro.obterCasasNaDistancia( casasOrigem , valorDoDado );
-		}
+		casasPossiveis = tabuleiro.obterCasasNaDistancia( jogadorDaVez , valorDoDado );
 		
 		// Adiciona a propria posicao atual do jogador
 		casasPossiveis.add( jogadorDaVez.posicao );
