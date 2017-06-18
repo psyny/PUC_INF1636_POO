@@ -4,6 +4,7 @@ import java.awt.Component;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import animacao.*;
 
@@ -26,15 +27,17 @@ public class CameraMenu extends Camera {
 		getViewport().setOpaque( false );
 		setTarget( 0 , 0 );
 		setIsFixedOnTarget( false );
-		setBorder(BorderFactory.createEmptyBorder());
+		//setBorder(BorderFactory.createEmptyBorder());
+		
+		setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		
 		definirModo( Modos.MENU_PRINCIPAL );
 	}
 	
 	private void esconderTudo( ) {
-		for( Component comp : this.getComponents() ) {
-			comp.setVisible( false );
-		}
+		if( menuPrincipal != null ) menuPrincipal.setVisible( false );
+		if( cenaMao != null ) cenaMao.setVisible( false );
 	}
 	
 	public void definirModo( CameraMenu.Modos modo ) {
@@ -42,8 +45,8 @@ public class CameraMenu extends Camera {
 		
 		switch( modo ) {
 			case MENU_PRINCIPAL:
-				setBounds(0, 0 , 1000 , 100 );
-				menuPrincipal.setVisible(true);
+				setBounds(0, 0 , 900 , 100 );
+				if( menuPrincipal != null ) menuPrincipal.setVisible(true);		
 				break;
 		
 			default:

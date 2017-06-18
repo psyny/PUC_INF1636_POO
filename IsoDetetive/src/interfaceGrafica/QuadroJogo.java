@@ -32,45 +32,7 @@ public class QuadroJogo extends JLayeredPane {
 		}
 	}
 	
-	private class actList_movimento implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e)  {
-			if(MediadorFluxoDeJogo.getInstance().obterEstadoDoJogo() == EstadoDaJogada.INICIO) {
-				MediadorFluxoDeJogo.getInstance().rolarDados();
-			}
-			else if(MediadorFluxoDeJogo.getInstance().obterEstadoDoJogo() == EstadoDaJogada.CONFIRMANDO_MOVIMENTO) {
-				MediadorFluxoDeJogo.getInstance().confirmarMovimento();
-			}
-		}
-	}
-	
-	private class actList_acusar implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e)  {
-			
-		}
-	}
-	
-	private class actList_verCartas implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e)  {
-			
-		}
-	}
-	
-	private class actList_verBlocoNotas implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e)  {
-			
-		}
-	}
-	
-	private class actList_passar implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e)  {
-			MediadorFluxoDeJogo.getInstance().iniciarJogadaDaVez();
-		}
-	}
+
 	
 	public QuadroJogo() {
 		// Carregando arquivos pertinentes ao jogo
@@ -131,53 +93,25 @@ public class QuadroJogo extends JLayeredPane {
         setLayer( gameCamera , 10 );
         
         // -------------------------------------------------------
-        // Cena Principal - Cena composta:
+        // Menus do jogo
         CenaComposta menuCenaPrincipal = new CenaComposta(0,0);
         
-        //Cena Mao
-        CenaMao cenaMao = new CenaMao();
-        menuCenaPrincipal.add(cenaMao);
-        menuCenaPrincipal.setLayer(cenaMao, 2);
-        
-        // Camera - Menus
         CameraMenu menuCamera = new CameraMenu( menuCenaPrincipal , 0 , 0 ); 
         add( menuCamera );
         setLayer( menuCamera , 20 );
         
-        // Layer dos controles de jogo
-        JPanel controlsPane = new painelDeControles();
-        controlsPane.setBounds(0, 0, 500, 50);
+        //Cena Menu Principal
+        menuCamera.menuPrincipal = new CenaMenuPrincipal();
+        menuCenaPrincipal.adicionarCena( menuCamera.menuPrincipal , 1 );    
         
-        JButton bt_dado = new JButton("Movimento");
-        bt_dado.setBounds(0, 0, 100, 30);
-        bt_dado.addActionListener( new actList_movimento() );
-        controlsPane.add( bt_dado );
+        //Cena Mao
+        menuCamera.cenaMao = new CenaMao();
+        menuCenaPrincipal.adicionarCena( menuCamera.cenaMao , 2);
         
-        JButton bt_acusar = new JButton("Acusar");
-        bt_acusar.setBounds(100, 0, 100, 30);
-        bt_acusar.addActionListener( new actList_acusar() );
-        controlsPane.add( bt_acusar );
-        
-        JButton bt_verCartas = new JButton("Cartas");
-        bt_verCartas.setBounds(200, 0, 100, 30);
-        bt_verCartas.addActionListener( new actList_verCartas() );
-        controlsPane.add( bt_verCartas );
-        
-        JButton bt_verBlocoNotas = new JButton("Notas");
-        bt_verBlocoNotas.setBounds(300, 0, 100, 30);
-        bt_verBlocoNotas.addActionListener( new actList_verBlocoNotas() );
-        controlsPane.add( bt_verBlocoNotas );
-        
-        JButton bt_passar = new JButton("Passar");
-        bt_passar.setBounds(400, 0, 100, 30);
-        bt_passar.addActionListener( new actList_passar() );
-        controlsPane.add( bt_passar );
-        
-        add( controlsPane );
-        setLayer( controlsPane , 20 );
+        menuCamera.definirModo( CameraMenu.Modos.MENU_PRINCIPAL );
+
         
         // -------------------------------------------------------
-        // Cena Principal - Cena composta:
         
         // Animacao de Teste - Diretor por Sprites
         
