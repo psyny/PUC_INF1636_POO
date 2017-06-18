@@ -92,6 +92,7 @@ public class QuadroJogo extends JLayeredPane {
         
 		// Camera
 		Camera gameCamera = new Camera( cenaPrincipal , 0 , 0 ); 
+		MediadorFluxoDeJogo.getInstance().camera = gameCamera;
         gameCamera.setBounds(0, 0, 1000 , 700 );
         gameCamera.setTarget( 0 , 0 );
         

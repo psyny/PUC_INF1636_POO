@@ -37,6 +37,7 @@ public class MediadorFluxoDeJogo {
 	
 	public CenaTabuleiro 		cenaTabuleiro = null;
 	public CenaAtores 			cenaAtores = null;
+	public Camera				camera = null;
 	
 	public TradutorJogadores 	tradutorJogadores = null;
 	public TradutorMovimentacao tradutorMovimentacao = null;
@@ -54,6 +55,13 @@ public class MediadorFluxoDeJogo {
 	}
 	
 	// Checadores de registro
+		public boolean checarRegistroCamera() {
+			if( camera == null )
+				System.out.println("Mediador Fluxo de Jogo: Erro: Camera não registrado");
+			else return true;
+			return false;
+		}	
+	
 		public boolean checarRegistroTabuleiro() {
 			if( tabuleiro == null )
 				System.out.println("Mediador Fluxo de Jogo: Erro: Tabuleiro não registrado");
@@ -123,13 +131,20 @@ public class MediadorFluxoDeJogo {
 			Casa casa = jogadorDaVez.obterPosicao();
 			Vetor2D_double centro1 = tradutorTabuleiro.obterCentroDaCasa(casa);
 			Vetor2D_double centro2 = tradutorTabuleiro.obterCentroDaCasa(casa);
-			
 			centro1.x += 100;
 			centro2.x -= 100;
 			
 			dado1.Lancar( centro1 , valorAleatorio1 );
-			dado2.Lancar( centro2 , valorAleatorio2 );
+			dado2.Lancar( centro2 , valorAleatorio2 );			
 			
+			// Posicionar Camera
+			
+			Vetor2D_int centroProjetado = cenaTabuleiro.getProjection( tradutorTabuleiro.obterCentroDaCasa(casa) );
+			camera.setIsFixedOnTarget( true );
+			camera.setTarget( centroProjetado.x , centroProjetado.y );
+			//camera.setPositionCenteredOn( centroProjetado.x , centroProjetado.y );
+
+			// Jogo
 			ControladoraDoJogo.getInstance().rolarDadoParaMovimentacao( valorAleatorio1 + valorAleatorio2 );
 		}
 		
@@ -148,6 +163,7 @@ public class MediadorFluxoDeJogo {
 		public void iniciarMovimentacao() {
 			tradutorMovimentacao.desmarcarCasas();	
 			tradutorMovimentacao.marcarCasas();
+			camera.setIsFixedOnTarget( false );
 		}
 	
 }

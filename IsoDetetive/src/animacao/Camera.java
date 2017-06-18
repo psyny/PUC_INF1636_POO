@@ -20,8 +20,8 @@ public class Camera extends JScrollPane implements Runnable {
 	private Vetor2D_double			cameraTarget;
 	private Vetor2D_double			cameraPosition;
 	private Vetor2D_double			cameraValidPosition;
-	private double					maxMoveSpeed = 50;
-	private double					minMoveSpeed = 0.5;
+	private double					maxMoveSpeed = 1000;
+	private double					minMoveSpeed = 1;
 	
 	
 	private boolean					fixedTarget = true;
@@ -94,7 +94,7 @@ public class Camera extends JScrollPane implements Runnable {
 		    	// Calculate Move Speed
 		    	Vetor2D_double distance = this.cameraPosition.getDistanceToVector( effectiveTarget );
 		    	if( distance.getModulus() > 1 ) {
-		    		Vetor2D_double moveSpeed = new Vetor2D_double( distance.x / 50 , distance.y / 50 );
+		    		Vetor2D_double moveSpeed = new Vetor2D_double( distance.x / 10 , distance.y / 10 );
 		    		distance.normalize();
 		    		int xDir = 1;
 		    		int yDir = 1;
@@ -130,16 +130,17 @@ public class Camera extends JScrollPane implements Runnable {
 		
 		    		this.cameraPosition.x += moveSpeed.x ;
 		    		this.cameraPosition.y +=  moveSpeed.y ;
+		    		
+		       		// Finally Set   
+		    		this.getViewport().setViewPosition( new Point( (int)this.cameraPosition.x , (int)this.cameraPosition.y ));
 		    	} else {
 		    		this.cameraPosition.x = effectiveTarget.x;
 		    		this.cameraPosition.y = effectiveTarget.y;
 		    	}
 			}
-    		// Finally Set   
-    		this.getViewport().setViewPosition( new Point( (int)this.cameraPosition.x , (int)this.cameraPosition.y ));
     	}
     	
-    	Toolkit.getDefaultToolkit().sync();
+    	//Toolkit.getDefaultToolkit().sync();
     }	
 	
 	@Override
@@ -178,6 +179,12 @@ public class Camera extends JScrollPane implements Runnable {
 	
 	public void setIsFixedOnTarget( boolean mode ) {
 		this.fixedTarget = mode;
+		
+		if( mode == true ) {
+			Point currentPosition = this.getViewport().getViewPosition();
+	    	this.cameraPosition.x = currentPosition.x;
+	    	this.cameraPosition.y = currentPosition.y;
+		}
 	}
 	
 	public void setPositionCenteredOn( int x , int y ) {
@@ -200,6 +207,8 @@ public class Camera extends JScrollPane implements Runnable {
 		
 		this.cameraPosition.x = effectivePosition.x;
 		this.cameraPosition.y = effectivePosition.y;
+		
+		this.getViewport().setViewPosition( new Point( (int)this.cameraPosition.x , (int)this.cameraPosition.y ));
 	}
 	
 	
