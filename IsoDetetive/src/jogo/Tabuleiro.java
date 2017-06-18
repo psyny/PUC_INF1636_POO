@@ -1,6 +1,7 @@
 package jogo;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import atores.AtorPiso;
 import estruturas.*;
@@ -233,6 +234,11 @@ public class Tabuleiro {
 			return false;
 		}
 		
+		return isBlocked(casa);
+	}
+	
+	// Checa se a casa está bloqueada por um jogador ou movel
+	public boolean isBlocked( Casa casa ) {
 		// Checa se a casa está bloqueada por algum jogador
 		ArrayList<Jogador> Jogadores = ControladoraDoJogo.getInstance().obterListaDeJogadores();
 		for( Jogador jogador : Jogadores ) {
@@ -371,5 +377,20 @@ public class Tabuleiro {
 			}
 			
 			return casas;
+		}
+		
+		public Casa obterPosicaoLivreTipo(CasaType tipo) {
+			ArrayList<Casa> casas = obterCasasDoTipo(tipo);
+			ArrayList<Casa> casasDisponiveis = new ArrayList<Casa>();
+			Random random = new Random();
+			
+			for (Casa casa : casas) {
+				if(isBlocked(casa))
+					casasDisponiveis.add(casa);
+			}
+			
+			int indice = random.nextInt(casasDisponiveis.size());
+			
+			return casasDisponiveis.get(indice);
 		}
 }

@@ -15,6 +15,7 @@ import estruturas.Vetor2D_int;
 import jogo.Casa;
 import jogo.CasaType;
 import jogo.ControladoraDoJogo;
+import jogo.ControladoraDoJogo.EstadoDaJogada;
 import jogo.Jogador;
 import jogo.Tabuleiro;
 
@@ -61,15 +62,21 @@ public class TradutorMovimentacao implements CasaSelecionadaObserver , MouseList
 			
 			if( ator.casaReferente.x == casaSelecionada.x && ator.casaReferente.y == casaSelecionada.y ) {
 				ator.definirMarcado(true);
+				MediadorFluxoDeJogo.getInstance().deletarDados();
 			}
 		}
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		if( ControladoraDoJogo.getInstance().obterEstadoDaJogada() != ControladoraDoJogo.EstadoDaJogada.AGUARDANDO_MOVIMENTO ) {
-			return;
-		}	
+		switch (ControladoraDoJogo.getInstance().obterEstadoDaJogada()) {
+			case AGUARDANDO_MOVIMENTO:
+			case CONFIRMANDO_MOVIMENTO:
+				break;
+	
+			default:
+				return;
+		}
 		
 		Vetor2D_int casaDestino = MediadorFluxoDeJogo.getInstance().cenaTabuleiro.ultimaCasaApontada;
 		
@@ -87,6 +94,7 @@ public class TradutorMovimentacao implements CasaSelecionadaObserver , MouseList
 
 		// Vai para a casa desejada
 		Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
+		ControladoraDoJogo.getInstance().decidindoMovimento();
 		MediadorFluxoDeJogo.getInstance().tradutorJogadores.reposicionarJogador( jogadorDaVez , casaDestino );
 	}
 

@@ -14,6 +14,7 @@ import animacao.*;
 import atores.*;
 import estruturas.*;
 import jogo.*;
+import jogo.ControladoraDoJogo.EstadoDaJogada;
 import mediadores.TradutorMovimentacao;
 import mediadores.MediadorFluxoDeJogo;
 import mediadores.TradutorJogadores;
@@ -31,16 +32,45 @@ public class QuadroJogo extends JLayeredPane {
 		}
 	}
 	
-	// Lister TEMPORARIO, so para testes de destruição de atores
-	private class actList_dado implements ActionListener {
+	private class actList_movimento implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e)  {
-			MediadorFluxoDeJogo.getInstance().iniciarJogadaDaVez();
-			MediadorFluxoDeJogo.getInstance().rolarDados();
+			if(MediadorFluxoDeJogo.getInstance().obterEstadoDoJogo() == EstadoDaJogada.INICIO) {
+				MediadorFluxoDeJogo.getInstance().rolarDados();
+			}
+			else if(MediadorFluxoDeJogo.getInstance().obterEstadoDoJogo() == EstadoDaJogada.CONFIRMANDO_MOVIMENTO) {
+				MediadorFluxoDeJogo.getInstance().confirmarMovimento();
+			}
 		}
 	}
 	
-
+	private class actList_acusar implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e)  {
+			
+		}
+	}
+	
+	private class actList_verCartas implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e)  {
+			
+		}
+	}
+	
+	private class actList_verBlocoNotas implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e)  {
+			
+		}
+	}
+	
+	private class actList_passar implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e)  {
+			MediadorFluxoDeJogo.getInstance().iniciarJogadaDaVez();
+		}
+	}
 	
 	public QuadroJogo() {
 		// Carregando arquivos pertinentes ao jogo
@@ -85,6 +115,10 @@ public class QuadroJogo extends JLayeredPane {
         TradutorMovimentacao tradutorMovimentacao = new TradutorMovimentacao();
         MediadorFluxoDeJogo.getInstance().tradutorMovimentacao = tradutorMovimentacao;
         
+        //Cena Mao
+        CenaMao cenaMao = new CenaMao();
+        add(cenaMao);
+        setLayer(cenaMao, 30);
         
         // Cena de Testes     
 		Scene cenaTeste = new CenaIsometrica( 0 , 0 , 300 , 300 );	
@@ -105,15 +139,33 @@ public class QuadroJogo extends JLayeredPane {
         JPanel controlsPane = new painelDeControles();
         controlsPane.setBounds(0, 0, 500, 50);
         
-        JButton bt_dado = new JButton("Dado");
+        JButton bt_dado = new JButton("Movimento");
         bt_dado.setBounds(0, 0, 100, 30);
-        bt_dado.addActionListener( new actList_dado() );
+        bt_dado.addActionListener( new actList_movimento() );
         controlsPane.add( bt_dado );
+        
+        JButton bt_acusar = new JButton("Acusar");
+        bt_acusar.setBounds(100, 0, 100, 30);
+        bt_acusar.addActionListener( new actList_acusar() );
+        controlsPane.add( bt_acusar );
+        
+        JButton bt_verCartas = new JButton("Cartas");
+        bt_verCartas.setBounds(200, 0, 100, 30);
+        bt_verCartas.addActionListener( new actList_verCartas() );
+        controlsPane.add( bt_verCartas );
+        
+        JButton bt_verBlocoNotas = new JButton("Notas");
+        bt_verBlocoNotas.setBounds(300, 0, 100, 30);
+        bt_verBlocoNotas.addActionListener( new actList_verBlocoNotas() );
+        controlsPane.add( bt_verBlocoNotas );
+        
+        JButton bt_passar = new JButton("Passar");
+        bt_passar.setBounds(400, 0, 100, 30);
+        bt_passar.addActionListener( new actList_passar() );
+        controlsPane.add( bt_passar );
         
         add( controlsPane );
         setLayer( controlsPane , 20 );
-        
-       
         
         
         
@@ -132,8 +184,8 @@ public class QuadroJogo extends JLayeredPane {
 		testActor.getAnimatedSprite().playAnimation(1);
 		cenaTeste.addActor( testActor , 10 );
 		
-		
-		
+		//Inicia o primerio turno
+		MediadorFluxoDeJogo.getInstance().iniciarJogadaDaVez();
 		
 	}
 }

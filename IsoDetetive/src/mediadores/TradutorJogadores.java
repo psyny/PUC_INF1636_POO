@@ -48,7 +48,6 @@ public class TradutorJogadores {
 	public void reposicionarJogador( Jogador jogador , Vetor2D_int novaCasa ) {
 		for( AtoresDoJogador atoresJogador : atoresDosJogadores ) {
 			if( atoresJogador.jogador == jogador ) {
-				System.out.println("AAA");
 				
 				Casa casa = MediadorFluxoDeJogo.getInstance().tabuleiro.getCell( novaCasa.x , novaCasa.y );
 				jogador.definirPosicao( casa );

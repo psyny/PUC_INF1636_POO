@@ -23,6 +23,7 @@ public class ControladoraDoJogo {
 	// ----------------------------
 	public enum EstadoDaJogada {
 		INICIO,
+		CONFIRMANDO_MOVIMENTO,
 		AGUARDANDO_MOVIMENTO,
 		PALPITE,
 		ACUSACAO
@@ -132,5 +133,9 @@ public class ControladoraDoJogo {
 		movimentacaoPossivel = casasPossiveis;
 		
 		estadoDaJogada = EstadoDaJogada.AGUARDANDO_MOVIMENTO; 
+	}
+	
+	public void decidindoMovimento() {
+		estadoDaJogada = EstadoDaJogada.CONFIRMANDO_MOVIMENTO;
 	}
 }

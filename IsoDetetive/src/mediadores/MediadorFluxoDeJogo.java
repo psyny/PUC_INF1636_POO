@@ -4,6 +4,7 @@ import animacao.*;
 import atores.*;
 import estruturas.*;
 import jogo.*;
+import jogo.ControladoraDoJogo.EstadoDaJogada;
 
 class Observer_animationEnd_Dados implements AnimationEndObserver {
 	@Override
@@ -107,7 +108,17 @@ public class MediadorFluxoDeJogo {
 		
 	// Nova Jogada ------------------------------------------------------------------		
 		public void iniciarJogadaDaVez() {
+			this.deletarDados();
+			this.tradutorMovimentacao.desmarcarCasas();
+			
 			ControladoraDoJogo.getInstance().iniciarProximaJogada();
+			
+			// Posicionar Camera
+			
+			Vetor2D_int centroProjetado = cenaTabuleiro.getProjection( tradutorTabuleiro.obterCentroDaCasa(ControladoraDoJogo.getInstance().obterJogadorDaVez().obterPosicao()) );
+			camera.setIsFixedOnTarget( true );
+			camera.setTarget( centroProjetado.x , centroProjetado.y );
+			//camera.setPositionCenteredOn( centroProjetado.x , centroProjetado.y );
 		}
 		
 	// Movimentacao ------------------------------------------------------------------
@@ -164,6 +175,22 @@ public class MediadorFluxoDeJogo {
 			tradutorMovimentacao.desmarcarCasas();	
 			tradutorMovimentacao.marcarCasas();
 			camera.setIsFixedOnTarget( false );
+		}
+		
+		public EstadoDaJogada obterEstadoDoJogo() {
+			return ControladoraDoJogo.getInstance().obterEstadoDaJogada();
+		}
+		
+		public void confirmarMovimento() {
+			//caso o jogador esteja em um comodo, colocar ele numa posiçao random do comodo
+			Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
+			if(jogadorDaVez.obterPosicao().isRoom())
+			{
+				tradutorJogadores.reposicionarJogador(jogadorDaVez, tabuleiro.obterPosicaoLivreTipo(jogadorDaVez.obterPosicao().type).position);
+			}
+			
+			
+			tradutorMovimentacao.desmarcarCasas();
 		}
 	
 }
