@@ -127,7 +127,7 @@ public class ControladoraDoJogo {
 		casasPossiveis = tabuleiro.obterCasasNaDistancia( jogadorDaVez , valorDoDado );
 		
 		// Adiciona a propria posicao atual do jogador
-		casasPossiveis.add( jogadorDaVez.posicao );
+		//casasPossiveis.add( jogadorDaVez.posicao );
 		
 		movimentacaoPossivel = casasPossiveis;
 		

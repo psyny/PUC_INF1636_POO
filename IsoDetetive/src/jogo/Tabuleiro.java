@@ -46,7 +46,7 @@ public class Tabuleiro {
 	}
 	
 	public int objeterQtdColunas() {
-		return this.linhas;
+		return this.colunas;
 	}	
 	
 	// Coleta dados essenciais
@@ -188,25 +188,38 @@ public class Tabuleiro {
 				}
 				
 				Casa nei;
+				boolean isDoor = casa.isDoor();
 				
 				nei = this.getCell(casa.position.x+1, casa.position.y);
-				if( nei != null && isFree(nei)) {
-					neighbors.add( nei );
+				if( nei != null ) {
+					if(isFree(nei))
+						neighbors.add( nei );
+					else if(nei.isRoom() && isDoor)
+						neighbors.add( nei );
 				}
 				
 				nei = this.getCell(casa.position.x-1, casa.position.y);
-				if( nei != null && isFree(nei)) {
-					neighbors.add( nei );
+				if( nei != null ) {
+					if(isFree(nei))
+						neighbors.add( nei );
+					else if(nei.isRoom() && isDoor)
+						neighbors.add( nei );
 				}
 				
 				nei = this.getCell(casa.position.x, casa.position.y+1);
-				if( nei != null && isFree(nei)) {
-					neighbors.add( nei );
+				if( nei != null ) {
+					if(isFree(nei))
+						neighbors.add( nei );
+					else if(nei.isRoom() && isDoor)
+						neighbors.add( nei );
 				}
 
 				nei = this.getCell(casa.position.x, casa.position.y-1);
-				if( nei != null && isFree(nei)) {
-					neighbors.add( nei );
+				if( nei != null ) {
+					if(isFree(nei))
+						neighbors.add( nei );
+					else if(nei.isRoom() && isDoor)
+						neighbors.add( nei );
 				}		
 				
 				return neighbors;
@@ -252,7 +265,7 @@ public class Tabuleiro {
 			
 			for( int y = 0 ; y < linhas ; y++ ) {
 				for( int x = 0 ; x < colunas ; x++ ) {
-					casas.add( this.casas.get(x).get(y) );
+					casas.add( this.casas.get(y).get(x) );
 				}	
 			}
 			
@@ -264,7 +277,14 @@ public class Tabuleiro {
 			
 			for( int y = 0 ; y < linhas ; y++ ) {
 				for( int x = 0 ; x < colunas ; x++ ) {
-					Casa casa = this.casas.get(x).get(y);
+					Casa casa = null;
+					try{
+						casa = this.casas.get(y).get(x);
+					}
+					catch (Exception e) {
+						System.out.println(x);
+						System.out.println(y);
+					}
 					
 					if( casa.type == tipo ) {
 						casas.add( casa );
@@ -288,7 +308,11 @@ public class Tabuleiro {
 				casas = new ArrayList<Casa>(casasDeOrigem);
 			} else {
 				CasaType tipoPorta = Casa.tipoSalaParaTipoPorta( jogador.posicao.type );
-				casasDeOrigem = obterCasasDoTipo( tipoPorta );
+				ArrayList<Casa> casas_tipoPorta = obterCasasDoTipo( tipoPorta );
+				for (Casa casa : casas_tipoPorta) {
+					if(isFree(casa))
+						casasDeOrigem.add(casa);
+				}
 				casas = new ArrayList<Casa>();
 				
 				switch (jogador.posicao.type) {
@@ -296,11 +320,23 @@ public class Tabuleiro {
 					case SL_ESTAR:
 					case SL_INVERNO:
 					case ESCRITORIO:
-						casas.addAll(obterCasasDoTipo( CasaType.COZINHA_PORTA ));
-						casas.addAll(obterCasasDoTipo( CasaType.SL_ESTAR_PORTA ));
-						casas.addAll(obterCasasDoTipo( CasaType.SL_INVERNO_PORTA ));
-						casas.addAll(obterCasasDoTipo( CasaType.ESCRITORIO_PORTA ));
+						if(jogador.posicao.type != CasaType.COZINHA)
+							casas.addAll(obterCasasDoTipo( CasaType.COZINHA ));
+						if(jogador.posicao.type != CasaType.SL_ESTAR)
+							casas.addAll(obterCasasDoTipo( CasaType.SL_ESTAR ));
+						if(jogador.posicao.type != CasaType.SL_INVERNO)
+							casas.addAll(obterCasasDoTipo( CasaType.SL_INVERNO ));
+						if(jogador.posicao.type != CasaType.ESCRITORIO)
+							casas.addAll(obterCasasDoTipo( CasaType.ESCRITORIO ));
 						break;
+						
+					/*case SL_MUSICA:
+					case SL_JOGOS:
+					case SL_JANTAR:
+					case BIBLIOTECA:
+					case ENTRADA:
+						casas.addAll(obterCasasDoTipo( jogador.posicao.type ));
+						break;*/
 	
 					default:
 						casas = new ArrayList<Casa>(casasDeOrigem);
@@ -320,9 +356,11 @@ public class Tabuleiro {
 					
 					for (Casa casaVizinha : vizinhos) {
 						if(casas.indexOf(casaVizinha) == -1) {
-							casaVizinha.casaAnterior = casa;
-							casas.add(casaVizinha);
-							fronteiraTemp.add(casaVizinha);
+							if(!(jogador.posicao.isRoom() && jogador.posicao.type == casaVizinha.type)) {
+								casaVizinha.casaAnterior = casa;
+								casas.add(casaVizinha);
+								fronteiraTemp.add(casaVizinha);
+							}	
 						}
 					}	
 				}
