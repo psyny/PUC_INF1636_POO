@@ -347,13 +347,11 @@ public class AnimatedSprite extends Sprite implements Animavel , AnimationEndObs
 		
 		if( this.animState.currentAnimation == null || anim != this.animState.currentAnimation ) {
 	        this.animState.currentAnimation = anim;
-	        this.animState.currentFrameTime = 0;
-	        this.animState.setCurrentFrame( frame );
-		} else {
-			if( resume == false ) {
-				this.animState.setCurrentFrame( frame );
-				this.animState.currentFrameTime = 0;
-			}
+		}
+		
+		if( resume == false ) {
+			this.animState.setCurrentFrame( frame );
+			this.animState.currentFrameTime = 0;
 		}
 		
 		this.loopLimit 				= loops;
