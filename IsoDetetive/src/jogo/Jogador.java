@@ -54,4 +54,26 @@ public class Jogador {
 		return false;
 	}
 
+	public boolean temCarta(ArrayList<Carta> objetivo)
+	{
+		for (Carta carta : objetivo) {
+			if(mao.contains(carta))
+				return true;
+		}
+		
+		return false;
+	}
+	
+	public ArrayList<Carta> cartasNaMao(ArrayList<Carta> objetivo)
+	{
+		ArrayList<Carta> cartas = new ArrayList<Carta>();
+		
+		for (Carta carta : objetivo) {
+			if(mao.contains(carta))
+				cartas.add(carta);
+		}
+		
+		return cartas;
+	}
+
 }
