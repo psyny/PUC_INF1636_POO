@@ -25,16 +25,29 @@ public class ControladoraDoJogo {
 	
 	protected Jogador 	jogadorDaVez = null;
 	protected int		valorDoDado = 0;
+	protected Baralho 	baralho;
 	protected ArrayList<Casa> movimentacaoPossivel;
+	protected ArrayList<Carta> crime;
 	
 	public Tabuleiro	tabuleiro = null;
 	
 	private ControladoraDoJogo() {
 		listaDeJogadores = new ArrayList<Jogador>();
+		baralho = new Baralho();
+		crime = baralho.gerarCrime();
 	}
 	
 	public void adicionarJogador( Jogador jog ) {
 		this.listaDeJogadores.add( jog );
+	}
+	
+	public void distribuirCartas()
+	{
+		while(baralho.baralho.size() > 0) {
+			for (Jogador jogador : listaDeJogadores) {
+				jogador.adicionarMao(baralho.distribuirCarta());
+			}
+		}
 	}
 	
 	public ArrayList<Jogador> obterListaDeJogadores() {

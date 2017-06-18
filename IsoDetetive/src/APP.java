@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 import animacao.*;
 import estruturas.*;
 import interfaceGrafica.*;
@@ -9,7 +11,6 @@ public class APP {
 		//Isometria.inicializar( 0 , 0 );
 
 		JanelaPrincipal.inicializar();
-		
 	}
 
 }
