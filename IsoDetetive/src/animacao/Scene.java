@@ -94,7 +94,7 @@ public class Scene extends JLayeredPane implements Animavel {
     	for( Actor act : this.toAdd ) {
 			if( act.isDestroyed() == false) { 
 	    		this.add( act );
-	    		this.setLayer( act , ((act.getProjectionCenter().y / 20 ) + act.desiredLayer ));
+	    		act.revalidateLayer();
 			}
 	}
 	

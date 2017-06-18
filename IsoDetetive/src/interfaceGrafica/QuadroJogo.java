@@ -32,44 +32,69 @@ public class QuadroJogo extends JLayeredPane {
 	
 	// Lister TEMPORARIO, so para testes de destruição de atores
 	private class actList_dado implements ActionListener , AnimationEndObserver {
-		private Actor dado = null;
+		private Dado dado1 = null;
+		private Dado dado2 = null;
 		private Scene cena = null;
+		private TradutorTabuleiro tradutorTabuleiro;
+		private TradutorMovimentacao tradutorMovimentacao;
 		
 		
-		public actList_dado( Scene cena ) {
+		public actList_dado( Scene cena , TradutorTabuleiro tradutorTabuleiro ,  TradutorMovimentacao tradutorMovimentacao ) {
 			this.cena = cena;
+			this.tradutorTabuleiro = tradutorTabuleiro;
+			this.tradutorMovimentacao = tradutorMovimentacao;
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e)  {
-			if( dado == null ) {
-				this.criarDado();
+			if( dado1 == null ) {
+				this.criarDados();
 			} else {
-				this.deletarDado();
+				this.deletarDados();
 			}
 		}
 		
-		private void criarDado() {
-			Dado novoDado = new Dado();
-			dado = novoDado;
-			cena.addActor( dado , 10 );
+		private void criarDados() {
+			dado1 = new Dado();;
+			cena.addActor( dado1 , 10 );
 			
-			novoDado.animationEndRegister(this);
+			dado2 = new Dado();;
+			cena.addActor( dado2 , 10 );
 			
-			int valorAleatorio = (int)(Math.random()*6 + 1);
-			novoDado.Lancar( new Vetor2D_double(100,1000), valorAleatorio );
+			dado1.animationEndRegister(this);
 			
+			int valorAleatorio1 = (int)(Math.random()*6 + 1);
+			int valorAleatorio2 = (int)(Math.random()*6 + 1);
+
+			tradutorMovimentacao.desmarcarCasas();	
+			ControladoraDoJogo.getInstance().iniciarProximaJogada();
+			Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
+			
+			Casa casa = jogadorDaVez.obterPosicao();
+			Vetor2D_double centro1 = tradutorTabuleiro.obterCentroDaCasa(casa);
+			Vetor2D_double centro2 = tradutorTabuleiro.obterCentroDaCasa(casa);
+			
+			centro1.x += 100;
+			centro2.x -= 100;
+			
+			dado1.Lancar( centro1 , valorAleatorio1 );
+			dado2.Lancar( centro2 , valorAleatorio2 );
+			
+			ControladoraDoJogo.getInstance().rolarDadoParaMovimentacao( valorAleatorio1 + valorAleatorio2 );
 		}
 		
-		private void deletarDado() {
+		private void deletarDados() {
 			//this.dado.setToDestroy();
-			this.dado.setToDestroy( 0 );
-			this.dado = null;
+			tradutorMovimentacao.desmarcarCasas();	
+			this.dado1.setToDestroy( 0 );
+			this.dado2.setToDestroy( 0 );
+			this.dado1 = null;
+			this.dado2 = null;
 		}
 
 		@Override
 		public void animationEndNotify(AnimationEndObserved observed) {
-			System.out.println("Dado Aterrizou");
+			tradutorMovimentacao.marcarCasas();		
 		}
 	}
 	
@@ -143,7 +168,7 @@ public class QuadroJogo extends JLayeredPane {
         TradutorJogadores tradutorJogadores = new TradutorJogadores( cenaAtores , tradutorTabuleiro  );
         tradutorJogadores.adicionarJogadores();
         
-        TradutorMovimentacao tradutorMovimentacao = new TradutorMovimentacao( cenaAtores , tradutorTabuleiro );
+        TradutorMovimentacao tradutorMovimentacao = new TradutorMovimentacao( tradutorJogadores );
         
         
         // Cena de Testes     
@@ -166,7 +191,7 @@ public class QuadroJogo extends JLayeredPane {
         
         JButton bt_dado = new JButton("Dado");
         bt_dado.setBounds(0, 0, 100, 30);
-        bt_dado.addActionListener( new actList_dado(cenaAtores) );
+        bt_dado.addActionListener( new actList_dado(cenaAtores , tradutorTabuleiro , tradutorMovimentacao ) );
         controlsPane.add( bt_dado );
         
         JButton bt_marcadores = new JButton("Marcadores");

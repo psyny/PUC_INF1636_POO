@@ -1,5 +1,7 @@
 package mediadores;
 
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import animacao.Actor;
@@ -13,19 +15,19 @@ import estruturas.Vetor2D_int;
 import jogo.Casa;
 import jogo.CasaType;
 import jogo.ControladoraDoJogo;
+import jogo.Jogador;
 import jogo.Tabuleiro;
 
-public class TradutorMovimentacao implements CasaSelecionadaObserver {
-	private CenaAtores 			cenaAtores;
-	private TradutorTabuleiro	tradutorTabuleiro;
+public class TradutorMovimentacao implements CasaSelecionadaObserver , MouseListener {
+	private TradutorJogadores 	tradutorJogadores;
 
 	private ArrayList<Marcador>	casasMarcadas = new ArrayList<Marcador>();
 	
-	public TradutorMovimentacao( CenaAtores cenaAtores , TradutorTabuleiro tradutorTabuleiro ) {
-		this.cenaAtores = cenaAtores;
-		this.tradutorTabuleiro = tradutorTabuleiro;
+	public TradutorMovimentacao( TradutorJogadores tradutorJogadores ) {
+		this.tradutorJogadores = tradutorJogadores;
 		
-		tradutorTabuleiro.cenaTabuleiro.casaSelecionadaObservedRegister(this);
+		tradutorJogadores.tradutorTabuleiro.cenaTabuleiro.casaSelecionadaObservedRegister(this);
+		tradutorJogadores.tradutorTabuleiro.cenaTabuleiro.addMouseListener(this);
 	}
 	
 	public void marcarCasas() {
@@ -35,9 +37,9 @@ public class TradutorMovimentacao implements CasaSelecionadaObserver {
 			marcador.casaReferente.y = casa.position.y;
 			
 			casasMarcadas.add( marcador );	
-			this.cenaAtores.addActor( marcador , 1 );
+			tradutorJogadores.tradutorTabuleiro.cenaTabuleiro.addActor( marcador , 1 );
 
-			Vetor2D_double posicao = tradutorTabuleiro.obterCentroDaCasa( casa.position.x , casa.position.y );
+			Vetor2D_double posicao = tradutorJogadores.tradutorTabuleiro.obterCentroDaCasa( casa.position.x , casa.position.y );
 			marcador.setVirtualPosition( posicao.x , posicao.y , 0 );
 		}
 	}
@@ -60,6 +62,47 @@ public class TradutorMovimentacao implements CasaSelecionadaObserver {
 				ator.definirMarcado(true);
 			}
 		}
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent arg0) {
+		if( ControladoraDoJogo.getInstance().obterEstadoDaJogada() != ControladoraDoJogo.EstadoDaJogada.AGUARDANDO_MOVIMENTO ) {
+			return;
+		}	
+		
+		Vetor2D_int casaDestino = tradutorJogadores.tradutorTabuleiro.cenaTabuleiro.ultimaCasaApontada;
+		
+		// Checa se é possivel ir para a casa desejada
+		boolean exitFlag = true;
+		for( Marcador marcador : casasMarcadas ) {
+			if( marcador.casaReferente.x == casaDestino.x && marcador.casaReferente.y == casaDestino.y ) {
+				exitFlag = false;
+				break;
+			}
+		}
+		if( exitFlag == true ) {
+			return;
+		}
+
+		// Vai para a casa desejada
+		Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
+		this.tradutorJogadores.reposicionarJogador( jogadorDaVez , casaDestino );
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+	}
+
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
 	}
 
 } 

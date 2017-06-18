@@ -13,9 +13,9 @@ public class TradutorJogadores {
 		public AtorJogador 	atorJogador;
 	}
 	
-	private CenaAtores 			cenaAtores;
-	private TradutorTabuleiro 	tradutorTabuleiro;
-	private ArrayList<AtoresDoJogador> atoresDosJogadores;
+	protected CenaAtores 			cenaAtores;
+	protected TradutorTabuleiro 	tradutorTabuleiro;
+	protected ArrayList<AtoresDoJogador> atoresDosJogadores;
 	
 	public TradutorJogadores( CenaAtores cenaAtores , TradutorTabuleiro tradutorTabuleiro ) {
 		this.cenaAtores = cenaAtores;
@@ -40,6 +40,22 @@ public class TradutorJogadores {
 
 			Vetor2D_double posicao = this.tradutorTabuleiro.obterCentroDaCasa( casaInicial.position.x , casaInicial.position.y );
 			atores.atorJogador.setVirtualPosition( posicao.x , posicao.y );
+			
+			atoresDosJogadores.add(atores);
+		}
+	}
+	
+	public void reposicionarJogador( Jogador jogador , Vetor2D_int novaCasa ) {
+		for( AtoresDoJogador atoresJogador : atoresDosJogadores ) {
+			if( atoresJogador.jogador == jogador ) {
+				System.out.println("AAA");
+				
+				Casa casa = tradutorTabuleiro.tabuleiro.getCell( novaCasa.x , novaCasa.y );
+				jogador.definirPosicao( casa );
+				
+				Vetor2D_double novaPosicao = tradutorTabuleiro.obterCentroDaCasa(casa);
+				atoresJogador.atorJogador.setVirtualPosition( novaPosicao.x , novaPosicao.y );
+			}
 		}
 	}
 }

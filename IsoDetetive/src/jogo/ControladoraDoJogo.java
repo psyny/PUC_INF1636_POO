@@ -21,13 +21,21 @@ public class ControladoraDoJogo {
 	}	
 	
 	// ----------------------------
+	public enum EstadoDaJogada {
+		INICIO,
+		AGUARDANDO_MOVIMENTO,
+		PALPITE,
+		ACUSACAO
+	}	
+	
 	protected ArrayList<Jogador> listaDeJogadores;
 	
-	protected Jogador 	jogadorDaVez = null;
-	protected int		valorDoDado = 0;
-	protected Baralho 	baralho;
-	protected ArrayList<Casa> movimentacaoPossivel;
-	protected ArrayList<Carta> crime;
+	protected EstadoDaJogada 	estadoDaJogada = EstadoDaJogada.INICIO; 
+	protected Jogador 			jogadorDaVez = null;
+	protected int				valorDoDado = 0;
+	protected Baralho 			baralho;
+	protected ArrayList<Casa>	movimentacaoPossivel;
+	protected ArrayList<Carta> 	crime;
 	
 	public Tabuleiro	tabuleiro = null;
 	
@@ -35,19 +43,6 @@ public class ControladoraDoJogo {
 		listaDeJogadores = new ArrayList<Jogador>();
 		baralho = new Baralho();
 		crime = baralho.gerarCrime();
-	}
-	
-	public void adicionarJogador( Jogador jog ) {
-		this.listaDeJogadores.add( jog );
-	}
-	
-	public void distribuirCartas()
-	{
-		while(baralho.baralho.size() > 0) {
-			for (Jogador jogador : listaDeJogadores) {
-				jogador.adicionarMao(baralho.distribuirCarta());
-			}
-		}
 	}
 	
 	public ArrayList<Jogador> obterListaDeJogadores() {
@@ -65,6 +60,26 @@ public class ControladoraDoJogo {
 	public ArrayList<Casa> obterMovimentacaoPossivel() {
 		return new ArrayList<Casa>( this.movimentacaoPossivel );
 	}	
+	
+	public EstadoDaJogada obterEstadoDaJogada() {
+		return this.estadoDaJogada;
+	}	
+	
+	
+	public void adicionarJogador( Jogador jog ) {
+		this.listaDeJogadores.add( jog );
+	}
+	
+	public void distribuirCartas()
+	{
+		while(baralho.baralho.size() > 0) {
+			for (Jogador jogador : listaDeJogadores) {
+				jogador.adicionarMao(baralho.distribuirCarta());
+			}
+		}
+	}
+	
+
 	
 	
 	public void iniciarProximaJogada() {
@@ -91,6 +106,7 @@ public class ControladoraDoJogo {
 		// Resetar variaveis de turno
 		valorDoDado = 0;
 		movimentacaoPossivel = new ArrayList<Casa>();
+		estadoDaJogada = EstadoDaJogada.INICIO; 
 	}
 	
 	public int rolarDadoParaMovimentacao( int valorPredeterminado ) {
@@ -122,5 +138,7 @@ public class ControladoraDoJogo {
 		casasPossiveis.add( jogadorDaVez.posicao );
 		
 		movimentacaoPossivel = casasPossiveis;
+		
+		estadoDaJogada = EstadoDaJogada.AGUARDANDO_MOVIMENTO; 
 	}
 }

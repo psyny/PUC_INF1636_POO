@@ -178,6 +178,8 @@ public class Actor extends JLayeredPane implements Animavel {
 		this.projectionPosition.y = centerPosition.y - ( this.projectionSize.y / 2 )  - this.virtualPosition.z;
 		
 		super.setLocation( (int)this.projectionPosition.x , (int)this.projectionPosition.y );
+		
+		this.revalidateLayer();
 	}	
 	
 	// Lembrando: essa é a posição REAL ( em tela )
@@ -244,6 +246,17 @@ public class Actor extends JLayeredPane implements Animavel {
 		}
 	}
 	
+	public int getLayer() {
+		return ((getProjectionCenter().y / 10 ) + desiredLayer );
+	}
+	
+	public void revalidateLayer() {
+		if( this.parentScene == null ) {
+			return;
+		}
+		
+		this.parentScene.setLayer( this , getLayer() );
+	}
 	
 	public void clearActor() {
 		for( innerSprite spr : innerSprites ) {

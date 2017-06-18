@@ -102,6 +102,28 @@ public class TradutorTabuleiro {
 				
 		}
 		
+		switch( tipo ) {
+			default:
+				break;
+				
+			case CORREDOR:
+				piso.talvezAdicionarSujeira(5);
+				break;					
+				
+			case COZINHA:
+			case SL_MUSICA:	
+			case SL_INVERNO:		
+			case SL_JANTAR:	
+			case SL_JOGOS:	
+			case SL_ESTAR:	
+			case ENTRADA:
+			case BIBLIOTECA:
+			case ESCRITORIO:
+				piso.talvezAdicionarSujeira(10);
+				break;							
+		}		
+		
+		
 		return piso;
 	} 
 	
