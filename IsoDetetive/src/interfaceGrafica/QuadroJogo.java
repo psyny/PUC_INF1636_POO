@@ -114,26 +114,35 @@ public class QuadroJogo extends JLayeredPane {
         
         TradutorMovimentacao tradutorMovimentacao = new TradutorMovimentacao();
         MediadorFluxoDeJogo.getInstance().tradutorMovimentacao = tradutorMovimentacao;
-        
-        //Cena Mao
-        CenaMao cenaMao = new CenaMao();
-        add(cenaMao);
-        setLayer(cenaMao, 30);
+
         
         // Cena de Testes     
 		Scene cenaTeste = new CenaIsometrica( 0 , 0 , 300 , 300 );	
 		cenaPrincipal.adicionarCena( cenaTeste , 1 );
         
-		// Camera
+		// Camera - Jogo
 		Camera gameCamera = new Camera( cenaPrincipal , 0 , 0 ); 
 		MediadorFluxoDeJogo.getInstance().camera = gameCamera;
         gameCamera.setBounds(0, 0, 1000 , 700 );
         gameCamera.setTarget( 0 , 0 );
-        
         gameCamera.setIsFixedOnTarget( false );
         
         add( gameCamera );
         setLayer( gameCamera , 10 );
+        
+        // -------------------------------------------------------
+        // Cena Principal - Cena composta:
+        CenaComposta menuCenaPrincipal = new CenaComposta(0,0);
+        
+        //Cena Mao
+        CenaMao cenaMao = new CenaMao();
+        menuCenaPrincipal.add(cenaMao);
+        menuCenaPrincipal.setLayer(cenaMao, 2);
+        
+        // Camera - Menus
+        CameraMenu menuCamera = new CameraMenu( menuCenaPrincipal , 0 , 0 ); 
+        add( menuCamera );
+        setLayer( menuCamera , 20 );
         
         // Layer dos controles de jogo
         JPanel controlsPane = new painelDeControles();
@@ -167,6 +176,8 @@ public class QuadroJogo extends JLayeredPane {
         add( controlsPane );
         setLayer( controlsPane , 20 );
         
+        // -------------------------------------------------------
+        // Cena Principal - Cena composta:
         
         // Animacao de Teste - Diretor por Sprites
         
