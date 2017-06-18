@@ -15,20 +15,24 @@ import jogo.CasaType;
 import jogo.ControladoraDoJogo;
 import jogo.Tabuleiro;
 
-public class TradutorMovimentacao {
+public class TradutorMovimentacao implements CasaSelecionadaObserver {
 	private CenaAtores 			cenaAtores;
 	private TradutorTabuleiro	tradutorTabuleiro;
 
-	private ArrayList<Actor>	casasMarcadas = new ArrayList<Actor>();
+	private ArrayList<Marcador>	casasMarcadas = new ArrayList<Marcador>();
 	
 	public TradutorMovimentacao( CenaAtores cenaAtores , TradutorTabuleiro tradutorTabuleiro ) {
 		this.cenaAtores = cenaAtores;
 		this.tradutorTabuleiro = tradutorTabuleiro;
+		
+		tradutorTabuleiro.cenaTabuleiro.casaSelecionadaObservedRegister(this);
 	}
 	
 	public void marcarCasas() {
 		for( Casa casa : ControladoraDoJogo.getInstance().obterMovimentacaoPossivel() ) {
 			Marcador marcador = new Marcador();
+			marcador.casaReferente.x = casa.position.x;
+			marcador.casaReferente.y = casa.position.y;
 			
 			casasMarcadas.add( marcador );	
 			this.cenaAtores.addActor( marcador , 1 );
@@ -39,8 +43,22 @@ public class TradutorMovimentacao {
 	}
 	
 	public void desmarcarCasas() {
-		for( Actor ator : casasMarcadas ) {
+		for( Marcador ator : casasMarcadas ) {
 			ator.setToDestroy();
+		}
+		casasMarcadas.clear();
+	}
+
+	@Override
+	public void observerNotify(CasaSelecionadaObserved observed) {
+		Vetor2D_int casaSelecionada = observed.obterCasaSelecionada();
+		
+		for( Marcador ator : casasMarcadas ) {
+			ator.definirMarcado(false);
+			
+			if( ator.casaReferente.x == casaSelecionada.x && ator.casaReferente.y == casaSelecionada.y ) {
+				ator.definirMarcado(true);
+			}
 		}
 	}
 

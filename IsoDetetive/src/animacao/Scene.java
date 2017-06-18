@@ -44,7 +44,7 @@ public class Scene extends JLayeredPane implements Animavel {
 		this.setPreferredSize( new Dimension(w , h) );
 	}	
 	
-	public void addActor( Actor actor , int layer ) {
+	public synchronized void addActor( Actor actor , int layer ) {
 		actor.desiredLayer = layer;
 		actor.parentScene = this;
 		
@@ -87,15 +87,19 @@ public class Scene extends JLayeredPane implements Animavel {
     	}
     	
     	// Adiciona os novos atores
-    	for( Actor act : this.toAdd ) {
-    			if( act.isDestroyed() == false) { 
-		    		this.add( act );
-		    		this.setLayer( act , ((act.getProjectionCenter().y / 20 ) + act.desiredLayer ));
-    			}
-    	}
-    	
-		this.toAdd.clear();
+    	this.addActorsFromList();
 	}	
+	
+	private synchronized void addActorsFromList() {
+    	for( Actor act : this.toAdd ) {
+			if( act.isDestroyed() == false) { 
+	    		this.add( act );
+	    		this.setLayer( act , ((act.getProjectionCenter().y / 20 ) + act.desiredLayer ));
+			}
+	}
+	
+	this.toAdd.clear();
+	}
 	
 	public boolean isDestroyed() {
 		return false;

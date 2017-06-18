@@ -6,74 +6,82 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
 
 import javax.swing.SwingUtilities;
 
 import animacao.*;
 import estruturas.Vetor2D_double;
 import estruturas.Vetor2D_int;
+import mediadores.*;
 
-public class CenaTabuleiro extends CenaIsometrica {
+public class CenaTabuleiro extends CenaIsometrica implements CasaSelecionadaObserved {
+	public Vetor2D_int ultimaCasaApontada = new Vetor2D_int(0,0);
+	CasaSelecionadaObserver a;
 	
-	class MouseController implements MouseListener
-	{
-		CenaTabuleiro cena;
-		
-		public MouseController(CenaTabuleiro cena)
-		{
-			this.cena = cena;
-		}
-		
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-			Vetor2D_int destino = cena.obterCasaClicada(e.getPoint());
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void mouseExited(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
-	}
+	public ArrayList<CasaSelecionadaObserver> casaSelecionadaObserverList = new ArrayList<CasaSelecionadaObserver>();
 
 	public CenaTabuleiro(int x, int y, int w, int h) {
 		super(x, y, w, h);
 		
 		this.setBackground( new Color(0,0,0) );
 		this.setOpaque( true );
-		
-		this.addMouseListener(new MouseController(this));
 	}
 
+	@Override
+	public void passTime( long time ) {
+		super.passTime(time);
+		
+		// Calcula a ultima posicao do mouse
+		Point posicaoAbsolutaDoMouse = MouseInfo.getPointerInfo().getLocation();
+		if( posicaoAbsolutaDoMouse != null ) {
+			Point posicaoAbsolutaDoComponente = this.getLocationOnScreen();
+			
+			Point posicaoRelativa = new Point();
+			posicaoRelativa.x = posicaoAbsolutaDoMouse.x - posicaoAbsolutaDoComponente.x;
+			posicaoRelativa.y = posicaoAbsolutaDoMouse.y - posicaoAbsolutaDoComponente.y;
+			
+			Vetor2D_int novaCasaApontada = this.obterCasaClicada(posicaoRelativa);
+			
+			// Chama os listeners interessados
+			if( novaCasaApontada.x == this.ultimaCasaApontada.x && novaCasaApontada.y == this.ultimaCasaApontada.y ) {
+				// Posicao é a mesma
+			} else {
+				this.ultimaCasaApontada.x = novaCasaApontada.x;
+				this.ultimaCasaApontada.y = novaCasaApontada.y;
+				
+				animationEndNotityObservers();
+			}
+		}
+	}
+	
 	public Vetor2D_int obterCasaClicada(Point p)
 	{
 		Vetor2D_double vet = Isometria.obterVetorCartesiano(new Vetor2D_double(p.x - this.getIsometricOffset().x, p.y - this.getIsometricOffset().y));
 		
 		Vetor2D_int casa = new Vetor2D_int(0, 0);
-		casa.x = (int)( 42 + vet.x) / 63;
-		casa.y = (int)( 42 + vet.y) / 63;
+		casa.x = (int)( 42 + vet.x) / 63; // Constantes referentes ao tamanho da imagem do tileset
+		casa.y = (int)( 42 + vet.y) / 63; // Constantes referentes ao tamanho da imagem do tileset
 		
 		return casa;
+	}
+	
+	// OBSERVER PATTERN Method Group
+	public void casaSelecionadaObservedRegister(CasaSelecionadaObserver observer) {
+		this.casaSelecionadaObserverList.add(observer);
+	}
+	
+	public void casaSelecionadaObservedUnRegister(CasaSelecionadaObserver observer) {
+		this.casaSelecionadaObserverList.remove(observer);
+	}
+	
+	private void animationEndNotityObservers() {
+		for( CasaSelecionadaObserver ob : this.casaSelecionadaObserverList ) {
+			ob.observerNotify(this);
+		}
+	}	
+	
+	public Vetor2D_int obterCasaSelecionada() {
+		return this.ultimaCasaApontada;
 	}
 }

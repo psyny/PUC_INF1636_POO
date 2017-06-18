@@ -320,6 +320,10 @@ public class AnimatedSprite extends Sprite implements Animavel , AnimationEndObs
 		this.playAnimation( ID , frame , true , 1 , LoopType.REPEAT );
 	}
 	
+	public void playAnimation( int ID , boolean resume ) {
+		this.playAnimation( this.findAnimation(ID) , 1 , resume , 1 , LoopType.REPEAT );
+	}	
+	
 	public void playAnimation( int ID , int loops , LoopType loopType  ) {
 		this.playAnimation( ID , 1 , true , loops  , loopType );
 	}
