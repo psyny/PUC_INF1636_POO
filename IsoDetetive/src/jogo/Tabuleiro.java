@@ -276,14 +276,40 @@ public class Tabuleiro {
 		}
 	
 	// Obtem casas acessiveis a partir da casa X
-		public ArrayList<Casa> obterCasasNaDistancia( ArrayList<Casa> casasDeOrigem , int distancia ) {
-			// TODO, no momento retornamos apenas uma lista arbitraria de casas
+		public ArrayList<Casa> obterCasasNaDistancia( Jogador jogador , int distancia ) {
 			
-			ArrayList<Casa> casas = new ArrayList<Casa>(casasDeOrigem);
-			ArrayList<Casa> fronteira = new ArrayList<Casa>(casasDeOrigem);
+			ArrayList<Casa> casasDeOrigem = new ArrayList<Casa>();
+			ArrayList<Casa> casas;
 			ArrayList<Casa> fronteiraTemp = new ArrayList<Casa>();
 			ArrayList<Casa> vizinhos = new ArrayList<Casa>();
 			
+			if( jogador.posicao.isRoom() == false ) {
+				casasDeOrigem.add(jogador.posicao);
+				casas = new ArrayList<Casa>(casasDeOrigem);
+			} else {
+				CasaType tipoPorta = Casa.tipoSalaParaTipoPorta( jogador.posicao.type );
+				casasDeOrigem = obterCasasDoTipo( tipoPorta );
+				casas = new ArrayList<Casa>();
+				
+				switch (jogador.posicao.type) {
+					case COZINHA:
+					case SL_ESTAR:
+					case SL_INVERNO:
+					case ESCRITORIO:
+						casas.addAll(obterCasasDoTipo( CasaType.COZINHA_PORTA ));
+						casas.addAll(obterCasasDoTipo( CasaType.SL_ESTAR_PORTA ));
+						casas.addAll(obterCasasDoTipo( CasaType.SL_INVERNO_PORTA ));
+						casas.addAll(obterCasasDoTipo( CasaType.ESCRITORIO_PORTA ));
+						break;
+	
+					default:
+						casas = new ArrayList<Casa>(casasDeOrigem);
+						break;
+				}
+			}
+			
+			ArrayList<Casa> fronteira = new ArrayList<Casa>(casasDeOrigem);
+
 			for (Casa casa : casasDeOrigem) {
 				casa.casaAnterior = null;
 			}
@@ -308,12 +334,4 @@ public class Tabuleiro {
 			
 			return casas;
 		}
-		
-		public ArrayList<Casa> obterCasasNaDistancia( Casa casaDeOrigem , int distancia ) {
-			ArrayList<Casa> casas = new ArrayList<Casa>();
-			casas.add( casaDeOrigem );
-			
-			return obterCasasNaDistancia( casas , distancia );
-		}
-	
 }
