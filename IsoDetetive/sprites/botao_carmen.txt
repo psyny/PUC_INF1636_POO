@@ -1,4 +1,4 @@
-botao_acusar.png
+botao_carmen.png
 
 Still		; animation name
 1		; animation ID code
