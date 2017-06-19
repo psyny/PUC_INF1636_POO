@@ -27,24 +27,22 @@ public class CenaMao extends Scene {
 	protected ArrayList<AtorCarta> cartasNaCena = new ArrayList<AtorCarta>();
 	protected Vetor2D_int proximaPosicao = new Vetor2D_int(70, 100);
 	
+	protected Actor fechar = null;
+	protected Vetor2D_int fecharPos = new Vetor2D_int( 0 , 20 );
+	
 	public CenaMao()
 	{
 		super(50, 50, 900, 600);
 		
 		setBackground(Color.WHITE);
-		setOpaque(true);
+		setOpaque(false);
 		
-		Actor fechar;
 		fechar = new AtorBotoes( "botao_fechar.txt" );
-		fechar.setLocation( 890 , 10 );  
+		fechar.setLocation( fecharPos.x , fecharPos.y );  
 		fechar.addMouseListener( new mouseListener_fechar() );
 		this.addActor( fechar , 10 );	
 		
-		/*Actor testActor = new Actor( 200 , 200 );
-		testActor.setLocation( 200, 100 );   
-		testActor.addAnimatedSprite( "tileSelector.txt" , new Vetor2D_int(0,0) , 0 );
-		testActor.getAnimatedSprite().playAnimation(1);
-		this.addActor( testActor , 10 );*/
+		this.limparCena();
 	}
 	
 	public CenaMao(int x, int y, int w, int h)
@@ -68,7 +66,7 @@ public class CenaMao extends Scene {
 		}
 		
 		cartasNaCena.clear();
-		proximaPosicao = new Vetor2D_int(70, 100);
+		proximaPosicao = new Vetor2D_int(70, 130);
 	}
 	
 	private void ajustarProximaPosicao()
@@ -77,7 +75,12 @@ public class CenaMao extends Scene {
 		if(proximaPosicao.x >= 900)
 		{
 			proximaPosicao.x = 70;
-			proximaPosicao.y += 200;
+			proximaPosicao.y += 190;
+		}
+		
+		if( fecharPos.x < proximaPosicao.x ) {
+			fecharPos.x = proximaPosicao.x - 80;
+			fechar.setLocation( fecharPos.x , fecharPos.y );
 		}
 	}
 }

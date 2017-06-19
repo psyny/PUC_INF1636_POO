@@ -25,7 +25,7 @@ public class CenaBlocoNotas extends Scene {
 	}
 	
 	protected ArrayList<AtorCarta> cartasNaCena = new ArrayList<AtorCarta>();
-	protected Vetor2D_int proximaPosicao = new Vetor2D_int(70, 100);
+	protected Vetor2D_int proximaPosicao = new Vetor2D_int(70, 130);
 	
 	public CenaBlocoNotas()
 	{
@@ -36,15 +36,11 @@ public class CenaBlocoNotas extends Scene {
 		
 		Actor fechar;
 		fechar = new AtorBotoes( "botao_fechar.txt" );
-		fechar.setLocation( 890 , 10 );  
+		fechar.setLocation( 880 , 20 );  
 		fechar.addMouseListener( new mouseListener_fechar() );
 		this.addActor( fechar , 10 );	
 		
-		/*Actor testActor = new Actor( 200 , 200 );
-		testActor.setLocation( 200, 100 );   
-		testActor.addAnimatedSprite( "tileSelector.txt" , new Vetor2D_int(0,0) , 0 );
-		testActor.getAnimatedSprite().playAnimation(1);
-		this.addActor( testActor , 10 );*/
+		this.limparCena();
 	}
 	
 	public CenaBlocoNotas(int x, int y, int w, int h)
@@ -70,7 +66,7 @@ public class CenaBlocoNotas extends Scene {
 		
 		TradutorMenus.getInstance().atualizarBlocoDeNotas();
 		cartasNaCena.clear();
-		proximaPosicao = new Vetor2D_int(70, 100);
+		proximaPosicao = new Vetor2D_int(70, 130);
 	}
 	
 	private void ajustarProximaPosicao()
@@ -79,7 +75,7 @@ public class CenaBlocoNotas extends Scene {
 		if(proximaPosicao.x >= 900)
 		{
 			proximaPosicao.x = 70;
-			proximaPosicao.y += 200;
+			proximaPosicao.y += 190;
 		}
 	}
 }
