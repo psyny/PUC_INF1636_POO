@@ -14,25 +14,26 @@ import jogo.Jogador;
 import mediadores.MediadorFluxoDeJogo;
 import mediadores.TradutorMenus;
 
-public class CenaMao extends Scene {
+public class CenaPalpite extends Scene {
 	
 	class mouseListener_fechar extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent arg0)  {
 			limparCena();
 			MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.MENU_PRINCIPAL);
+			TradutorMenus.getInstance().gerarPalpite();
 		}
 	}
 	
 	protected ArrayList<AtorCarta> cartasNaCena = new ArrayList<AtorCarta>();
 	protected Vetor2D_int proximaPosicao = new Vetor2D_int(70, 100);
 	
-	public CenaMao()
+	public CenaPalpite()
 	{
 		super(50, 50, 900, 600);
 		
 		setBackground(Color.WHITE);
-		setOpaque(true);
+		setOpaque(false);
 		
 		Actor fechar;
 		fechar = new AtorBotoes( "botao_fechar.txt" );
@@ -47,7 +48,7 @@ public class CenaMao extends Scene {
 		this.addActor( testActor , 10 );*/
 	}
 	
-	public CenaMao(int x, int y, int w, int h)
+	public CenaPalpite(int x, int y, int w, int h)
 	{
 		super(x, y, w, h);
 	}

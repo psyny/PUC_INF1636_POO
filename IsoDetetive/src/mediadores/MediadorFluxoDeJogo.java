@@ -2,6 +2,7 @@ package mediadores;
 
 import animacao.*;
 import atores.*;
+import atores.CameraMenu.Modos;
 import estruturas.*;
 import jogo.*;
 import jogo.ControladoraDoJogo.EstadoDaJogada;
@@ -39,6 +40,7 @@ public class MediadorFluxoDeJogo {
 	public CenaTabuleiro 		cenaTabuleiro = null;
 	public CenaAtores 			cenaAtores = null;
 	public Camera				camera = null;
+	public CameraMenu			cameraMenu = null;
 	
 	public TradutorJogadores 	tradutorJogadores = null;
 	public TradutorMovimentacao tradutorMovimentacao = null;
@@ -59,6 +61,13 @@ public class MediadorFluxoDeJogo {
 		public boolean checarRegistroCamera() {
 			if( camera == null )
 				System.out.println("Mediador Fluxo de Jogo: Erro: Camera não registrado");
+			else return true;
+			return false;
+		}	
+		
+		public boolean checarRegistroCameraMenu() {
+			if( cameraMenu == null )
+				System.out.println("Mediador Fluxo de Jogo: Erro: Camera Menu não registrado");
 			else return true;
 			return false;
 		}	
@@ -119,6 +128,12 @@ public class MediadorFluxoDeJogo {
 			camera.setIsFixedOnTarget( true );
 			camera.setTarget( centroProjetado.x , centroProjetado.y );
 			//camera.setPositionCenteredOn( centroProjetado.x , centroProjetado.y );
+		}
+		
+	// Inicio do Jogo ----------------------------------------------------------------
+		public void iniciarJogo()
+		{
+			ControladoraDoJogo.getInstance().iniciarPartida();
 		}
 		
 	// Movimentacao ------------------------------------------------------------------
@@ -186,10 +201,11 @@ public class MediadorFluxoDeJogo {
 			Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
 			if(jogadorDaVez.obterPosicao().isRoom())
 			{
+				cameraMenu.definirModo(Modos.PALPITE);
+				TradutorMenus.getInstance().desenharPalpite(cameraMenu.cenaPalpite);
 				tradutorJogadores.reposicionarJogador(jogadorDaVez, tabuleiro.obterPosicaoLivreTipo(jogadorDaVez.obterPosicao().type).position);
 			}
-			
-			
+
 			tradutorMovimentacao.desmarcarCasas();
 		}
 	

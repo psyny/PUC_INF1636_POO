@@ -13,12 +13,14 @@ public class CameraMenu extends Camera {
 		MENU_PRINCIPAL,
 		MAO,
 		PALPITE,
-		ACUSACAO
+		ACUSACAO,
+		NOTAS
 	}
 	
-    public CenaMenuPrincipal 	menuPrincipal;
-    public CenaMao 				cenaMao;
-    
+	public CenaMenuPrincipal 	menuPrincipal;
+	public CenaMao 				cenaMao;
+	public CenaBlocoNotas 		cenaBlocoNotas;
+	public CenaPalpite 			cenaPalpite;
     
 	public CameraMenu( Component viewPort , int x , int y ) {
 		super( viewPort , x , y );
@@ -27,7 +29,7 @@ public class CameraMenu extends Camera {
 		getViewport().setOpaque( false );
 		setTarget( 0 , 0 );
 		setIsFixedOnTarget( false );
-		//setBorder(BorderFactory.createEmptyBorder());
+		setBorder(BorderFactory.createEmptyBorder());
 		
 		setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -38,6 +40,8 @@ public class CameraMenu extends Camera {
 	private void esconderTudo( ) {
 		if( menuPrincipal != null ) menuPrincipal.setVisible( false );
 		if( cenaMao != null ) cenaMao.setVisible( false );
+		if( cenaBlocoNotas != null ) cenaBlocoNotas.setVisible( false );
+		if( cenaPalpite != null ) cenaPalpite.setVisible( false );
 	}
 	
 	public void definirModo( CameraMenu.Modos modo ) {
@@ -47,6 +51,21 @@ public class CameraMenu extends Camera {
 			case MENU_PRINCIPAL:
 				setBounds(0, 0 , 900 , 100 );
 				if( menuPrincipal != null ) menuPrincipal.setVisible(true);		
+				break;
+				
+			case MAO:
+				setBounds(0, 0 , 1000 , 700 );
+				if( cenaMao != null ) cenaMao.setVisible(true);		
+				break;
+				
+			case PALPITE:
+				setBounds(0, 0 , 1000 , 700 );
+				if( cenaPalpite != null ) cenaPalpite.setVisible(true);		
+				break;
+				
+			case NOTAS:
+				setBounds(0, 0 , 1000 , 700 );
+				if( cenaBlocoNotas != null ) cenaBlocoNotas.setVisible(true);		
 				break;
 		
 			default:

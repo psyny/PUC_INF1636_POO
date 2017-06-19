@@ -97,6 +97,7 @@ public class QuadroJogo extends JLayeredPane {
         CenaComposta menuCenaPrincipal = new CenaComposta(0,0);
         
         CameraMenu menuCamera = new CameraMenu( menuCenaPrincipal , 0 , 0 ); 
+        MediadorFluxoDeJogo.getInstance().cameraMenu = menuCamera;
         add( menuCamera );
         setLayer( menuCamera , 20 );
         
@@ -108,8 +109,16 @@ public class QuadroJogo extends JLayeredPane {
         menuCamera.cenaMao = new CenaMao();
         menuCenaPrincipal.adicionarCena( menuCamera.cenaMao , 2);
         
+        //Cena BlocoDeNotas
+        menuCamera.cenaBlocoNotas = new CenaBlocoNotas();
+        menuCenaPrincipal.adicionarCena( menuCamera.cenaBlocoNotas , 2);
+        
+        //Cena Palpite
+        menuCamera.cenaPalpite = new CenaPalpite();
+        menuCenaPrincipal.adicionarCena( menuCamera.cenaPalpite , 2);
+        
         menuCamera.definirModo( CameraMenu.Modos.MENU_PRINCIPAL );
-
+        
         
         // -------------------------------------------------------
         
@@ -129,6 +138,7 @@ public class QuadroJogo extends JLayeredPane {
 		cenaTeste.addActor( testActor , 10 );
 		
 		//Inicia o primerio turno
+		MediadorFluxoDeJogo.getInstance().iniciarJogo();
 		MediadorFluxoDeJogo.getInstance().iniciarJogadaDaVez();
 		
 	}

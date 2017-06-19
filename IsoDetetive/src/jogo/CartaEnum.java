@@ -1,12 +1,13 @@
 package jogo;
 
 public enum CartaEnum {
-		CANO,
-		CASTICAL,
-		CHAVE_INGLESA,
-		CORDA,
-		FACA,
+		DEATH_NOTE,
+		BATRANGUE,
+		CACHIMBO,
+		DIAMANTE,
 		REVOLVER,
+		FEDORA,
+		
 		BIBLIOTECA,
 		COZINHA,
 		ENTRADA,
@@ -16,6 +17,7 @@ public enum CartaEnum {
 		SALA_DE_JANTAR,
 		SALA_DE_MUSICA,
 		SALA_DE_JOGOS,
+		
 		L,
 		SHERLOCK,
 		CARMEN,

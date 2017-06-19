@@ -5,19 +5,19 @@ import java.util.Random;
 
 public class Baralho {
 	
-	private ArrayList<Carta> pilhaArmas = new ArrayList<Carta>();
-	private ArrayList<Carta> pilhaComodos = new ArrayList<Carta>();
-	private ArrayList<Carta> pilhaSuspeitos = new ArrayList<Carta>();
+	public static ArrayList<Carta> pilhaArmas = new ArrayList<Carta>();
+	public static ArrayList<Carta> pilhaComodos = new ArrayList<Carta>();
+	public static ArrayList<Carta> pilhaSuspeitos = new ArrayList<Carta>();
 	
 	public ArrayList<Carta> baralho = new ArrayList<Carta>();
 	
 	public Baralho()
 	{
-		pilhaArmas.add(new Carta(CartaEnum.CANO));
-		pilhaArmas.add(new Carta(CartaEnum.CASTICAL));
-		pilhaArmas.add(new Carta(CartaEnum.CHAVE_INGLESA));
-		pilhaArmas.add(new Carta(CartaEnum.CORDA));
-		pilhaArmas.add(new Carta(CartaEnum.FACA));
+		pilhaArmas.add(new Carta(CartaEnum.DEATH_NOTE));
+		pilhaArmas.add(new Carta(CartaEnum.DIAMANTE));
+		pilhaArmas.add(new Carta(CartaEnum.FEDORA));
+		pilhaArmas.add(new Carta(CartaEnum.BATRANGUE));
+		pilhaArmas.add(new Carta(CartaEnum.CACHIMBO));
 		pilhaArmas.add(new Carta(CartaEnum.REVOLVER));
 		
 		pilhaComodos.add(new Carta(CartaEnum.BIBLIOTECA));
@@ -87,5 +87,16 @@ public class Baralho {
 		baralho.remove(cartaEscolhida);
 		
 		return carta;
+	}
+	
+	public static ArrayList<Carta> todasCartas()
+	{
+		ArrayList<Carta> baralho = new ArrayList<Carta>();
+		
+		baralho.addAll(pilhaArmas);
+		baralho.addAll(pilhaComodos);
+		baralho.addAll(pilhaSuspeitos);
+		
+		return baralho;
 	}
 }

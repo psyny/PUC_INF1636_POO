@@ -9,9 +9,12 @@ import java.awt.event.MouseListener;
 
 import animacao.Actor;
 import animacao.Scene;
+import atores.CameraMenu.Modos;
 import estruturas.Vetor2D_int;
+import jogo.ControladoraDoJogo;
 import jogo.ControladoraDoJogo.EstadoDaJogada;
 import mediadores.MediadorFluxoDeJogo;
+import mediadores.TradutorMenus;
 
 class mouseListener_movimento extends MouseAdapter {
 	@Override
@@ -35,14 +38,16 @@ class mouseListener_acusar extends MouseAdapter {
 class mouseListener_verCartas extends MouseAdapter {
 	@Override
 	public void mouseClicked(MouseEvent arg0)  {
-		
+		MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.MAO);
+		TradutorMenus.getInstance().desenharCartasNaMao(MediadorFluxoDeJogo.getInstance().cameraMenu.cenaMao);
 	}
 }
 
 class mouseListener_verBlocoNotas extends MouseAdapter {
 	@Override
 	public void mouseClicked(MouseEvent arg0)  {
-		
+		MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.NOTAS);
+		TradutorMenus.getInstance().desenharBlocoDeNotas(MediadorFluxoDeJogo.getInstance().cameraMenu.cenaBlocoNotas);
 	}
 }
 

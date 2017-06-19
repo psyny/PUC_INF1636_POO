@@ -42,8 +42,6 @@ public class ControladoraDoJogo {
 	
 	private ControladoraDoJogo() {
 		listaDeJogadores = new ArrayList<Jogador>();
-		baralho = new Baralho();
-		crime = baralho.gerarCrime();
 	}
 	
 	public ArrayList<Jogador> obterListaDeJogadores() {
@@ -75,9 +73,17 @@ public class ControladoraDoJogo {
 	{
 		while(baralho.baralho.size() > 0) {
 			for (Jogador jogador : listaDeJogadores) {
-				jogador.adicionarMao(baralho.distribuirCarta());
+				if(jogador.emJogo)
+					jogador.adicionarMao(baralho.distribuirCarta());
 			}
 		}
+	}
+	
+	public void iniciarPartida()
+	{
+		baralho = new Baralho();
+		crime = baralho.gerarCrime();
+		distribuirCartas();
 	}
 	
 
@@ -137,5 +143,42 @@ public class ControladoraDoJogo {
 	
 	public void decidindoMovimento() {
 		estadoDaJogada = EstadoDaJogada.CONFIRMANDO_MOVIMENTO;
+	}
+	
+	public void validarPalpite(ArrayList<Carta> palpite)
+	{
+		//iterar sobre jogadores, na ordem da roda
+		int idx = listaDeJogadores.indexOf( jogadorDaVez ); 
+		int idxInicial = idx;
+		int idxProximo;
+		
+		if( idx == listaDeJogadores.size() - 1 ) {
+			idxProximo = 0;
+		} else {
+			idxProximo = idx + 1;
+		}
+		
+		while(idxProximo != idxInicial)
+		{
+			Jogador candidato = listaDeJogadores.get(idxProximo);
+			if(candidato.temCarta(palpite))
+			{
+				for(Carta carta : candidato.mao)
+				{
+					if(palpite.contains(carta))
+					{
+						jogadorDaVez.adicionarBlocoDeNotas(carta, true);
+						return;
+					}
+				}
+			}
+			
+			idxProximo++;
+			if( idx == listaDeJogadores.size() - 1 ) {
+				idxProximo = 0;
+			}
+		}
+		
+		
 	}
 }
