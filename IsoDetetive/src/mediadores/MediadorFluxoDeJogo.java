@@ -117,19 +117,59 @@ public class MediadorFluxoDeJogo {
 		
 	// Nova Jogada ------------------------------------------------------------------		
 		public void iniciarJogadaDaVez() {
+			// Limpando Interface Grafica
 			this.deletarDados();
 			this.tradutorMovimentacao.desmarcarCasas();
 			
+			// Notificando a controladora do jogo
 			ControladoraDoJogo.getInstance().iniciarProximaJogada();
 			
-			// Posicionar Camera
+			// Criando o menu com as opções disponiveis para o jogador atual
+				cameraMenu.menuPrincipal.esconderBotoes();
+				Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
+				
+				// Icone do Jogador
+					switch( jogadorDaVez.obterPersonagem().obterEnum() ) {
+						case L:
+							cameraMenu.menuPrincipal.ativarBotao( AtorBotoes.Tipo.PERSONAGEM_L );
+							break;
+							
+						case SHERLOCK:
+							cameraMenu.menuPrincipal.ativarBotao( AtorBotoes.Tipo.PERSONAGEM_SHERLOCK );
+							break;
+							
+						case CARMEN:
+							cameraMenu.menuPrincipal.ativarBotao( AtorBotoes.Tipo.PERSONAGEM_CARMEN );
+							break;
+							
+						case PANTERA:
+							cameraMenu.menuPrincipal.ativarBotao( AtorBotoes.Tipo.PERSONAGEM_PANTERA );
+							break;
+							
+						case EDMORT:
+							cameraMenu.menuPrincipal.ativarBotao( AtorBotoes.Tipo.PERSONAGEM_EDMORT );
+							break;
+							
+						case BATMAN:
+							cameraMenu.menuPrincipal.ativarBotao( AtorBotoes.Tipo.PERSONAGEM_BATMAN );
+							break;	
+					}
+					
+				// Botões sempre disponiveis
+				cameraMenu.menuPrincipal.ativarBotao( AtorBotoes.Tipo.BOTAO_ACUSAR );
+				cameraMenu.menuPrincipal.ativarBotao( AtorBotoes.Tipo.BOTAO_MAO );
+				cameraMenu.menuPrincipal.ativarBotao( AtorBotoes.Tipo.BOTAO_NOTAS );
+				
+				// Botões de situacao
+				// TODO
+				cameraMenu.menuPrincipal.ativarBotao( AtorBotoes.Tipo.BOTAO_DADO );
+				cameraMenu.menuPrincipal.ativarBotao( AtorBotoes.Tipo.BOTAO_PASSAR );
 			
-			Vetor2D_int centroProjetado = cenaTabuleiro.getProjection( tradutorTabuleiro.obterCentroDaCasa(ControladoraDoJogo.getInstance().obterJogadorDaVez().obterPosicao()) );
-			camera.setIsFixedOnTarget( true );
-			camera.setTarget( centroProjetado.x , centroProjetado.y );
-			//camera.setPositionCenteredOn( centroProjetado.x , centroProjetado.y );
+			// Posicionar Camera no personagem
+			Vetor2D_double posicaoVirtualJogador = tradutorTabuleiro.obterCentroDaCasa(ControladoraDoJogo.getInstance().obterJogadorDaVez().obterPosicao());
+			this.centralizarCameraEmPosicaoVirtual(posicaoVirtualJogador);
 		}
-		
+			
 	// Inicio do Jogo ----------------------------------------------------------------
 		public void iniciarJogo()
 		{
@@ -174,6 +214,16 @@ public class MediadorFluxoDeJogo {
 			ControladoraDoJogo.getInstance().rolarDadoParaMovimentacao( valorAleatorio1 + valorAleatorio2 );
 		}
 		
+		public void sombrearDados() {
+			if( dado1 != null ) {
+				dado1.definirSombreado(true);
+			}
+			
+			if( dado2 != null ) {
+				dado2.definirSombreado(true);
+			}
+		}
+		
 		public void deletarDados() {
 			if( dado1 != null ) {
 				dado1.setToDestroy( 0 );
@@ -189,6 +239,7 @@ public class MediadorFluxoDeJogo {
 		public void iniciarMovimentacao() {
 			tradutorMovimentacao.desmarcarCasas();	
 			tradutorMovimentacao.marcarCasas();
+			tradutorJogadores.definirSombreado( ControladoraDoJogo.getInstance().obterJogadorDaVez() , true );
 			camera.setIsFixedOnTarget( false );
 		}
 		
@@ -198,6 +249,9 @@ public class MediadorFluxoDeJogo {
 		
 		public void confirmarMovimento() {
 			//caso o jogador esteja em um comodo, colocar ele numa posiçao random do comodo
+			deletarDados();
+			tradutorJogadores.definirSombreado( ControladoraDoJogo.getInstance().obterJogadorDaVez() , false );
+			
 			Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
 			if(jogadorDaVez.obterPosicao().isRoom())
 			{
@@ -208,5 +262,21 @@ public class MediadorFluxoDeJogo {
 
 			tradutorMovimentacao.desmarcarCasas();
 		}
+		
+	// Camera
+		public void centralizarCameraEmPosicaoVirtual( Vetor2D_double posicaoVirtual ) {
+			Vetor2D_int posicaoReal = cenaTabuleiro.getProjection( posicaoVirtual );
+			this.centralizarCameraEmPosicaoReal(posicaoReal);
+		}
+		
+		public void centralizarCameraEmPosicaoReal( Vetor2D_double posicaoReal ) {
+			this.centralizarCameraEmPosicaoReal( new Vetor2D_int( (int)posicaoReal.x , (int)posicaoReal.y ));
+		}			
+		
+		public void centralizarCameraEmPosicaoReal( Vetor2D_int posicaoReal ) {
+			camera.setIsFixedOnTarget( true );
+			camera.setTarget( posicaoReal.x , posicaoReal.y );
+			//camera.setPositionCenteredOn( centroProjetado.x , centroProjetado.y );
+		}	
 	
 }

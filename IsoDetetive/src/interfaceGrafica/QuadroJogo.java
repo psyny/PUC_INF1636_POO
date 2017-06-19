@@ -78,14 +78,10 @@ public class QuadroJogo extends JLayeredPane {
         MediadorFluxoDeJogo.getInstance().tradutorMovimentacao = tradutorMovimentacao;
 
         
-        // Cena de Testes     
-		Scene cenaTeste = new CenaIsometrica( 0 , 0 , 300 , 300 );	
-		cenaPrincipal.adicionarCena( cenaTeste , 1 );
-        
 		// Camera - Jogo
 		Camera gameCamera = new Camera( cenaPrincipal , 0 , 0 ); 
 		MediadorFluxoDeJogo.getInstance().camera = gameCamera;
-        gameCamera.setBounds(0, 0, 1000 , 700 );
+        gameCamera.setBounds(0, 0, 1020 , 735 );
         gameCamera.setTarget( 0 , 0 );
         gameCamera.setIsFixedOnTarget( false );
         
@@ -120,22 +116,6 @@ public class QuadroJogo extends JLayeredPane {
         menuCamera.definirModo( CameraMenu.Modos.MENU_PRINCIPAL );
         
         
-        // -------------------------------------------------------
-        
-        // Animacao de Teste - Diretor por Sprites
-        
-		AnimatedSprite testAnim = new AnimatedSprite( "testExplosion.txt" );
-		testAnim.setLocation( 0, 100 );   
-		testAnim.insertInto( cenaTeste );
-		testAnim.playAnimation( 5 , LoopType.REPEAT );
-		
-		// Ator de Teste - Ator que pode ser composto por Varios Sprites
-		
-		Actor testActor = new Actor( 200 , 200 );
-		testActor.setLocation( 200, 100 );   
-		testActor.addAnimatedSprite( "tileSelector.txt" , new Vetor2D_int(0,0) , 0 );
-		testActor.getAnimatedSprite().playAnimation(1);
-		cenaTeste.addActor( testActor , 10 );
 		
 		//Inicia o primerio turno
 		MediadorFluxoDeJogo.getInstance().iniciarJogo();

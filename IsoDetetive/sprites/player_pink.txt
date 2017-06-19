@@ -9,3 +9,14 @@ Idle		; animation name
 1		; total number of frames ( usually rows*cols )
 1000		; frame change speed ( millis )
 
+Ghost		; animation name
+2		; animation ID code
+0,128 		; animation frame start position
+128,128		; single frame size
+128,128		; advancement step ( usually frame size )
+1,2		; number of rows and cols of frames
+2		; total number of frames ( usually rows*cols )
+1000		; frame change speed ( millis )
+
+#		; End of File Mark
+

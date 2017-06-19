@@ -29,7 +29,8 @@ public class JanelaPrincipal extends JFrame {
 		tamanho = new Vetor2D_int( 1024 , 768 );
 		
     	setSize( tamanho.x , tamanho.y );
-
+    	setResizable(false);
+    	
     	setTitle("Jogo dos Detetives");
     	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	setLocationRelativeTo(null);

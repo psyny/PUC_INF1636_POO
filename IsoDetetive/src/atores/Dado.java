@@ -55,6 +55,20 @@ public class Dado extends ActorPhysics implements AnimationEndObserved {
 		}
 	}
 	
+	public void definirSombreado(boolean estado) {
+		int novoID = this.getAnimatedSprite().getCurrentAnimationID();
+		if( estado == true ) {
+			if( novoID > 0 && novoID < 10 ) {
+				novoID += 10;
+			}
+		} else {
+			if( novoID > 10 && novoID < 20 ) {
+				novoID -= 10;
+			}
+		}
+		
+		this.getAnimatedSprite().playAnimation(novoID, true);
+	}
 	
 	// OBSERVER PATTERN Method Group
 	public void animationEndRegister(AnimationEndObserver observer) {

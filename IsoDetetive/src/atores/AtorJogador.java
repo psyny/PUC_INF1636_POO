@@ -44,5 +44,11 @@ public class AtorJogador extends Actor {
 	}
 	
 	
-
+	public void definirSombreado( boolean estado ) {
+		if( estado == true ) {
+			spriteJogador.playAnimation( 2, true );
+		} else {
+			spriteJogador.playAnimation( 1, true );
+		}
+	}
 }

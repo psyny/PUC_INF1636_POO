@@ -54,6 +54,60 @@ Still06		; animation name
 1		; total number of frames ( usually rows*cols )
 1000		; frame change speed ( millis )
 
+Ghost01		; animation name
+11		; animation ID code
+0,850 		; animation frame start position
+170,170		; single frame size
+0,0		; advancement step ( usually frame size )
+1,1		; number of rows and cols of frames
+1		; total number of frames ( usually rows*cols )
+1000		; frame change speed ( millis )
+
+Ghost02		; animation name
+12		; animation ID code
+170,850 		; animation frame start position
+170,170		; single frame size
+0,0		; advancement step ( usually frame size )
+1,1		; number of rows and cols of frames
+1		; total number of frames ( usually rows*cols )
+1000		; frame change speed ( millis )
+
+Ghost03		; animation name
+13		; animation ID code
+340,850 		; animation frame start position
+170,170		; single frame size
+0,0		; advancement step ( usually frame size )
+1,1		; number of rows and cols of frames
+1		; total number of frames ( usually rows*cols )
+1000		; frame change speed ( millis )
+
+Ghost04		; animation name
+14		; animation ID code
+510,850 		; animation frame start position
+170,170		; single frame size
+0,0		; advancement step ( usually frame size )
+1,1		; number of rows and cols of frames
+1		; total number of frames ( usually rows*cols )
+1000		; frame change speed ( millis )
+
+Ghost05		; animation name
+15		; animation ID code
+680,850 		; animation frame start position
+170,170		; single frame size
+0,0		; advancement step ( usually frame size )
+1,1		; number of rows and cols of frames
+1		; total number of frames ( usually rows*cols )
+1000		; frame change speed ( millis )
+
+Ghost06		; animation name
+16		; animation ID code
+850,850 		; animation frame start position
+170,170		; single frame size
+0,0		; advancement step ( usually frame size )
+1,1		; number of rows and cols of frames
+1		; total number of frames ( usually rows*cols )
+1000		; frame change speed ( millis )
+
 Flying		; animation name
 100		; animation ID code
 0,170 		; animation frame start position

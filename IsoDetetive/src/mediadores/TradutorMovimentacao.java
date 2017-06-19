@@ -62,7 +62,7 @@ public class TradutorMovimentacao implements CasaSelecionadaObserver , MouseList
 			
 			if( ator.casaReferente.x == casaSelecionada.x && ator.casaReferente.y == casaSelecionada.y ) {
 				ator.definirMarcado(true);
-				MediadorFluxoDeJogo.getInstance().deletarDados();
+				MediadorFluxoDeJogo.getInstance().sombrearDados();
 			}
 		}
 	}
@@ -79,6 +79,10 @@ public class TradutorMovimentacao implements CasaSelecionadaObserver , MouseList
 		}
 		
 		Vetor2D_int casaDestino = MediadorFluxoDeJogo.getInstance().cenaTabuleiro.ultimaCasaApontada;
+		
+		// Posiciona camera no local clicado
+		Vetor2D_double localDoClique = MediadorFluxoDeJogo.getInstance().tradutorTabuleiro.obterCentroDaCasa( casaDestino.x , casaDestino.y );
+		MediadorFluxoDeJogo.getInstance().centralizarCameraEmPosicaoVirtual( localDoClique );
 		
 		// Checa se é possivel ir para a casa desejada
 		boolean exitFlag = true;
