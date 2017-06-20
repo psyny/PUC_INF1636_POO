@@ -102,6 +102,7 @@ public class TradutorMenus {
 		Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
 	
 		ArrayList<Carta> baralho = Baralho.todasCartas();
+		cartasAtor.clear();
 		
 		for (Carta carta : baralho) {
 			CartaAtor cartaAtor = new CartaAtor(carta, new AtorCarta(carta));
@@ -121,12 +122,8 @@ public class TradutorMenus {
 		ArrayList<Carta> pilhaArmas = Baralho.pilhaArmas;
 		ArrayList<Carta> pilhaSuspeitos = Baralho.pilhaSuspeitos;
 		
-		//pegar a carta que simboliza o comodo que o jogador está
-		//jogadorDaVez.obterPosicao().type
-		
 		Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
-		
-		
+		cartasAtor.clear();
 		
 		for (Carta carta : pilhaSuspeitos) {
 			CartaAtor cartaAtor = new CartaAtor(carta, new AtorCarta(carta));
@@ -166,6 +163,7 @@ public class TradutorMenus {
 			if(!carta.atorCarta.getSelecionado() && jogadorDaVez.temNota(carta.carta))
 				jogadorDaVez.removerBlocoDeNotas(jogadorDaVez.obterNota(carta.carta));
 		}
+		System.out.println();
 	}
 	
 	public void desmarcarCartaTipo(Carta carta)

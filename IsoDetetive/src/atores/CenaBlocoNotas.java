@@ -21,6 +21,7 @@ public class CenaBlocoNotas extends Scene {
 		public void mouseClicked(MouseEvent arg0)  {
 			limparCena();
 			MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.MENU_PRINCIPAL);
+			TradutorMenus.getInstance().atualizarBlocoDeNotas();
 		}
 	}
 	
@@ -64,7 +65,6 @@ public class CenaBlocoNotas extends Scene {
 			carta.setToDestroy();
 		}
 		
-		TradutorMenus.getInstance().atualizarBlocoDeNotas();
 		cartasNaCena.clear();
 		proximaPosicao = new Vetor2D_int(70, 130);
 	}
