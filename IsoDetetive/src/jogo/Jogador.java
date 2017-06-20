@@ -92,9 +92,17 @@ public class Jogador {
 		return false;
 	}
 	
-	public boolean temNotaCerta(Carta carta) {
+	public boolean temNotaManual(Carta carta) {
 		for (Nota nota : blocoDeNotas) {
-			if(carta.equals(nota.carta) && nota.certeza)
+			if( carta.equals(nota.carta) && nota.certeza == false )
+				return true;
+		}
+		return false;
+	}	
+	
+	public boolean temNotaCerteza(Carta carta) {
+		for (Nota nota : blocoDeNotas) {
+			if( carta.equals(nota.carta) && nota.certeza == true )
 				return true;
 		}
 		return false;

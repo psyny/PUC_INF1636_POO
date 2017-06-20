@@ -256,7 +256,7 @@ public class MediadorFluxoDeJogo {
 			if(jogadorDaVez.obterPosicao().isRoom())
 			{
 				cameraMenu.definirModo(Modos.PALPITE);
-				TradutorMenus.getInstance().desenharPalpite(cameraMenu.cenaPalpite);
+				TradutorMenus.getInstance().desenharMenuPalpite(cameraMenu.cenaPalpite);
 				tradutorJogadores.reposicionarJogador(jogadorDaVez, tabuleiro.obterPosicaoLivreTipo(jogadorDaVez.obterPosicao().type).position);
 			}
 

@@ -35,23 +35,33 @@ public class TradutorMenus {
 		
 	// ----------------------------------------
 		
-	class mouseListener_cartaMulti extends MouseAdapter {
-		protected CartaAtor carta = null;
+	class MouseListener_cartaSelecaoMultipla extends MouseAdapter {
+		protected ReferenciaCartaAtor carta = null;
 		
-		public mouseListener_cartaMulti(CartaAtor carta) {
+		public MouseListener_cartaSelecaoMultipla(ReferenciaCartaAtor carta) {
 			this.carta = carta;
 		}
 		
 		@Override
 		public void mouseClicked(MouseEvent arg0)  {
-			carta.atorCarta.definirSelecionado(!(carta.atorCarta.getSelecionado()));
+			boolean estado = carta.atorCarta.getSelecionado();
+			estado = !estado;
+			
+			carta.atorCarta.definirSelecionado( estado );
+			
+			if( estado == true ) {
+				carta.atorCarta.definirMarcador( AtorCarta.TipoMarcador.NEUTRO );
+			}
+			else {
+				carta.atorCarta.definirMarcador( AtorCarta.TipoMarcador.SUSPEITO );
+			}
 		}
 	}
 	
-	class mouseListener_cartaSingle extends MouseAdapter {
-		protected CartaAtor carta = null;
+	class MouseListener_cartaSelecaoUnica extends MouseAdapter {
+		protected ReferenciaCartaAtor carta = null;
 		
-		public mouseListener_cartaSingle(CartaAtor carta) {
+		public MouseListener_cartaSelecaoUnica(ReferenciaCartaAtor carta) {
 			this.carta = carta;
 		}
 		
@@ -62,193 +72,220 @@ public class TradutorMenus {
 		}
 	}
 	
-	public class CartaAtor {
+	public class ReferenciaCartaAtor {
 		public AtorCarta atorCarta;
 		public Carta carta;
 		
-		public CartaAtor(Carta carta, AtorCarta atorCarta)
+		public ReferenciaCartaAtor(Carta carta, AtorCarta atorCarta)
 		{
 			this.carta = carta;
 			this.atorCarta = atorCarta;
 		}
 	}
 	
-	public ArrayList<CartaAtor> cartasAtor = new ArrayList<CartaAtor>();
+	public ArrayList<ReferenciaCartaAtor> referenciasCartasAtor = new ArrayList<ReferenciaCartaAtor>();
 		
 	public TradutorMenus()
 	{
 		
 	}
 	
-	public void desenharCartasNaMao(CenaMao cena)
-	{
-		Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
-		
-		ArrayList<Carta> cartas = jogadorDaVez.obterMao();
-		cartasAtor.clear();
-
-		for (Carta carta : cartas) {
-			CartaAtor cartaAtor = new CartaAtor(carta, new AtorCarta(carta));
-			cartasAtor.add(cartaAtor);
-			String arquivo = obteArquivoCarta(carta);
-			cartaAtor.atorCarta.definirCarta(arquivo);
-			cartaAtor.atorCarta.definirSelecionado(true);
-			cena.desenharCarta(cartaAtor.atorCarta);
-		}
-	}
-	
-	public void desenharBlocoDeNotas(CenaBlocoNotas cena)
-	{
-		Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
-	
-		ArrayList<Carta> baralho = Baralho.todasCartas();
-		cartasAtor.clear();
-		
-		for (Carta carta : baralho) {
-			CartaAtor cartaAtor = new CartaAtor(carta, new AtorCarta(carta));
-			cartasAtor.add(cartaAtor);
-			String arquivo = obteArquivoCarta(carta);
-			cartaAtor.atorCarta.definirCarta(arquivo);
-			if(jogadorDaVez.temNota(carta))
-				cartaAtor.atorCarta.definirSelecionado(true);	
-			if(!jogadorDaVez.temNotaCerta(carta))
-				cartaAtor.atorCarta.addMouseListener(new mouseListener_cartaMulti(cartaAtor));
-			cena.desenharCarta(cartaAtor.atorCarta);
-		}
-	}
-	
-	public void desenharPalpite(CenaPalpite cena)
-	{
-		ArrayList<Carta> pilhaArmas = Baralho.pilhaArmas;
-		ArrayList<Carta> pilhaSuspeitos = Baralho.pilhaSuspeitos;
-		
-		Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
-		cartasAtor.clear();
-		
-		for (Carta carta : pilhaSuspeitos) {
-			CartaAtor cartaAtor = new CartaAtor(carta, new AtorCarta(carta));
-			cartasAtor.add(cartaAtor);
-			String arquivo = obteArquivoCarta(carta);
-			cartaAtor.atorCarta.definirCarta(arquivo);
-			cartaAtor.atorCarta.addMouseListener(new mouseListener_cartaSingle(cartaAtor));
-			cena.desenharCarta(cartaAtor.atorCarta);
-		}
-		
-		for (Carta carta : pilhaArmas) {
-			CartaAtor cartaAtor = new CartaAtor(carta, new AtorCarta(carta));
-			cartasAtor.add(cartaAtor);
-			String arquivo = obteArquivoCarta(carta);
-			cartaAtor.atorCarta.definirCarta(arquivo);
-			cartaAtor.atorCarta.addMouseListener(new mouseListener_cartaSingle(cartaAtor));
-			cena.desenharCarta(cartaAtor.atorCarta);
-		}
-		
-		Carta carta = jogadorDaVez.obterCartaPosicao();
-		CartaAtor cartaAtor = new CartaAtor(carta, new AtorCarta(carta));
-		cartasAtor.add(cartaAtor);
-		String arquivo = obteArquivoCarta(carta);
-		cartaAtor.atorCarta.definirCarta(arquivo);
-		cartaAtor.atorCarta.definirSelecionado(true);
-		cena.desenharCarta(cartaAtor.atorCarta);
-	}
-	
-	public void atualizarBlocoDeNotas()
-	{
-		Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
-		
-		for (CartaAtor carta : cartasAtor) {
-			if(carta.atorCarta.getSelecionado() && !jogadorDaVez.temNota(carta.carta))
-				jogadorDaVez.adicionarBlocoDeNotas(carta.carta);
+	// Menu: Cartas na mao
+		public void desenharCartasNaMao(CenaMao cena)
+		{
+			Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
 			
-			if(!carta.atorCarta.getSelecionado() && jogadorDaVez.temNota(carta.carta))
-				jogadorDaVez.removerBlocoDeNotas(jogadorDaVez.obterNota(carta.carta));
-		}
-		System.out.println();
-	}
+			ArrayList<Carta> cartas = jogadorDaVez.obterMao();
+			referenciasCartasAtor.clear();
 	
-	public void desmarcarCartaTipo(Carta carta)
-	{
-		for (CartaAtor cartaAtor : cartasAtor) {
-			if(mesmoTipoCarta(cartaAtor.carta, carta) && !cartaAtor.carta.equals(carta))
-			{
-				cartaAtor.atorCarta.definirSelecionado(false);
+			for (Carta carta : cartas) {
+				ReferenciaCartaAtor cartaAtor = new ReferenciaCartaAtor(carta, new AtorCarta(carta));
+				referenciasCartasAtor.add(cartaAtor);
+				String arquivo = obterArquivoCarta(carta);
+				cartaAtor.atorCarta.definirCarta(arquivo);
+				cartaAtor.atorCarta.definirSelecionado(true);
+				cena.desenharCarta(cartaAtor.atorCarta);
 			}
 		}
-	}
 	
-	private boolean mesmoTipoCarta(Carta c1, Carta c2)
-	{
-		if(c1.isArma() && c2.isArma())
-			return true;
-		if(c1.isComodo() && c2.isComodo())
-			return true;
-		if(c1.isSuspeito() && c2.isSuspeito())
-			return true;
+	// Bloco de notas
+		public void desenharBlocoDeNotas(CenaBlocoNotas cena)
+		{
+			Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
 		
-		return false;
-	}
-	
-	public void gerarPalpite()
-	{
-		ArrayList<Carta> palpite = new ArrayList<Carta>();
-		
-		for (CartaAtor cartaAtor : cartasAtor) {
-			if(cartaAtor.atorCarta.getSelecionado())
-				palpite.add(cartaAtor.carta);
-		}
-		
-		ControladoraDoJogo.getInstance().validarPalpite(palpite);
-	}
-	
-	public String obteArquivoCarta(Carta carta)
-	{
-		switch (carta.tipo) {
-
-			case BATMAN:
-				return "carta_batman.txt";
-			case BATRANGUE:
-				return "carta_boomerang.txt";
-			case BIBLIOTECA:
-				return "carta_biblioteca.txt";
-			case CACHIMBO:
-				return "carta_cachimbo.txt";
-			case CARMEN:
-				return "carta_carmen.txt";
-			case COZINHA:
-				return "carta_cozinha.txt";
-			case DEATH_NOTE:
-				return "carta_deathnote.txt";
-			case DIAMANTE:
-				return "carta_diamante.txt";
-			case EDMORT:
-				return "carta_edmort.txt";
-			case ENTRADA:
-				return "carta_entrada.txt";
-			case ESCRITORIO:
-				return "carta_escritorio.txt";
-			case FEDORA:
-				return "carta_fedora.txt";
-			case JARDIM_INVERNO:
-				return "carta_jardiminverno.txt";
-			case L:
-				return "carta_l.txt";
-			case PANTERA:
-				return "carta_panther.txt";
-			case REVOLVER:
-				return "carta_revolver.txt";
-			case SALA_DE_ESTAR:
-				return "carta_salaestar.txt";
-			case SALA_DE_JANTAR:
-				return "carta_salajantar.txt";
-			case SALA_DE_JOGOS:
-				return "carta_salajogos.txt";
-			case SALA_DE_MUSICA:
-				return "carta_salamusica.txt";
-			case SHERLOCK:
-				return "carta_sherlock.txt";
+			ArrayList<Carta> baralho = Baralho.todasCartas();
+			referenciasCartasAtor.clear();
+			
+			for (Carta carta : baralho) {
+				ReferenciaCartaAtor referenciaCartaAtor = new ReferenciaCartaAtor( carta , new AtorCarta(carta) );
+				referenciasCartasAtor.add( referenciaCartaAtor );
+				String arquivo = obterArquivoCarta( carta );
+				referenciaCartaAtor.atorCarta.definirCarta( arquivo );
 				
-			default:
-				return "carta_dummy.txt";
+				// Checa se o jogador tem a carta marcada em seu bloco de notas
+				if( jogadorDaVez.temNota(carta) == true ) {
+					referenciaCartaAtor.atorCarta.definirSelecionado(true);	
+				}
+				
+				// Checa se a carta é uma certeza ( já revelada por algum jogador ou na mão do jogador atual )
+				if( jogadorDaVez.temNotaCerteza(carta) == false ) {
+					referenciaCartaAtor.atorCarta.addMouseListener( new MouseListener_cartaSelecaoMultipla(referenciaCartaAtor) );
+				}	
+				
+				// Desenhar marcacao do tipo de carta ( feedback para o jogador )
+				definirMarcadorCarta( referenciaCartaAtor , jogadorDaVez );
+				
+				cena.desenharCarta( referenciaCartaAtor.atorCarta );
+			}
 		}
-	}
+		
+		public void atualizarBlocoDeNotas()
+		{
+			Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
+			
+			for (ReferenciaCartaAtor carta : referenciasCartasAtor) {
+				if(carta.atorCarta.getSelecionado() && !jogadorDaVez.temNota(carta.carta))
+					jogadorDaVez.adicionarBlocoDeNotas(carta.carta);
+				
+				if(!carta.atorCarta.getSelecionado() && jogadorDaVez.temNota(carta.carta))
+					jogadorDaVez.removerBlocoDeNotas(jogadorDaVez.obterNota(carta.carta));
+			}
+			System.out.println();
+		}	
+	
+	// Menu: Palpite
+		public void desenharMenuPalpite(CenaPalpite cena)
+		{
+			ArrayList<Carta> pilhaArmas = Baralho.pilhaArmas;
+			ArrayList<Carta> pilhaSuspeitos = Baralho.pilhaSuspeitos;
+			
+			Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
+			referenciasCartasAtor.clear();
+			
+			for (Carta carta : pilhaSuspeitos) {
+				desenharMenuPalpite_auxiliar_desenharCartaNaCena( carta , cena , true );
+			}
+			
+			for (Carta carta : pilhaArmas) {
+				desenharMenuPalpite_auxiliar_desenharCartaNaCena( carta , cena , true );
+			}
+			
+			// Carta do comodo atual
+			Carta carta = jogadorDaVez.obterCartaPosicao();
+			desenharMenuPalpite_auxiliar_desenharCartaNaCena( carta , cena , false );
+		}
+		
+		private void desenharMenuPalpite_auxiliar_desenharCartaNaCena( Carta carta , CenaPalpite cena , boolean addListener ) {
+			ReferenciaCartaAtor referenciaCartaAtor = new ReferenciaCartaAtor(carta, new AtorCarta(carta));
+			referenciasCartasAtor.add(referenciaCartaAtor);
+			String arquivo = obterArquivoCarta(carta);
+			referenciaCartaAtor.atorCarta.definirCarta(arquivo);
+			
+			if( addListener == true ) {
+				referenciaCartaAtor.atorCarta.addMouseListener(new MouseListener_cartaSelecaoUnica(referenciaCartaAtor));
+			} else {
+				referenciaCartaAtor.atorCarta.definirSelecionado(true);
+			}
+			
+			cena.desenharCarta(referenciaCartaAtor.atorCarta);
+			
+			definirMarcadorCarta( referenciaCartaAtor , ControladoraDoJogo.getInstance().obterJogadorDaVez() );
+		}
+		
+		public void gerarPalpite()
+		{
+			ArrayList<Carta> palpite = new ArrayList<Carta>();
+			
+			for (ReferenciaCartaAtor cartaAtor : referenciasCartasAtor) {
+				if(cartaAtor.atorCarta.getSelecionado())
+					palpite.add(cartaAtor.carta);
+			}
+			
+			ControladoraDoJogo.getInstance().validarPalpite(palpite);
+		}
+
+	// Funcoes sobre as cartas
+		private void definirMarcadorCarta( ReferenciaCartaAtor referenciaCartaAtor , Jogador jogadorDaVez ) {
+			if( jogadorDaVez.temNota(referenciaCartaAtor.carta) == false ) {
+				referenciaCartaAtor.atorCarta.definirMarcador( AtorCarta.TipoMarcador.SUSPEITO );
+			}
+			
+			if( jogadorDaVez.temNotaCerteza(referenciaCartaAtor.carta) == true ) {
+				referenciaCartaAtor.atorCarta.definirMarcador( AtorCarta.TipoMarcador.INOCENTE );
+			}
+		}
+		
+		public void desmarcarCartaTipo(Carta carta)
+		{
+			for (ReferenciaCartaAtor cartaAtor : referenciasCartasAtor) {
+				if(mesmoTipoCarta(cartaAtor.carta, carta) && !cartaAtor.carta.equals(carta))
+				{
+					cartaAtor.atorCarta.definirSelecionado(false);
+				}
+			}
+		}
+		
+		private boolean mesmoTipoCarta(Carta c1, Carta c2)
+		{
+			if(c1.isArma() && c2.isArma())
+				return true;
+			if(c1.isComodo() && c2.isComodo())
+				return true;
+			if(c1.isSuspeito() && c2.isSuspeito())
+				return true;
+			
+			return false;
+		}
+		
+		public String obterArquivoCarta(Carta carta)
+		{
+			switch (carta.tipo) {
+	
+				case BATMAN:
+					return "carta_batman.txt";
+				case BATRANGUE:
+					return "carta_boomerang.txt";
+				case BIBLIOTECA:
+					return "carta_biblioteca.txt";
+				case CACHIMBO:
+					return "carta_cachimbo.txt";
+				case CARMEN:
+					return "carta_carmen.txt";
+				case COZINHA:
+					return "carta_cozinha.txt";
+				case DEATH_NOTE:
+					return "carta_deathnote.txt";
+				case DIAMANTE:
+					return "carta_diamante.txt";
+				case EDMORT:
+					return "carta_edmort.txt";
+				case ENTRADA:
+					return "carta_entrada.txt";
+				case ESCRITORIO:
+					return "carta_escritorio.txt";
+				case FEDORA:
+					return "carta_fedora.txt";
+				case JARDIM_INVERNO:
+					return "carta_jardiminverno.txt";
+				case L:
+					return "carta_l.txt";
+				case PANTERA:
+					return "carta_panther.txt";
+				case REVOLVER:
+					return "carta_revolver.txt";
+				case SALA_DE_ESTAR:
+					return "carta_salaestar.txt";
+				case SALA_DE_JANTAR:
+					return "carta_salajantar.txt";
+				case SALA_DE_JOGOS:
+					return "carta_salajogos.txt";
+				case SALA_DE_MUSICA:
+					return "carta_salamusica.txt";
+				case SHERLOCK:
+					return "carta_sherlock.txt";
+					
+				default:
+					return "carta_dummy.txt";
+			}
+		}
 }
