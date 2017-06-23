@@ -78,4 +78,6 @@ public class TradutorJogadores {
 		
 		atoresJogador.atorJogador.definirSombreado( estado );
 	}
+	
+
 }

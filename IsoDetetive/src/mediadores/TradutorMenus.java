@@ -10,6 +10,7 @@ import atores.CenaMao;
 import atores.CenaPalpite;
 import jogo.Baralho;
 import jogo.Carta;
+import jogo.CartaEnum;
 import jogo.ControladoraDoJogo;
 import jogo.Jogador;
 import jogo.Jogador.Nota;
@@ -99,10 +100,9 @@ public class TradutorMenus {
 			referenciasCartasAtor.clear();
 	
 			for (Carta carta : cartas) {
-				ReferenciaCartaAtor cartaAtor = new ReferenciaCartaAtor(carta, new AtorCarta(carta));
+				ReferenciaCartaAtor cartaAtor = new ReferenciaCartaAtor(carta, new AtorCarta());
 				referenciasCartasAtor.add(cartaAtor);
-				String arquivo = obterArquivoCarta(carta);
-				cartaAtor.atorCarta.definirCarta(arquivo);
+				cartaAtor.atorCarta.definirCarta(carta.tipo);
 				cartaAtor.atorCarta.definirSelecionado(true);
 				cena.desenharCarta(cartaAtor.atorCarta);
 			}
@@ -117,10 +117,9 @@ public class TradutorMenus {
 			referenciasCartasAtor.clear();
 			
 			for (Carta carta : baralho) {
-				ReferenciaCartaAtor referenciaCartaAtor = new ReferenciaCartaAtor( carta , new AtorCarta(carta) );
+				ReferenciaCartaAtor referenciaCartaAtor = new ReferenciaCartaAtor( carta , new AtorCarta() );
 				referenciasCartasAtor.add( referenciaCartaAtor );
-				String arquivo = obterArquivoCarta( carta );
-				referenciaCartaAtor.atorCarta.definirCarta( arquivo );
+				referenciaCartaAtor.atorCarta.definirCarta( carta.tipo );
 				
 				// Checa se o jogador tem a carta marcada em seu bloco de notas
 				if( jogadorDaVez.temNota(carta) == true ) {
@@ -176,10 +175,9 @@ public class TradutorMenus {
 		}
 		
 		private void desenharMenuPalpite_auxiliar_desenharCartaNaCena( Carta carta , CenaPalpite cena , boolean addListener ) {
-			ReferenciaCartaAtor referenciaCartaAtor = new ReferenciaCartaAtor(carta, new AtorCarta(carta));
+			ReferenciaCartaAtor referenciaCartaAtor = new ReferenciaCartaAtor(carta, new AtorCarta());
 			referenciasCartasAtor.add(referenciaCartaAtor);
-			String arquivo = obterArquivoCarta(carta);
-			referenciaCartaAtor.atorCarta.definirCarta(arquivo);
+			referenciaCartaAtor.atorCarta.definirCarta( carta.tipo );
 			
 			if( addListener == true ) {
 				referenciaCartaAtor.atorCarta.addMouseListener(new MouseListener_cartaSelecaoUnica(referenciaCartaAtor));
@@ -237,7 +235,8 @@ public class TradutorMenus {
 			return false;
 		}
 		
-		public String obterArquivoCarta(Carta carta)
+		
+		public String obterArquivoCartaa(Carta carta)
 		{
 			switch (carta.tipo) {
 	

@@ -277,6 +277,11 @@ public class MediadorFluxoDeJogo {
 			camera.setIsFixedOnTarget( true );
 			camera.setTarget( posicaoReal.x , posicaoReal.y );
 			//camera.setPositionCenteredOn( centroProjetado.x , centroProjetado.y );
-		}	
-	
+		}
+		
+	// Novos jogadores
+		public void adicionarNovoJogador( PersonagemEnum personagem ) {
+			Jogador jogador = new Jogador( personagem );
+			ControladoraDoJogo.getInstance().adicionarJogador( jogador );	
+		}
 }
