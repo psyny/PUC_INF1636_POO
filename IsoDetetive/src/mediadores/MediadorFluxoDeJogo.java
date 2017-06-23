@@ -131,39 +131,39 @@ public class MediadorFluxoDeJogo {
 				// Icone do Jogador
 					switch( jogadorDaVez.obterPersonagem().obterEnum() ) {
 						case L:
-							cameraMenu.menuPrincipal.ativarBotao( AtorBotoes.Tipo.PERSONAGEM_L );
+							cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.PERSONAGEM_L );
 							break;
 							
 						case SHERLOCK:
-							cameraMenu.menuPrincipal.ativarBotao( AtorBotoes.Tipo.PERSONAGEM_SHERLOCK );
+							cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.PERSONAGEM_SHERLOCK );
 							break;
 							
 						case CARMEN:
-							cameraMenu.menuPrincipal.ativarBotao( AtorBotoes.Tipo.PERSONAGEM_CARMEN );
+							cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.PERSONAGEM_CARMEN );
 							break;
 							
 						case PANTERA:
-							cameraMenu.menuPrincipal.ativarBotao( AtorBotoes.Tipo.PERSONAGEM_PANTERA );
+							cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.PERSONAGEM_PANTERA );
 							break;
 							
 						case EDMORT:
-							cameraMenu.menuPrincipal.ativarBotao( AtorBotoes.Tipo.PERSONAGEM_EDMORT );
+							cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.PERSONAGEM_EDMORT );
 							break;
 							
 						case BATMAN:
-							cameraMenu.menuPrincipal.ativarBotao( AtorBotoes.Tipo.PERSONAGEM_BATMAN );
+							cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.PERSONAGEM_BATMAN );
 							break;	
 					}
 					
 				// Botões sempre disponiveis
-				cameraMenu.menuPrincipal.ativarBotao( AtorBotoes.Tipo.BOTAO_ACUSAR );
-				cameraMenu.menuPrincipal.ativarBotao( AtorBotoes.Tipo.BOTAO_MAO );
-				cameraMenu.menuPrincipal.ativarBotao( AtorBotoes.Tipo.BOTAO_NOTAS );
+				cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_ACUSAR );
+				cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_MAO );
+				cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_NOTAS );
 				
 				// Botões de situacao
 				// TODO
-				cameraMenu.menuPrincipal.ativarBotao( AtorBotoes.Tipo.BOTAO_DADO );
-				cameraMenu.menuPrincipal.ativarBotao( AtorBotoes.Tipo.BOTAO_PASSAR );
+				cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_DADO );
+				cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_PASSAR );
 			
 			// Posicionar Camera no personagem
 			Vetor2D_double posicaoVirtualJogador = tradutorTabuleiro.obterCentroDaCasa(ControladoraDoJogo.getInstance().obterJogadorDaVez().obterPosicao());

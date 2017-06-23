@@ -76,4 +76,8 @@ public abstract class Sprite extends JPanel {
 	    super.addNotify();
 
 	}
+	
+	public Vetor2D_int getLastSize() {
+		return new Vetor2D_int( this.lastFrame.size );
+	}
 }

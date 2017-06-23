@@ -56,6 +56,12 @@ public class QuadroJogo extends JLayeredPane {
         MediadorFluxoDeJogo.getInstance().cenaTabuleiro = cenaTabuleiro;
 		cenaTabuleiro.definirMargens( 100 , 100 , 100, 100);
 		
+		Actor act = new Actor(200,200);
+		act.addAnimatedSprite( "testExplosion.txt", new Vetor2D_int(0,0), 0);
+		cenaTabuleiro.addActor(act,20);
+		act.setVirtualPosition(0, 0);
+		
+		
         TradutorTabuleiro tradutorTabuleiro = new TradutorTabuleiro( 63 , 63 );
         MediadorFluxoDeJogo.getInstance().tradutorTabuleiro = tradutorTabuleiro;
         tradutorTabuleiro.popularTabuleiroGrafico();
@@ -90,6 +96,7 @@ public class QuadroJogo extends JLayeredPane {
         
         // -------------------------------------------------------
         // Menus do jogo
+        
         CenaComposta menuCenaPrincipal = new CenaComposta(0,0);
         
         CameraMenu menuCamera = new CameraMenu( menuCenaPrincipal , 0 , 0 ); 

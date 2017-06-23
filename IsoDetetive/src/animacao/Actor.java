@@ -10,17 +10,17 @@ import javax.swing.JLayeredPane;
 import estruturas.*;
 
 
-class innerSprite {
-	public Vetor2D_int 	projectionPosition;
-	public Sprite		sprite;
-	
-	public innerSprite( Vetor2D_int position , Sprite sprite ) {
-		this.projectionPosition = new Vetor2D_int( position.x , position.y );
-		this.sprite = sprite;
-	}
-}
-
 public class Actor extends JLayeredPane implements Animavel {
+	class innerSprite {
+		public Vetor2D_int 	projectionPosition;
+		public Sprite		innerSprite;
+		
+		public innerSprite( Vetor2D_int position , Sprite sprite ) {
+			projectionPosition = new Vetor2D_int( position.x , position.y );
+			this.innerSprite = sprite;
+		}
+	}
+	
 	public enum DestroyStyle {
 		NONE,
 		DESTROYED,
@@ -28,11 +28,23 @@ public class Actor extends JLayeredPane implements Animavel {
 		ANIMATION
 	}
 	
+	public enum PosicaoAncora { 
+		CENTRO,
+		SUPERIOR_CENTRO,
+		SUPERIOR_ESQUERDO,
+		SUPERIOR_DIREITO,
+		INFERIOR_ESQUERDO,
+		INFERIOR_DIREITO,
+		INFERIOR_CENTRO
+	}
+	
 	
 	public Vetor3D_double	virtualPosition		= new Vetor3D_double( 0 , 0 , 0 );
 	
 	public Vetor2D_double 	projectionPosition 	= new Vetor2D_double( 0 , 0 );
 	public Vetor2D_int 		projectionSize 		= new Vetor2D_int( 0 , 0 );
+	
+	public PosicaoAncora	posicaoAncora		= Actor.PosicaoAncora.CENTRO;
 	
 	public Scene			parentScene = null;
 	
@@ -143,8 +155,8 @@ public class Actor extends JLayeredPane implements Animavel {
 		
 		// Anima os sprites internos
 		for( innerSprite iSpr : this.innerSprites ) {
-    		if (iSpr.sprite instanceof Animavel ) {
-    			((Animavel) iSpr.sprite).passTime( time );
+    		if (iSpr.innerSprite instanceof Animavel ) {
+    			((Animavel) iSpr.innerSprite).passTime( time );
     		}
 		}
 	}
@@ -162,7 +174,7 @@ public class Actor extends JLayeredPane implements Animavel {
 	}
 
 	private void updateLocation() {
-		this.setSize( this.projectionSize.x , this.projectionSize.y );
+		setSize( projectionSize.x , projectionSize.y );	
 		
 		Vetor2D_int centerPosition;
 		if( this.parentScene != null ) {
@@ -184,10 +196,49 @@ public class Actor extends JLayeredPane implements Animavel {
 	
 	// Lembrando: essa é a posição REAL ( em tela )
 	public void setLocation( int x , int y ) {
-		this.setSize( this.projectionSize.x , this.projectionSize.y );		
+		setSize( projectionSize.x , projectionSize.y );	
 		
-		this.projectionPosition.x = x - ( this.projectionSize.x / 2 );
-		this.projectionPosition.y = y - ( this.projectionSize.y / 2 ) - this.virtualPosition.z;
+		Vetor2D_double offSet = new Vetor2D_double(0,0);
+		
+		switch( this.posicaoAncora ) {
+			case CENTRO:
+				offSet.x = -(projectionSize.x / 2 );
+				offSet.y = -(( projectionSize.y / 2 ) - virtualPosition.z );
+				break;
+				
+			case SUPERIOR_DIREITO:
+				offSet.x = -(projectionSize.x );
+				offSet.y = 0;
+				break;
+				
+			case SUPERIOR_ESQUERDO:
+				offSet.x = 0;
+				offSet.y = 0;
+				break;
+				
+			case SUPERIOR_CENTRO:
+				offSet.x = -(projectionSize.x / 2 );
+				offSet.y = 0;
+				break;
+				
+			case INFERIOR_DIREITO:
+				offSet.x = -(projectionSize.x );
+				offSet.y = -( projectionSize.y  - virtualPosition.z );
+				break;
+				
+			case INFERIOR_ESQUERDO:
+				offSet.x = 0;
+				offSet.y = -( projectionSize.y - virtualPosition.z );
+				break;
+				
+			case INFERIOR_CENTRO:
+				offSet.x = -(projectionSize.x / 2 );
+				offSet.y = -( projectionSize.y - virtualPosition.z );
+				break;
+		}
+		
+		projectionPosition.x = x + offSet.x;
+		projectionPosition.y = y + offSet.y;
 		
 		super.setLocation( (int)this.projectionPosition.x , (int)this.projectionPosition.y );
 	}
@@ -202,8 +253,8 @@ public class Actor extends JLayeredPane implements Animavel {
 	
 	public AnimatedSprite getAnimatedSprite() {
 		for( innerSprite iSpr : this.innerSprites ) {
-    		if (iSpr.sprite instanceof Animavel ) {
-    			return (AnimatedSprite)iSpr.sprite;
+    		if (iSpr.innerSprite instanceof Animavel ) {
+    			return (AnimatedSprite)iSpr.innerSprite;
     		}
 		}
 		
@@ -214,7 +265,7 @@ public class Actor extends JLayeredPane implements Animavel {
 		if( num >= this.innerSprites.size() ) {
 			return null;
 		} else {
-			return this.innerSprites.get(0).sprite;
+			return this.innerSprites.get(0).innerSprite;
 		}	
 	}
 	
@@ -247,20 +298,29 @@ public class Actor extends JLayeredPane implements Animavel {
 	}
 	
 	public int getLayer() {
-		return ((getProjectionCenter().y / 10 ) + desiredLayer );
+		int layer = 0;
+		
+		if( parentScene instanceof CenaIsometrica ) {
+			layer = ((getProjectionCenter().y / 10 ) + desiredLayer );
+		}
+		else {
+			layer = desiredLayer;
+		}
+		
+		return layer;
 	}
 	
 	public void revalidateLayer() {
 		if( this.parentScene == null ) {
 			return;
 		}
-		
+
 		this.parentScene.setLayer( this , getLayer() );
 	}
 	
 	public void clearActor() {
 		for( innerSprite spr : innerSprites ) {
-			spr.sprite.delete();
+			spr.innerSprite.delete();
 		}
 		this.innerSprites.clear();
 		this.removeAll();
@@ -272,5 +332,31 @@ public class Actor extends JLayeredPane implements Animavel {
 		this.clearActor();
 		this.destroyStyle = DestroyStyle.DESTROYED;
 		//Toolkit.getDefaultToolkit().sync();
+	}
+	
+	// Define o tamanho do ator como o tamanho do maior sprite que ele possui
+	public void autoSize() {
+		Vetor2D_int tamanhoTemporario = new Vetor2D_int(0,0);
+		Vetor2D_int spriteLastSize;
+		
+		for( innerSprite sprite : innerSprites ) {
+			if( sprite == null || sprite.innerSprite == null) {
+				continue;				
+			}
+			spriteLastSize = sprite.innerSprite.getLastSize();
+
+			tamanhoTemporario.x = ( Math.abs( sprite.projectionPosition.x  ) + (spriteLastSize.x / 2) ) * 2;
+			tamanhoTemporario.y = ( Math.abs( sprite.projectionPosition.y  ) + (spriteLastSize.y / 2) ) * 2;
+
+			if( tamanhoTemporario.x > projectionSize.x ) {
+				projectionSize.x = tamanhoTemporario.x;
+			}
+			
+			if( tamanhoTemporario.y > projectionSize.y ) {
+				projectionSize.y = tamanhoTemporario.y;
+			}
+		}
+		
+		setSize( projectionSize.x , projectionSize.y );	
 	}
 }

@@ -36,7 +36,7 @@ public class CenaPalpite extends Scene {
 		setOpaque(false);
 		
 		Actor fechar;
-		fechar = new AtorBotoes( "botao_fechar.txt" );
+		fechar = new AtorBotaoMenuJogo( "botao_confirmar.txt" );
 		fechar.setLocation( 880 , 20 );  
 		fechar.addMouseListener( new mouseListener_fechar() );
 		this.addActor( fechar , 10 );	

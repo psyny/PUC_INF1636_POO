@@ -1,0 +1,21 @@
+botao_continuar.png
+
+Still		; animation name
+1		; animation ID code
+0,0 		; animation frame start position
+464,204 	; single frame size
+464,204 	; advancement step ( usually frame size )
+1,1		; number of rows and cols of frames
+-1		; total number of frames ( usually rows*cols )
+100 		; frame change speed ( millis )
+
+Over		; animation name
+2		; animation ID code
+0,204 		; animation frame start position
+464,204 	; single frame size
+464,204 	; advancement step ( usually frame size )
+1,1		; number of rows and cols of frames
+-1		; total number of frames ( usually rows*cols )
+100 		; frame change speed ( millis )
+
+#		; End of File Mark

@@ -9,7 +9,7 @@ import jogo.ControladoraDoJogo.EstadoDaJogada;
 import mediadores.MediadorFluxoDeJogo;
 
 @SuppressWarnings("serial")
-public class AtorBotoes extends Actor {
+public class AtorBotaoMenuJogo extends Actor {
 	public enum Tipo {
 		PERSONAGEM_L,
 		PERSONAGEM_SHERLOCK,
@@ -47,9 +47,9 @@ public class AtorBotoes extends Actor {
 	
 	private AnimatedSprite 	botao;
 	private boolean 		mouseOverChange = false;
-	private AtorBotoes.Tipo tipo = AtorBotoes.Tipo.DESCONHECIDO;
+	private AtorBotaoMenuJogo.Tipo tipo = AtorBotaoMenuJogo.Tipo.DESCONHECIDO;
 
-	public AtorBotoes( AtorBotoes.Tipo tipo ) {
+	public AtorBotaoMenuJogo( AtorBotaoMenuJogo.Tipo tipo ) {
 		super(100,100);
 		
 		this.tipo = tipo;
@@ -130,7 +130,7 @@ public class AtorBotoes extends Actor {
 		adicionarDoArquivo(botaoFile);
 	}
 	
-	public AtorBotoes( String botaoFile ) {
+	public AtorBotaoMenuJogo( String botaoFile ) {
 		super(100, 100);
 		adicionarDoArquivo(botaoFile);
 	}
@@ -140,7 +140,7 @@ public class AtorBotoes extends Actor {
 		this.botao = addAnimatedSprite( botaoFile , new Vetor2D_int(0,0) , 0 );	
 	}
 	
-	public AtorBotoes.Tipo obterTipo() {
+	public AtorBotaoMenuJogo.Tipo obterTipo() {
 		return this.tipo;
 	}
 

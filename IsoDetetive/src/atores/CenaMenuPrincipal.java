@@ -83,21 +83,21 @@ public class CenaMenuPrincipal extends Scene {
 		}
 	}
 	
-	protected AtorBotoes personagem_l;
-	protected AtorBotoes personagem_sherlock;
-	protected AtorBotoes personagem_pantera;
-	protected AtorBotoes personagem_carmen;
-	protected AtorBotoes personagem_edmort;
-	protected AtorBotoes personagem_batman;
+	protected AtorBotaoMenuJogo personagem_l;
+	protected AtorBotaoMenuJogo personagem_sherlock;
+	protected AtorBotaoMenuJogo personagem_pantera;
+	protected AtorBotaoMenuJogo personagem_carmen;
+	protected AtorBotaoMenuJogo personagem_edmort;
+	protected AtorBotaoMenuJogo personagem_batman;
 	
-	protected AtorBotoes botao_dado;
-	protected AtorBotoes botao_mover;
-	protected AtorBotoes botao_acusar;
-	protected AtorBotoes botao_mao;
-	protected AtorBotoes botao_notas;
-	protected AtorBotoes botao_passar;	
+	protected AtorBotaoMenuJogo botao_dado;
+	protected AtorBotaoMenuJogo botao_mover;
+	protected AtorBotaoMenuJogo botao_acusar;
+	protected AtorBotaoMenuJogo botao_mao;
+	protected AtorBotaoMenuJogo botao_notas;
+	protected AtorBotaoMenuJogo botao_passar;	
 	
-	ArrayList<AtorBotoes> botoes = new ArrayList<AtorBotoes>();
+	ArrayList<AtorBotaoMenuJogo> botoes = new ArrayList<AtorBotaoMenuJogo>();
 	
 	private Vetor2D_int proximaPosicao = new Vetor2D_int(0,0);
 	
@@ -115,60 +115,60 @@ public class CenaMenuPrincipal extends Scene {
 	@Override
 	public synchronized void addActor( Actor actor , int layer ) {
 		super.addActor(actor, layer);
-		if( actor instanceof AtorBotoes ) {
-			botoes.add( (AtorBotoes)actor );
+		if( actor instanceof AtorBotaoMenuJogo ) {
+			botoes.add( (AtorBotaoMenuJogo)actor );
 		}
 	}
 
 	private void inicializarBotoes() {
 		// Personagens
-		personagem_l = new AtorBotoes( AtorBotoes.Tipo.PERSONAGEM_L );
+		personagem_l = new AtorBotaoMenuJogo( AtorBotaoMenuJogo.Tipo.PERSONAGEM_L );
 		personagem_l.setVisible(false);
 		this.addActor( personagem_l , 10 );
 		
-		personagem_sherlock = new AtorBotoes( AtorBotoes.Tipo.PERSONAGEM_SHERLOCK );
+		personagem_sherlock = new AtorBotaoMenuJogo( AtorBotaoMenuJogo.Tipo.PERSONAGEM_SHERLOCK );
 		this.addActor( personagem_sherlock , 10 );
 		
-		personagem_pantera = new AtorBotoes( AtorBotoes.Tipo.PERSONAGEM_PANTERA );
+		personagem_pantera = new AtorBotaoMenuJogo( AtorBotaoMenuJogo.Tipo.PERSONAGEM_PANTERA );
 		this.addActor( personagem_pantera , 10 );	
 		
-		personagem_carmen = new AtorBotoes( AtorBotoes.Tipo.PERSONAGEM_CARMEN );
+		personagem_carmen = new AtorBotaoMenuJogo( AtorBotaoMenuJogo.Tipo.PERSONAGEM_CARMEN );
 		this.addActor( personagem_carmen , 10 );	
 		
-		personagem_edmort = new AtorBotoes( AtorBotoes.Tipo.PERSONAGEM_EDMORT );
+		personagem_edmort = new AtorBotaoMenuJogo( AtorBotaoMenuJogo.Tipo.PERSONAGEM_EDMORT );
 		this.addActor( personagem_edmort , 10 );	
 		
-		personagem_batman = new AtorBotoes( AtorBotoes.Tipo.PERSONAGEM_BATMAN );
+		personagem_batman = new AtorBotaoMenuJogo( AtorBotaoMenuJogo.Tipo.PERSONAGEM_BATMAN );
 		this.addActor( personagem_batman , 10 );	
 		
 		// Controle de jogo		
-		botao_acusar = new AtorBotoes( AtorBotoes.Tipo.BOTAO_ACUSAR );
+		botao_acusar = new AtorBotaoMenuJogo( AtorBotaoMenuJogo.Tipo.BOTAO_ACUSAR );
 		botao_acusar.addMouseListener( new mouseListener_acusar() );
 		this.addActor( botao_acusar , 10 );		
 		
-		botao_mao = new AtorBotoes( AtorBotoes.Tipo.BOTAO_MAO );
+		botao_mao = new AtorBotaoMenuJogo( AtorBotaoMenuJogo.Tipo.BOTAO_MAO );
 		botao_mao.addMouseListener( new mouseListener_verCartas() );
 		this.addActor( botao_mao , 10 );		
 		
-		botao_notas = new AtorBotoes( AtorBotoes.Tipo.BOTAO_NOTAS );
+		botao_notas = new AtorBotaoMenuJogo( AtorBotaoMenuJogo.Tipo.BOTAO_NOTAS );
 		botao_notas.addMouseListener( new mouseListener_verBlocoNotas() );
 		this.addActor( botao_notas , 10 );	
 		
-		botao_dado = new AtorBotoes( AtorBotoes.Tipo.BOTAO_DADO );
+		botao_dado = new AtorBotaoMenuJogo( AtorBotaoMenuJogo.Tipo.BOTAO_DADO );
 		botao_dado.addMouseListener( new mouseListener_dado() );
 		this.addActor( botao_dado , 10 );
 		
-		botao_mover = new AtorBotoes( AtorBotoes.Tipo.BOTAO_MOVER );
+		botao_mover = new AtorBotaoMenuJogo( AtorBotaoMenuJogo.Tipo.BOTAO_MOVER );
 		botao_mover.addMouseListener( new mouseListener_mover() );
 		this.addActor( botao_mover , 10 );
 		
-		botao_passar = new AtorBotoes( AtorBotoes.Tipo.BOTAO_PASSAR );
+		botao_passar = new AtorBotaoMenuJogo( AtorBotaoMenuJogo.Tipo.BOTAO_PASSAR );
 		botao_passar.addMouseListener( new mouseListener_passar() );
 		this.addActor( botao_passar , 10 );				
 	}
 
 	public void esconderBotoes() {
-		for( AtorBotoes botao : this.botoes ) {
+		for( AtorBotaoMenuJogo botao : this.botoes ) {
 			botao.setVisible(false);
 			botao.setLocation(0, 0);
 		}
@@ -176,8 +176,8 @@ public class CenaMenuPrincipal extends Scene {
 		resetarPosicaoInicial();
 	}
 	
-	public void ativarBotao( AtorBotoes.Tipo tipo ) {
-		for( AtorBotoes botao : this.botoes ) {
+	public void ativarBotao( AtorBotaoMenuJogo.Tipo tipo ) {
+		for( AtorBotaoMenuJogo botao : this.botoes ) {
 			if( botao.obterTipo() == tipo ) {
 				botao.setVisible(true);
 				break;
@@ -187,8 +187,8 @@ public class CenaMenuPrincipal extends Scene {
 		revalidarPosicaoDosBotoes();
 	}	
 	
-	public void desativarBotao( AtorBotoes.Tipo tipo ) {
-		for( AtorBotoes botao : this.botoes ) {
+	public void desativarBotao( AtorBotaoMenuJogo.Tipo tipo ) {
+		for( AtorBotaoMenuJogo botao : this.botoes ) {
 			if( botao.obterTipo() == tipo ) {
 				botao.setVisible(false);
 				break;
@@ -201,7 +201,7 @@ public class CenaMenuPrincipal extends Scene {
 	private void revalidarPosicaoDosBotoes() {
 		resetarPosicaoInicial();
 		
-		for( AtorBotoes botao : this.botoes ) {
+		for( AtorBotaoMenuJogo botao : this.botoes ) {
 			if( botao.isVisible() == true ) {
 				botao.setLocation( proximaPosicao.x , proximaPosicao.y );
 				

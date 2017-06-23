@@ -3,59 +3,77 @@ package interfaceGrafica;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import animacao.*;
+import atores.*;
+import estruturas.*;
+import mediadores.*;
+
 
 
 
 public class QuadroInicial extends JPanel {
-	
-	
 	// Listener que carrega proxima janela de novo jogo
-	class actList_novoJogo implements ActionListener {
-		public actList_novoJogo() {
-		}
-
+	class actList_novoJogo extends MouseAdapter {
 		@Override
-		public void actionPerformed(ActionEvent e)  {
+		public void mouseClicked(MouseEvent arg0)  {
 			JanelaPrincipal.getInstance().carregarQuadro( new QuadroSelecaoDeJogadores() );
 		}
-	}
+	}	
 
 	// Listener que carrega o fileChooser para carregar um jogo existente
-	class actList_carregarJogo implements ActionListener {
+	class actList_carregarJogo extends MouseAdapter {
 		JFrame frame;
 		
-		public actList_carregarJogo( ) {
-		}
-
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void mouseClicked(MouseEvent arg0)  {
 			JFileChooser fileChooser = new JFileChooser();
-			fileChooser.showOpenDialog( JanelaPrincipal.singleton );
+			fileChooser.showOpenDialog( JanelaPrincipal.getInstance() );
 		}
 	}
+	
 	
 	//Construtor do QuadroInicial
 	public QuadroInicial() {
 		setBackground( new Color(255,255,255) );
 		setLayout( null );
 		
-		//Adiciona o botão de novo jogo
-		JButton btn_novoJogo = new JButton("Novo Jogo");
-		btn_novoJogo.setBounds( 0 , 0, 100, 100);
-		btn_novoJogo.addActionListener( new actList_novoJogo() );
-		add(btn_novoJogo);
-		
-		//Adiciona o botão de carregar um jogo
-		JButton btn_carregarJogo = new JButton("Continuar");
-		btn_carregarJogo.setBounds( 100 , 0, 100, 100);
-		btn_carregarJogo.addActionListener( new actList_carregarJogo() );
-		add(btn_carregarJogo);
-		
+
+		Vetor2D_int dim = JanelaPrincipal.getInstance().obterDimensoesInternas();
+		Scene cena = new Scene( 0 , 0 , dim.x , dim.y );
+
+        Camera camera = new Camera( cena , dim.x , dim.y );
+        camera.hideScrolls();
+        camera.setBounds(0, 0, dim.x, dim.y);
+        add( camera );
+        
+		// Elementos
+        AtorBackground atorBackground = new AtorBackground( "bg_mainscreen.txt" );
+        cena.addActor( atorBackground , 0 );
+        atorBackground.setLocation(0, 0);
+        
+        // Titulo
+        AtorEtiqueta titulo = new AtorEtiqueta( AtorEtiqueta.Tipo.JOGO_DOS_DETETIVES );
+        cena.addActor( titulo , 1 );
+        titulo.setLocation(240, 0);
+        
+        // Novo Jogo
+        AtorBotaoMenuPreJogo botao_novoJogo = new AtorBotaoMenuPreJogo( AtorBotaoMenuPreJogo.Tipo.NOVO_JOGO );
+        botao_novoJogo.addMouseListener( new actList_novoJogo() );
+        cena.addActor( botao_novoJogo , 2 );
+        botao_novoJogo.setLocation(300, 240);
+        
+        // Continuar Jogo
+        AtorBotaoMenuPreJogo botao_carregarJogo = new AtorBotaoMenuPreJogo( AtorBotaoMenuPreJogo.Tipo.CONTINUAR_JOGO );
+        botao_carregarJogo.addMouseListener( new actList_carregarJogo() );
+        cena.addActor( botao_carregarJogo , 2 );
+        botao_carregarJogo.setLocation(750, 550);
 	}	
 }

@@ -40,6 +40,9 @@ public class Camera extends JScrollPane implements Runnable {
 		this.cameraValidPosition = new Vetor2D_double( 0 , 0 );
 		this.setViewportView( viewPort );
 		this.getViewport().setScrollMode(JViewport.SIMPLE_SCROLL_MODE); // ???
+		
+		//this.setBounds(0, 0, x, y);
+		//this.revalidate();
 		//this.setHorizontalScrollBarPolicy( JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS );
 	}
 
@@ -216,4 +219,8 @@ public class Camera extends JScrollPane implements Runnable {
 		this.animableList.add( anim );
 	}
  
+	public void hideScrolls() {
+		setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+	}
 }

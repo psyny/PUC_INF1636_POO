@@ -31,8 +31,7 @@ public class CameraMenu extends Camera {
 		setIsFixedOnTarget( false );
 		setBorder(BorderFactory.createEmptyBorder());
 		
-		setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-        setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		super.hideScrolls();
 		
 		definirModo( Modos.MENU_PRINCIPAL );
 	}
@@ -46,7 +45,7 @@ public class CameraMenu extends Camera {
 	
 	public void definirModo( CameraMenu.Modos modo ) {
 		esconderTudo();
-		
+
 		switch( modo ) {
 			case MENU_PRINCIPAL:
 				setBounds(0, 0 , 900 , 100 );
@@ -72,7 +71,7 @@ public class CameraMenu extends Camera {
 				setBounds(0, 0 , 1000 , 700 );
 				break;
 		}
-		
+
 		this.revalidate();
 	}
 	

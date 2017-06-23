@@ -37,7 +37,7 @@ public class CenaMao extends Scene {
 		setBackground(Color.WHITE);
 		setOpaque(false);
 		
-		fechar = new AtorBotoes( "botao_fechar.txt" );
+		fechar = new AtorBotaoMenuJogo( "botao_fechar.txt" );
 		fechar.setLocation( fecharPos.x , fecharPos.y );  
 		fechar.addMouseListener( new mouseListener_fechar() );
 		this.addActor( fechar , 10 );	

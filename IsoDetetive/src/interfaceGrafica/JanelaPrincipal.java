@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
+import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,10 +20,9 @@ import jogo.ControladoraDoJogo;
 
 
 public class JanelaPrincipal extends JFrame {	
-	public static JanelaPrincipal singleton = null;	
+	private static JanelaPrincipal instance = null;	
 	public Container mainContentPane;
 	public Vetor2D_int tamanho;
-	
 	
 	//Contrutor de JanelaPrincipal
 	private JanelaPrincipal() {
@@ -35,27 +35,37 @@ public class JanelaPrincipal extends JFrame {
     	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	setLocationRelativeTo(null);
 	}
+	
+	
+	public static JanelaPrincipal getInstance() {
+		if( instance == null ){
+			EventQueue.invokeLater(new Runnable() {
+
+				@Override
+				public void run() {
+					// Cria a janela e prepara o Singleton	
+					JanelaPrincipal janelaPrincipal =  new JanelaPrincipal();
+					JanelaPrincipal.instance = janelaPrincipal;
+					
+					janelaPrincipal.mainContentPane =  janelaPrincipal.getContentPane();			
+
+					// Exibe a janela inicial
+					janelaPrincipal.carregarQuadro( new QuadroInicial() );
+					
+					// Finalmente, exibe a janela
+					janelaPrincipal.setVisible( true );
+				}
+				
+			} ); // EventQueue end
+		}
+		
+		return instance;
+	}	
 
 	//inicializador statico da JanelaPrincipal, que inicializa a variavel static singleton
 	public static void inicializar() {
-		EventQueue.invokeLater(new Runnable() {
+		
 
-			@Override
-			public void run() {
-				// Cria a janela e prepara o Singleton			
-				JanelaPrincipal.singleton = new JanelaPrincipal();
-				JanelaPrincipal.singleton.mainContentPane =  JanelaPrincipal.singleton.getContentPane();
-				
-				
-
-				// Exibe a janela inicial
-				JanelaPrincipal.singleton.carregarQuadro( new QuadroInicial() );
-				
-				// Finalmente, exibe a janela
-				JanelaPrincipal.singleton.setVisible( true );
-			}
-			
-		} ); // EventQueue end
 	}
 	
 	//Remove todos os componentes do mainContentPane
@@ -86,8 +96,14 @@ public class JanelaPrincipal extends JFrame {
 		JanelaPrincipal.getInstance().mainContentPane.setLayout( new FlowLayout() );
 	}
 	
-	public static JanelaPrincipal getInstance() {
-		return JanelaPrincipal.singleton;
+	//Obtem espaço interno ( dimensoes uteis ) da janela
+	public Vetor2D_int obterDimensoesInternas() {
+		Vetor2D_int dimensoes = new Vetor2D_int(0,0);
+		Insets inset = this.getInsets();
+		
+		dimensoes.x = (int)this.getSize().getWidth() - inset.left - inset.right;
+		dimensoes.y = (int)this.getSize().getHeight() - inset.top - inset.bottom;
+		
+		return dimensoes;
 	}
-	
 }

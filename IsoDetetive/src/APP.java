@@ -10,7 +10,7 @@ public class APP {
 		Isometria.inicializar( 45 , 60 );
 		//Isometria.inicializar( 0 , 0 );
 
-		JanelaPrincipal.inicializar();
+		JanelaPrincipal janelaPrincipal = JanelaPrincipal.getInstance();
 	}
 
 }
