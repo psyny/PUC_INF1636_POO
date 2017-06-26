@@ -2,6 +2,12 @@ package jogo;
 
 import java.util.ArrayList;
 
+import com.sun.xml.internal.ws.api.Cancelable;
+
+import atores.CameraMenu.Modos;
+import mediadores.MediadorFluxoDeJogo;
+import mediadores.TradutorMenus;
+
 public class ControladoraDoJogo {
 	// Singleton com LazyHolder para tratar threads
 	private static class LazyHolder {
@@ -56,6 +62,10 @@ public class ControladoraDoJogo {
 		return this.valorDoDado;
 	}
 	
+	public ArrayList<Carta> obterCrime() {
+		return this.crime;
+	}
+	
 	public ArrayList<Casa> obterMovimentacaoPossivel() {
 		return new ArrayList<Casa>( this.movimentacaoPossivel );
 	}	
@@ -69,21 +79,26 @@ public class ControladoraDoJogo {
 		this.listaDeJogadores.add( jog );
 	}
 	
+	public void iniciarPartida()
+	{
+		baralho = new Baralho();
+		crime = baralho.gerarCrime();
+		for (Carta carta : crime) {
+			System.out.println(carta.tipo);
+		}
+		distribuirCartas();
+	}
+	
 	public void distribuirCartas()
 	{
 		while(baralho.baralho.size() > 0) {
 			for (Jogador jogador : listaDeJogadores) {
 				if(jogador.emJogo)
 					jogador.adicionarMao(baralho.distribuirCarta());
+				if(baralho.baralho.size() == 0)
+					break;
 			}
 		}
-	}
-	
-	public void iniciarPartida()
-	{
-		baralho = new Baralho();
-		crime = baralho.gerarCrime();
-		distribuirCartas();
 	}
 
 	
@@ -146,14 +161,14 @@ public class ControladoraDoJogo {
 	public void validarPalpite(ArrayList<Carta> palpite)
 	{
 		//iterar sobre jogadores, na ordem da roda
-		int idx = listaDeJogadores.indexOf( jogadorDaVez ); 
-		int idxInicial = idx;
+		int idxInicial = listaDeJogadores.indexOf( jogadorDaVez );
 		int idxProximo;
 		
-		if( idx == listaDeJogadores.size() - 1 ) {
+		
+		if( idxInicial == listaDeJogadores.size() - 1 ) {
 			idxProximo = 0;
 		} else {
-			idxProximo = idx + 1;
+			idxProximo = idxInicial + 1;
 		}
 		
 		while(idxProximo != idxInicial)
@@ -161,18 +176,14 @@ public class ControladoraDoJogo {
 			Jogador candidato = listaDeJogadores.get(idxProximo);
 			if(candidato.temCarta(palpite))
 			{
-				for(Carta carta : candidato.mao)
-				{
-					if(palpite.contains(carta))
-					{
-						jogadorDaVez.adicionarBlocoDeNotas(carta, true);
-						return;
-					}
-				}
+				
+				MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.ESCOLHA_CARTA);
+				TradutorMenus.getInstance().desenharEscolhaCarta(MediadorFluxoDeJogo.getInstance().cameraMenu.cenaEscolhaCarta, candidato, palpite);
+				return;
 			}
 			
 			idxProximo++;
-			if( idx == listaDeJogadores.size() - 1 ) {
+			if( idxProximo == listaDeJogadores.size() ) {
 				idxProximo = 0;
 			}
 		}
@@ -181,9 +192,17 @@ public class ControladoraDoJogo {
 	public boolean validarAcusacao(ArrayList<Carta> acusacao)
 	{
 		if(acusacao.containsAll(crime))
+		{
+			//TODO - end-Game, alguem vençeu
+			System.out.println(jogadorDaVez.personagem.nome + " venceu");
 			return true;
+		}
 		else
+		{
+			jogadorDaVez.emJogo = false;
+			MediadorFluxoDeJogo.getInstance().iniciarJogadaDaVez();
 			return false;
+		}
 	}
 	
 }

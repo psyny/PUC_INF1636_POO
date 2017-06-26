@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import animacao.Actor;
 import animacao.Scene;
 import atores.CameraMenu.Modos;
+import atores.CenaAcusacao.mouseListener_confirma;
+import atores.CenaAcusacao.mouseListener_fechar;
 import estruturas.Vetor2D_int;
 import jogo.ControladoraDoJogo;
 import jogo.Jogador;
@@ -16,12 +18,20 @@ import mediadores.TradutorMenus;
 
 public class CenaBlocoNotas extends Scene {
 	
-	class mouseListener_fechar extends MouseAdapter {
+	class mouseListener_confirma extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent arg0)  {
 			limparCena();
 			MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.MENU_PRINCIPAL);
 			TradutorMenus.getInstance().atualizarBlocoDeNotas();
+		}
+	}
+	
+	class mouseListener_fechar extends MouseAdapter {
+		@Override
+		public void mouseClicked(MouseEvent arg0)  {
+			limparCena();
+			MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.MENU_PRINCIPAL);
 		}
 	}
 	
@@ -35,11 +45,17 @@ public class CenaBlocoNotas extends Scene {
 		setBackground(Color.WHITE);
 		setOpaque(false);
 		
+		Actor confirma;
+		confirma = new AtorBotaoMenuJogo( "botao_confirmar.txt" );
+		confirma.setLocation( 820 , 20 );  
+		confirma.addMouseListener( new mouseListener_confirma() );
+		this.addActor( confirma , 10 );	
+		
 		Actor fechar;
-		fechar = new AtorBotaoMenuJogo( "botao_confirmar.txt" );
+		fechar = new AtorBotaoMenuJogo( "botao_fechar.txt" );
 		fechar.setLocation( 880 , 20 );  
 		fechar.addMouseListener( new mouseListener_fechar() );
-		this.addActor( fechar , 10 );	
+		this.addActor( fechar , 10 );
 		
 		this.limparCena();
 	}

@@ -14,6 +14,8 @@ import javax.swing.JPanel;
 import animacao.*;
 import atores.*;
 import estruturas.*;
+import jogo.ControladoraDoJogo;
+import jogo.Salvador;
 import mediadores.*;
 
 
@@ -36,6 +38,8 @@ public class QuadroInicial extends JPanel {
 		public void mouseClicked(MouseEvent arg0)  {
 			JFileChooser fileChooser = new JFileChooser();
 			fileChooser.showOpenDialog( JanelaPrincipal.getInstance() );
+			Salvador.getInstance().configurarFile(fileChooser.getSelectedFile());
+			Salvador.getInstance().carregarPartida();
 		}
 	}
 	

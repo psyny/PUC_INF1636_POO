@@ -4,9 +4,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+import animacao.Scene;
 import atores.AtorCarta;
 import atores.CenaAcusacao;
 import atores.CenaBlocoNotas;
+import atores.CenaEscolhaCarta;
 import atores.CenaMao;
 import atores.CenaPalpite;
 import jogo.Baralho;
@@ -60,10 +62,10 @@ public class TradutorMenus {
 		}
 	}
 	
-	class MouseListener_cartaSelecaoUnica extends MouseAdapter {
+	class MouseListener_cartaSelecaoUnicaTipada extends MouseAdapter {
 		protected ReferenciaCartaAtor carta = null;
 		
-		public MouseListener_cartaSelecaoUnica(ReferenciaCartaAtor carta) {
+		public MouseListener_cartaSelecaoUnicaTipada(ReferenciaCartaAtor carta) {
 			this.carta = carta;
 		}
 		
@@ -71,6 +73,20 @@ public class TradutorMenus {
 		public void mouseClicked(MouseEvent arg0)  {
 			carta.atorCarta.definirSelecionado(!(carta.atorCarta.getSelecionado()));
 			desmarcarCartaTipo(carta.carta);
+		}
+	}
+	
+	class MouseListener_cartaSelecaoUnicaNaoTipada extends MouseAdapter {
+		protected ReferenciaCartaAtor carta = null;
+		
+		public MouseListener_cartaSelecaoUnicaNaoTipada(ReferenciaCartaAtor carta) {
+			this.carta = carta;
+		}
+		
+		@Override
+		public void mouseClicked(MouseEvent arg0)  {
+			carta.atorCarta.definirSelecionado(!(carta.atorCarta.getSelecionado()));
+			desmarcarCarta(carta.carta);
 		}
 	}
 	
@@ -175,6 +191,40 @@ public class TradutorMenus {
 			desenharMenuPalpite_auxiliar_desenharCartaNaCena( carta , cena , false );
 		}
 		
+	// Menu: Escolha Carta	
+		public void desenharEscolhaCarta(CenaEscolhaCarta cena, Jogador jogador, ArrayList<Carta> palpite)
+		{
+			Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
+		
+			ArrayList<Carta> cartas = jogador.temCartasNaMao(palpite);
+			referenciasCartasAtor.clear();
+			
+			for (Carta carta : cartas) {
+				ReferenciaCartaAtor referenciaCartaAtor = new ReferenciaCartaAtor( carta , new AtorCarta() );
+				referenciasCartasAtor.add( referenciaCartaAtor );
+				referenciaCartaAtor.atorCarta.definirCarta( carta.tipo );
+				
+				// Adiciona o mouseListener para multipla seleção
+				referenciaCartaAtor.atorCarta.addMouseListener( new MouseListener_cartaSelecaoUnicaNaoTipada(referenciaCartaAtor) );	
+				
+				// Desenhar marcacao do tipo de carta ( feedback para o jogador )
+				definirMarcadorCarta( referenciaCartaAtor , jogadorDaVez );
+				
+				cena.desenharCarta( referenciaCartaAtor.atorCarta );
+			}
+		}
+		
+		public void registrarCartaEscolhida()
+		{
+			Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
+			
+			for (ReferenciaCartaAtor referenciaCartaAtor : referenciasCartasAtor) {
+				if(referenciaCartaAtor.atorCarta.getSelecionado())
+					jogadorDaVez.adicionarBlocoDeNotas(referenciaCartaAtor.carta, true);
+			}
+			
+		}
+	
 	// Menu: Acusação	
 		public void desenharAcusacao(CenaAcusacao cena)
 		{
@@ -189,7 +239,7 @@ public class TradutorMenus {
 				referenciaCartaAtor.atorCarta.definirCarta( carta.tipo );
 				
 				// Adiciona o mouseListener para multipla seleção
-				referenciaCartaAtor.atorCarta.addMouseListener( new MouseListener_cartaSelecaoMultipla(referenciaCartaAtor) );	
+				referenciaCartaAtor.atorCarta.addMouseListener( new MouseListener_cartaSelecaoUnicaTipada(referenciaCartaAtor) );	
 				
 				// Desenhar marcacao do tipo de carta ( feedback para o jogador )
 				definirMarcadorCarta( referenciaCartaAtor , jogadorDaVez );
@@ -207,7 +257,7 @@ public class TradutorMenus {
 					acusacao.add(cartaAtor.carta);
 			}
 			
-			System.out.println(ControladoraDoJogo.getInstance().validarAcusacao(acusacao));
+			ControladoraDoJogo.getInstance().validarAcusacao(acusacao);
 		}
 		
 		private void desenharMenuPalpite_auxiliar_desenharCartaNaCena( Carta carta , CenaPalpite cena , boolean addListener ) {
@@ -216,7 +266,7 @@ public class TradutorMenus {
 			referenciaCartaAtor.atorCarta.definirCarta( carta.tipo );
 			
 			if( addListener == true ) {
-				referenciaCartaAtor.atorCarta.addMouseListener(new MouseListener_cartaSelecaoUnica(referenciaCartaAtor));
+				referenciaCartaAtor.atorCarta.addMouseListener(new MouseListener_cartaSelecaoUnicaTipada(referenciaCartaAtor));
 			} else {
 				referenciaCartaAtor.atorCarta.definirSelecionado(true);
 			}
@@ -253,6 +303,16 @@ public class TradutorMenus {
 		{
 			for (ReferenciaCartaAtor cartaAtor : referenciasCartasAtor) {
 				if(mesmoTipoCarta(cartaAtor.carta, carta) && !cartaAtor.carta.equals(carta))
+				{
+					cartaAtor.atorCarta.definirSelecionado(false);
+				}
+			}
+		}
+		
+		public void desmarcarCarta(Carta carta)
+		{
+			for (ReferenciaCartaAtor cartaAtor : referenciasCartasAtor) {
+				if(!cartaAtor.carta.equals(carta))
 				{
 					cartaAtor.atorCarta.definirSelecionado(false);
 				}

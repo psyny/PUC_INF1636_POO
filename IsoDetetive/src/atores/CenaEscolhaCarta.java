@@ -14,51 +14,49 @@ import jogo.Jogador;
 import mediadores.MediadorFluxoDeJogo;
 import mediadores.TradutorMenus;
 
-public class CenaAcusacao extends Scene {
-	
-	class mouseListener_confirma extends MouseAdapter {
-		@Override
-		public void mouseClicked(MouseEvent arg0)  {
-			limparCena();
-			MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.MENU_PRINCIPAL);
-			TradutorMenus.getInstance().gerarAcusacao();
-		}
-	}
+public class CenaEscolhaCarta extends Scene {
 	
 	class mouseListener_fechar extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent arg0)  {
+			// TODO - corrigir logica que impede q o jogador feche com nem uma carta selecionada
+			/*for (AtorCarta carta : cartasNaCena) {
+				if(carta.flagSelecionado)
+				{
+					limparCena();
+					MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.MENU_PRINCIPAL);
+					TradutorMenus.getInstance().registrarCartaEscolhida();
+				}
+			}*/
+			
 			limparCena();
 			MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.MENU_PRINCIPAL);
+			TradutorMenus.getInstance().registrarCartaEscolhida();
 		}
 	}
 	
 	protected ArrayList<AtorCarta> cartasNaCena = new ArrayList<AtorCarta>();
-	protected Vetor2D_int proximaPosicao = new Vetor2D_int(70, 130);
+	protected Vetor2D_int proximaPosicao = new Vetor2D_int(70, 100);
 	
-	public CenaAcusacao()
+	protected Actor fechar = null;
+	protected Vetor2D_int fecharPos = new Vetor2D_int( 0 , 20 );
+	
+	public CenaEscolhaCarta()
 	{
 		super(50, 50, 900, 600);
 		
 		setBackground(Color.WHITE);
 		setOpaque(false);
 		
-		Actor confirma;
-		confirma = new AtorBotaoMenuJogo( "botao_confirmar.txt" );
-		confirma.setLocation( 820 , 20 );  
-		confirma.addMouseListener( new mouseListener_confirma() );
-		this.addActor( confirma , 10 );	
-		
-		Actor fechar;
-		fechar = new AtorBotaoMenuJogo( "botao_fechar.txt" );
-		fechar.setLocation( 880 , 20 );  
+		fechar = new AtorBotaoMenuJogo( "botao_confirmar.txt" );
+		fechar.setLocation( fecharPos.x , fecharPos.y );  
 		fechar.addMouseListener( new mouseListener_fechar() );
 		this.addActor( fechar , 10 );	
 		
 		this.limparCena();
 	}
 	
-	public CenaAcusacao(int x, int y, int w, int h)
+	public CenaEscolhaCarta(int x, int y, int w, int h)
 	{
 		super(x, y, w, h);
 	}
@@ -66,7 +64,6 @@ public class CenaAcusacao extends Scene {
 	public void desenharCarta(AtorCarta carta)
 	{
 		carta.setLocation(proximaPosicao.x, proximaPosicao.y);
-
 		this.addActor(carta, 20);
 		cartasNaCena.add(carta);
 		
@@ -90,6 +87,11 @@ public class CenaAcusacao extends Scene {
 		{
 			proximaPosicao.x = 70;
 			proximaPosicao.y += 190;
+		}
+		
+		if( fecharPos.x < proximaPosicao.x ) {
+			fecharPos.x = proximaPosicao.x - 80;
+			fechar.setLocation( fecharPos.x , fecharPos.y );
 		}
 	}
 }

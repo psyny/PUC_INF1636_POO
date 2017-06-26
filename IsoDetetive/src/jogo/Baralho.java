@@ -56,7 +56,7 @@ public class Baralho {
 		
 		crime.add(pilhaComodos.get(comodoEscolhido));
 		baralho.remove(pilhaComodos.get(comodoEscolhido));
-		
+
 		crime.add(pilhaSuspeitos.get(suspeitoEscolhido));
 		baralho.remove(pilhaSuspeitos.get(suspeitoEscolhido));
 		

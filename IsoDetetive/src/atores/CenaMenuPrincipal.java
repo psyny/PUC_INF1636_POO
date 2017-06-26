@@ -8,12 +8,16 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
+import javax.swing.JFileChooser;
+
 import animacao.Actor;
 import animacao.Scene;
 import atores.CameraMenu.Modos;
 import estruturas.Vetor2D_int;
+import interfaceGrafica.JanelaPrincipal;
 import jogo.ControladoraDoJogo;
 import jogo.ControladoraDoJogo.EstadoDaJogada;
+import jogo.Salvador;
 import mediadores.MediadorFluxoDeJogo;
 import mediadores.TradutorMenus;
 
