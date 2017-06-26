@@ -85,9 +85,7 @@ public class ControladoraDoJogo {
 		crime = baralho.gerarCrime();
 		distribuirCartas();
 	}
-	
 
-	
 	
 	public void iniciarProximaJogada() {
 		// Descobrir quem é o proximo jogador
@@ -178,7 +176,14 @@ public class ControladoraDoJogo {
 				idxProximo = 0;
 			}
 		}
-		
-		
 	}
+	
+	public boolean validarAcusacao(ArrayList<Carta> acusacao)
+	{
+		if(acusacao.containsAll(crime))
+			return true;
+		else
+			return false;
+	}
+	
 }

@@ -5,6 +5,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import atores.AtorCarta;
+import atores.CenaAcusacao;
 import atores.CenaBlocoNotas;
 import atores.CenaMao;
 import atores.CenaPalpite;
@@ -172,6 +173,41 @@ public class TradutorMenus {
 			// Carta do comodo atual
 			Carta carta = jogadorDaVez.obterCartaPosicao();
 			desenharMenuPalpite_auxiliar_desenharCartaNaCena( carta , cena , false );
+		}
+		
+	// Menu: Acusação	
+		public void desenharAcusacao(CenaAcusacao cena)
+		{
+			Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
+		
+			ArrayList<Carta> baralho = Baralho.todasCartas();
+			referenciasCartasAtor.clear();
+			
+			for (Carta carta : baralho) {
+				ReferenciaCartaAtor referenciaCartaAtor = new ReferenciaCartaAtor( carta , new AtorCarta() );
+				referenciasCartasAtor.add( referenciaCartaAtor );
+				referenciaCartaAtor.atorCarta.definirCarta( carta.tipo );
+				
+				// Adiciona o mouseListener para multipla seleção
+				referenciaCartaAtor.atorCarta.addMouseListener( new MouseListener_cartaSelecaoMultipla(referenciaCartaAtor) );	
+				
+				// Desenhar marcacao do tipo de carta ( feedback para o jogador )
+				definirMarcadorCarta( referenciaCartaAtor , jogadorDaVez );
+				
+				cena.desenharCarta( referenciaCartaAtor.atorCarta );
+			}
+		}
+		
+		public void gerarAcusacao()
+		{
+			ArrayList<Carta> acusacao = new ArrayList<Carta>();
+			
+			for (ReferenciaCartaAtor cartaAtor : referenciasCartasAtor) {
+				if(cartaAtor.atorCarta.getSelecionado())
+					acusacao.add(cartaAtor.carta);
+			}
+			
+			System.out.println(ControladoraDoJogo.getInstance().validarAcusacao(acusacao));
 		}
 		
 		private void desenharMenuPalpite_auxiliar_desenharCartaNaCena( Carta carta , CenaPalpite cena , boolean addListener ) {

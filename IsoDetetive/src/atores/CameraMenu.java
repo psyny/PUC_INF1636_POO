@@ -21,6 +21,7 @@ public class CameraMenu extends Camera {
 	public CenaMao 				cenaMao;
 	public CenaBlocoNotas 		cenaBlocoNotas;
 	public CenaPalpite 			cenaPalpite;
+	public CenaAcusacao 		cenaAcusacao;
     
 	public CameraMenu( Component viewPort , int x , int y ) {
 		super( viewPort , x , y );
@@ -41,6 +42,7 @@ public class CameraMenu extends Camera {
 		if( cenaMao != null ) cenaMao.setVisible( false );
 		if( cenaBlocoNotas != null ) cenaBlocoNotas.setVisible( false );
 		if( cenaPalpite != null ) cenaPalpite.setVisible( false );
+		if( cenaAcusacao != null ) cenaAcusacao.setVisible( false );
 	}
 	
 	public void definirModo( CameraMenu.Modos modo ) {
@@ -65,6 +67,11 @@ public class CameraMenu extends Camera {
 			case NOTAS:
 				setBounds(0, 0 , 1000 , 700 );
 				if( cenaBlocoNotas != null ) cenaBlocoNotas.setVisible(true);		
+				break;
+				
+			case ACUSACAO:
+				setBounds(0, 0 , 1000 , 700 );
+				if( cenaAcusacao != null ) cenaAcusacao.setVisible(true);		
 				break;
 		
 			default:

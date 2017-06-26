@@ -56,7 +56,8 @@ public class CenaMenuPrincipal extends Scene {
 	class mouseListener_acusar extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent arg0)  {
-			System.out.println("Listener Acusar: Nao implementado");
+			MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.ACUSACAO);
+			TradutorMenus.getInstance().desenharAcusacao(MediadorFluxoDeJogo.getInstance().cameraMenu.cenaAcusacao);
 		}
 	}
 
