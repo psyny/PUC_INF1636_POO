@@ -77,6 +77,15 @@ public class Baralho {
 		return mao;
 	}
 	
+	public Carta obterCarta(CartaEnum nome)
+	{
+		for (Carta carta : baralho) {
+			if(carta.tipo == nome)
+				return carta;
+		}
+		return null;
+	}
+	
 	public Carta distribuirCarta()
 	{
 		Random random = new Random();

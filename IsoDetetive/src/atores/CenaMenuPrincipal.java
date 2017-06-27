@@ -60,8 +60,13 @@ public class CenaMenuPrincipal extends Scene {
 	class mouseListener_acusar extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent arg0)  {
-			MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.ACUSACAO);
-			TradutorMenus.getInstance().desenharAcusacao(MediadorFluxoDeJogo.getInstance().cameraMenu.cenaAcusacao);
+			//MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.ACUSACAO);
+			//TradutorMenus.getInstance().desenharAcusacao(MediadorFluxoDeJogo.getInstance().cameraMenu.cenaAcusacao);
+			
+			JFileChooser fileChooser = new JFileChooser();
+			fileChooser.showOpenDialog( JanelaPrincipal.getInstance() );
+			Salvador.getInstance().configurarFile(fileChooser.getSelectedFile());
+			Salvador.getInstance().salvarPartida(ControladoraDoJogo.getInstance().obterListaDeJogadores(), ControladoraDoJogo.getInstance().obterCrime(), ControladoraDoJogo.getInstance().obterJogadorDaVez());
 		}
 	}
 
