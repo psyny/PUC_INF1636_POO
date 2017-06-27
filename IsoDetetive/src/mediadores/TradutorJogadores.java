@@ -8,7 +8,7 @@ import jogo.*;
 
 
 public class TradutorJogadores {
-	private class AtoresDoJogador {
+	public class AtoresDoJogador {
 		public Jogador 		jogador;
 		public AtorJogador 	atorJogador;
 	}
@@ -25,7 +25,6 @@ public class TradutorJogadores {
 	public void adicionarJogadores() {
 		this.atoresDosJogadores = new ArrayList<AtoresDoJogador>();
 		
-
 		
 		for( Jogador jogador : ControladoraDoJogo.getInstance().obterListaDeJogadores() ) {
 			AtoresDoJogador atores = new AtoresDoJogador();
@@ -79,5 +78,13 @@ public class TradutorJogadores {
 		atoresJogador.atorJogador.definirSombreado( estado );
 	}
 	
-
+	public ArrayList<AtoresDoJogador> obterAtoresDosJogadores()
+	{
+		return atoresDosJogadores;
+	}
+	
+	public void inicializarAtoresDosJogadores()
+	{
+		atoresDosJogadores = new ArrayList<AtoresDoJogador>();
+	}
 }

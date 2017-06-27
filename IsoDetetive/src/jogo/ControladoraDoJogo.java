@@ -116,8 +116,10 @@ public class ControladoraDoJogo {
 				idxCandidato = idx + 1;
 			}
 			
-			while( (listaDeJogadores.get(idxCandidato)).emJogo == false ) {
+			while( (listaDeJogadores.get(idxCandidato)).emJogo == false) {
 				idxCandidato++;
+				if(idxCandidato == listaDeJogadores.size())
+					idxCandidato = 0;
 			}
 			
 			jogadorDaVez = listaDeJogadores.get(idxCandidato);

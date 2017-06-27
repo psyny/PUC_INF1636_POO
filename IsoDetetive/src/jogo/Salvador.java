@@ -4,11 +4,15 @@ import java.util.ArrayList;
 
 import javax.swing.text.html.HTMLDocument.HTMLReader.BlockAction;
 
+import atores.AtorJogador;
+import estruturas.Vetor2D_double;
 import interfaceGrafica.JanelaPrincipal;
 import interfaceGrafica.QuadroJogo;
 import jogo.Jogador;
 import jogo.Jogador.Nota;
 import mediadores.MediadorFluxoDeJogo;
+import mediadores.TradutorJogadores;
+import mediadores.TradutorJogadores.AtoresDoJogador;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -95,8 +99,6 @@ public class Salvador {
 				fileWriter.write(jogadorDaVez.personagem.nome);
 				
 				fileWriter.close();
-				
-				System.out.println("FOI");
 			}	
 			catch (Exception e) {
 				System.out.println(e);
@@ -106,16 +108,19 @@ public class Salvador {
 		public void carregarPartida()
 		{
 			try {
+				//File reader
 				FileReader fileReader = new FileReader(file);
 				BufferedReader reader = new BufferedReader(fileReader);
 				
-				String line;
-				
+				String line = reader.readLine();;
 				String crime[], jogadorDaVez;
 				
-				line = reader.readLine();
-				
+				//Criando um baralho
 				Baralho baralho = new Baralho();
+				
+		        JanelaPrincipal.getInstance().carregarQuadro( new QuadroJogo(false) );
+		        
+		        MediadorFluxoDeJogo.getInstance().tradutorJogadores.inicializarAtoresDosJogadores();
 				
 				int indice = 0;
 				while(!line.equals("Crime"))
@@ -129,9 +134,21 @@ public class Salvador {
 					emJogo = reader.readLine();
 					
 					MediadorFluxoDeJogo.getInstance().adicionarNovoJogador( obterPersonagem(nome) );
-					
 					Jogador jogador = ControladoraDoJogo.getInstance().listaDeJogadores.get(indice);
-					jogador.posicao = new Casa(Integer.parseInt(posicao[0]), Integer.parseInt(posicao[1]));
+
+					AtoresDoJogador atores = MediadorFluxoDeJogo.getInstance().tradutorJogadores.new AtoresDoJogador();
+					atores.jogador = jogador;
+					
+					atores.atorJogador = new AtorJogador( jogador.obterPersonagem().obterEnum() );
+					MediadorFluxoDeJogo.getInstance().cenaAtores.addActor( atores.atorJogador , 10 );
+
+					Casa casaInicial = new Casa(Integer.parseInt(posicao[0]), Integer.parseInt(posicao[1]));
+					jogador.definirPosicao( casaInicial );
+					
+					Vetor2D_double posicaoVirtual = MediadorFluxoDeJogo.getInstance().tradutorTabuleiro.obterCentroDaCasa( casaInicial.position.x , casaInicial.position.y );
+					atores.atorJogador.setVirtualPosition( posicaoVirtual.x , posicaoVirtual.y );
+					
+					MediadorFluxoDeJogo.getInstance().tradutorJogadores.obterAtoresDosJogadores().add(atores);
 					
 					for (String string : mao) {
 						jogador.mao.add(baralho.obterCarta(obterCarta(string)));
@@ -142,25 +159,35 @@ public class Salvador {
 						jogador.blocoDeNotas.add(nota);
 					}
 					
-					jogador.emJogo = (emJogo == "1") ? true : false;
+					jogador.emJogo = (emJogo.equals("1")) ? true : false;
 					
 					line = reader.readLine();
 					indice++;
 				}
 
-				
 				crime = reader.readLine().split(",");
+				ControladoraDoJogo.getInstance().crime = new ArrayList<Carta>();
 				for (String string : crime) {
-					
+					ControladoraDoJogo.getInstance().crime.add(baralho.obterCarta( obterCarta(string) ));
 				}
 				
 				line = reader.readLine();
-				
+
 				jogadorDaVez = reader.readLine();
+				for (Jogador jogador : ControladoraDoJogo.getInstance().listaDeJogadores) {
+					if(jogador.personagem.personagem.equals(obterPersonagem(jogadorDaVez)))
+					{
+						int jogadorAnterior = ControladoraDoJogo.getInstance().listaDeJogadores.indexOf(jogador) - 1;
+						if(jogadorAnterior == -1)
+							jogadorAnterior = ControladoraDoJogo.getInstance().listaDeJogadores.size() - 1;
+						ControladoraDoJogo.getInstance().jogadorDaVez = ControladoraDoJogo.getInstance().listaDeJogadores.get(jogadorAnterior);
+						break;
+					}
+				}
 				
+				MediadorFluxoDeJogo.getInstance().iniciarJogadaDaVez();
+
 				reader.close();
-				
-				JanelaPrincipal.getInstance().carregarQuadro( new QuadroJogo() );
 				
 			} catch (Exception e) {
 				System.out.println(e);
@@ -175,7 +202,7 @@ public class Salvador {
 				case "L":
 					return PersonagemEnum.L;
 				case "Sherlock Holmes":
-					return PersonagemEnum.BATMAN;
+					return PersonagemEnum.SHERLOCK;
 				case "Carmen San Diego":
 					return PersonagemEnum.CARMEN;
 				case "Pantera Cor-de-Rosa":
