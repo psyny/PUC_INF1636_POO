@@ -1,0 +1,19 @@
+pillarTiles.png
+
+Full		; Set Name
+1		; Set ID code
+0,0 		; Set start position
+128,256		; Single tile size
+128,256		; Advancement step ( usually = tile size )
+1,4		; Number of rows and cols of Tiles in Image
+-1		; Total number of tiles ( -1 set to rows*cols )
+
+Half		; Set Name
+2		; Set ID code
+512,0 		; Set start position
+128,256		; Single tile size
+128,256		; Advancement step ( usually = tile size )
+1,4		; Number of rows and cols of Tiles in Image
+-1		; Total number of tiles ( -1 set to rows*cols )
+
+#		; End of File Mark
