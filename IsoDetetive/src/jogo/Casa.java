@@ -11,11 +11,17 @@ public class Casa {
 	public CasaType 	type;//Tipo da Casa
 	public Casa			casaAnterior;//Casa Anterior
 	
+	public boolean		ehAndavel = false;
+	public boolean		ehBloqueado = true;
+	
 	//Construtor de Cada
 	public Casa( int x , int y ) {
 		this.position = new Vetor2D_int( x , y );
 		this.type = CasaType.CORREDOR;
 		this.casaAnterior = null;
+		
+		this.ehAndavel = false;
+		this.ehBloqueado = true;
 	}
 	
 
@@ -73,21 +79,10 @@ public class Casa {
 	}
 	
 	public boolean isWalkable() {
-		if( isRoom() == true ) {
+		if( this.ehBloqueado == true ) {
 			return false;
-		}
-		
-		if( isDoor() == true ) {
-			return true;
-		}
-		
-		switch( type ) {
-		case VACUO:
-		case CENTRO:
-			return false;
-
-		default:
-			return true;
+		} else {
+			return this.ehAndavel;
 		}
 	}
 	
