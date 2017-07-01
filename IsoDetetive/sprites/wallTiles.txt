@@ -1,0 +1,35 @@
+wallTiles.png
+
+DirA_Full	; Set Name
+1		; Set ID code
+0,0 		; Set start position
+128,256		; Single tile size
+128,256		; Advancement step ( usually = tile size )
+1,4		; Number of rows and cols of Tiles in Image
+-1		; Total number of tiles ( -1 set to rows*cols )
+
+DirB_Full	; Set Name
+2		; Set ID code
+0,256 		; Set start position
+128,256		; Single tile size
+128,256		; Advancement step ( usually = tile size )
+1,4		; Number of rows and cols of Tiles in Image
+-1		; Total number of tiles ( -1 set to rows*cols )
+
+DirA_Half	; Set Name
+11		; Set ID code
+512,0	 	; Set start position
+128,256		; Single tile size
+128,256		; Advancement step ( usually = tile size )
+1,4		; Number of rows and cols of Tiles in Image
+-1		; Total number of tiles ( -1 set to rows*cols )
+
+DirB_Half	; Set Name
+12		; Set ID code
+512,256	 	; Set start position
+128,256		; Single tile size
+128,256		; Advancement step ( usually = tile size )
+1,4		; Number of rows and cols of Tiles in Image
+-1		; Total number of tiles ( -1 set to rows*cols )
+
+#		; End of File Mark
