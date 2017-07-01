@@ -180,90 +180,90 @@ public class Tabuleiro {
 		}
 		
 	//Retorna os vizinhos da casa contida no (x, y) do tabuleiro
-			public ArrayList<Casa> getFreeNeighbors( Casa casa ) {
-				ArrayList<Casa> neighbors = new ArrayList<Casa>();
-
-				Casa center = this.getCell( casa.position.x , casa.position.y );
-				if( center == null ) {
-					return neighbors;
-				}
-				
-				Casa nei;
-				boolean isDoor = casa.isDoor();
-				
-				nei = this.getCell(casa.position.x+1, casa.position.y);
-				if( nei != null ) {
-					if(isFree(nei))
-						neighbors.add( nei );
-					else if(nei.isRoom() && isDoor)
-						neighbors.add( nei );
-				}
-				
-				nei = this.getCell(casa.position.x-1, casa.position.y);
-				if( nei != null ) {
-					if(isFree(nei))
-						neighbors.add( nei );
-					else if(nei.isRoom() && isDoor)
-						neighbors.add( nei );
-				}
-				
-				nei = this.getCell(casa.position.x, casa.position.y+1);
-				if( nei != null ) {
-					if(isFree(nei))
-						neighbors.add( nei );
-					else if(nei.isRoom() && isDoor)
-						neighbors.add( nei );
-				}
-
-				nei = this.getCell(casa.position.x, casa.position.y-1);
-				if( nei != null ) {
-					if(isFree(nei))
-						neighbors.add( nei );
-					else if(nei.isRoom() && isDoor)
-						neighbors.add( nei );
-				}		
-				
+		public ArrayList<Casa> getFreeNeighbors( Casa casa ) {
+			ArrayList<Casa> neighbors = new ArrayList<Casa>();
+	
+			Casa center = this.getCell( casa.position.x , casa.position.y );
+			if( center == null ) {
 				return neighbors;
 			}
 			
+			Casa nei;
+			boolean isDoor = casa.isDoor();
+			
+			nei = this.getCell(casa.position.x+1, casa.position.y);
+			if( nei != null ) {
+				if(isFree(nei))
+					neighbors.add( nei );
+				else if(nei.isRoom() && isDoor)
+					neighbors.add( nei );
+			}
+			
+			nei = this.getCell(casa.position.x-1, casa.position.y);
+			if( nei != null ) {
+				if(isFree(nei))
+					neighbors.add( nei );
+				else if(nei.isRoom() && isDoor)
+					neighbors.add( nei );
+			}
+			
+			nei = this.getCell(casa.position.x, casa.position.y+1);
+			if( nei != null ) {
+				if(isFree(nei))
+					neighbors.add( nei );
+				else if(nei.isRoom() && isDoor)
+					neighbors.add( nei );
+			}
+	
+			nei = this.getCell(casa.position.x, casa.position.y-1);
+			if( nei != null ) {
+				if(isFree(nei))
+					neighbors.add( nei );
+				else if(nei.isRoom() && isDoor)
+					neighbors.add( nei );
+			}		
+			
+			return neighbors;
+		}
+			
 	
 	// Checa se a casa esta livre para movimentar-se para ela
-	public boolean isFree( Casa casa ) {
-		// Checa se a casa é naturalmente acessivel
-		if( casa.isWalkable() == false ) {
-			return false;
-		}
-		
-		return isBlocked(casa);
-	}
-	
-	// Checa se a casa está bloqueada por um jogador ou movel
-	public boolean isBlocked( Casa casa ) {
-		// Checa se a casa está bloqueada por algum jogador
-		ArrayList<Jogador> Jogadores = ControladoraDoJogo.getInstance().obterListaDeJogadores();
-		for( Jogador jogador : Jogadores ) {
-			if( jogador.posicao == casa ) {
+		public boolean isFree( Casa casa ) {
+			// Checa se a casa é naturalmente acessivel
+			if( casa.isWalkable() == false ) {
 				return false;
 			}
+			
+			return isBlocked(casa);
 		}
-		
-		return true;
-	}
+	
+	// Checa se a casa está bloqueada por um jogador ou movel
+		public boolean isBlocked( Casa casa ) {
+			// Checa se a casa está bloqueada por algum jogador
+			ArrayList<Jogador> Jogadores = ControladoraDoJogo.getInstance().obterListaDeJogadores();
+			for( Jogador jogador : Jogadores ) {
+				if( jogador.posicao == casa ) {
+					return false;
+				}
+			}
+			
+			return true;
+		}
 	
 	// Retorna a casa na posicao x e y se a casa é livre para movimentar-se
-	public Casa getFreeCell( int x , int y ) {
-		Casa casa = getCell(x,y);
-		
-		if( casa == null ) {
-			return null;
+		public Casa getFreeCell( int x , int y ) {
+			Casa casa = getCell(x,y);
+			
+			if( casa == null ) {
+				return null;
+			}
+			
+			if( isFree(casa) == false ) {
+				return null;
+			}
+			
+			return casa;
 		}
-		
-		if( isFree(casa) == false ) {
-			return null;
-		}
-		
-		return casa;
-	}
 	
 	// Obter todas as casas de um determinado tipo
 		public ArrayList<Casa> obterCasasDoTipo() {
@@ -293,7 +293,65 @@ public class Tabuleiro {
 					}
 					
 					if( casa.type == tipo ) {
-						casas.add( casa );
+						casas.add(casa);
+					}
+				}	
+			}
+			
+			return casas;
+		}
+	
+	//obter todas as casa adjacentes a porta
+		public ArrayList<Casa> obterCasasAdjacentePorta()
+		{
+			ArrayList<Casa> casas = new ArrayList<Casa>();
+			
+			for( int y = 0 ; y < linhas ; y++ ) {
+				for( int x = 0 ; x < colunas ; x++ ) {
+					Casa casa = null;
+					try{
+						casa = this.casas.get(y).get(x);
+					}
+					catch (Exception e) {
+						System.out.println(x);
+						System.out.println(y);
+					}
+					
+					if( casa.isDoor() ) {
+						for(Casa casaVizinha : getNeighbors(casa))
+						{
+							if(casaVizinha.isRoom())
+								casas.add(casaVizinha);
+						}
+					}
+				}	
+			}
+			
+			return casas;
+		}
+		
+	//obter as casa adjacentes a porta do tipo passado
+		public ArrayList<Casa> obterCasasAdjacentePorta( CasaType tipo )
+		{
+			ArrayList<Casa> casas = new ArrayList<Casa>();
+			
+			for( int y = 0 ; y < linhas ; y++ ) {
+				for( int x = 0 ; x < colunas ; x++ ) {
+					Casa casa = null;
+					try{
+						casa = this.casas.get(y).get(x);
+					}
+					catch (Exception e) {
+						System.out.println(x);
+						System.out.println(y);
+					}
+					
+					if( casa.type == tipo ) {
+						for(Casa casaVizinha : getNeighbors(casa))
+						{
+							if(casaVizinha.isRoom())
+								casas.add(casaVizinha);
+						}
 					}
 				}	
 			}
@@ -327,13 +385,13 @@ public class Tabuleiro {
 					case SL_INVERNO:
 					case ESCRITORIO:
 						if(jogador.posicao.type != CasaType.COZINHA)
-							casas.addAll(obterCasasDoTipo( CasaType.COZINHA ));
+							casas.addAll(obterCasasAdjacentePorta( CasaType.COZINHA_PORTA ));
 						if(jogador.posicao.type != CasaType.SL_ESTAR)
-							casas.addAll(obterCasasDoTipo( CasaType.SL_ESTAR ));
+							casas.addAll(obterCasasAdjacentePorta( CasaType.SL_ESTAR_PORTA ));
 						if(jogador.posicao.type != CasaType.SL_INVERNO)
-							casas.addAll(obterCasasDoTipo( CasaType.SL_INVERNO ));
+							casas.addAll(obterCasasAdjacentePorta( CasaType.SL_INVERNO_PORTA ));
 						if(jogador.posicao.type != CasaType.ESCRITORIO)
-							casas.addAll(obterCasasDoTipo( CasaType.ESCRITORIO ));
+							casas.addAll(obterCasasAdjacentePorta( CasaType.ESCRITORIO_PORTA ));
 						break;
 						
 					/*case SL_MUSICA:
