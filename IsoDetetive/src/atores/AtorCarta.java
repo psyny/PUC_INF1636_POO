@@ -7,7 +7,7 @@ import animacao.Actor;
 import animacao.AnimatedSprite;
 import estruturas.Vetor2D_int;
 import jogo.Carta;
-import jogo.CartaEnum;
+import jogo.CartaType;
 
 public class AtorCarta extends Actor {
 	private class mouseListener_mouseOver extends MouseAdapter {
@@ -34,7 +34,7 @@ public class AtorCarta extends Actor {
 	private AnimatedSprite 	seletor = null;
 	protected boolean 	flagSelecionado = false;
 	
-	private CartaEnum	tipo;
+	private CartaType	tipo;
 	
 	public AtorCarta() {
 		super(120, 180);
@@ -58,14 +58,14 @@ public class AtorCarta extends Actor {
 		carta.playAnimation(2);
 	}
 	
-	public void definirCarta( CartaEnum tipo )
+	public void definirCarta( CartaType tipo )
 	{
 		this.tipo = tipo;
 		String arquivo = this.obterArquivoCarta(tipo);		
 		this.definirCarta(arquivo);
 	}
 	
-	public String obterArquivoCarta( CartaEnum tipo ) {
+	public String obterArquivoCarta( CartaType tipo ) {
 		switch (tipo) {
 		
 		case BATMAN:
@@ -154,7 +154,7 @@ public class AtorCarta extends Actor {
 		}
 	}
 	
-	public CartaEnum obterTipo() {
+	public CartaType obterTipo() {
 		return this.tipo;
 	}
 	

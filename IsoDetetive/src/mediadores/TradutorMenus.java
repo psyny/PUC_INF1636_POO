@@ -13,7 +13,7 @@ import atores.CenaMao;
 import atores.CenaPalpite;
 import jogo.Baralho;
 import jogo.Carta;
-import jogo.CartaEnum;
+import jogo.CartaType;
 import jogo.ControladoraDoJogo;
 import jogo.Jogador;
 import jogo.Jogador.Nota;

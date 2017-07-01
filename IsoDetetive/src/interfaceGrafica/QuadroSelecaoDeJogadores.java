@@ -125,15 +125,15 @@ public class QuadroSelecaoDeJogadores extends JPanel {
 		        int y = 350;
 		        int incX = 160;
 		        
-		        ArrayList<CartaEnum> cartasPersonagens = new ArrayList<CartaEnum>();
-		        cartasPersonagens.add(CartaEnum.L);
-		        cartasPersonagens.add(CartaEnum.SHERLOCK);
-		        cartasPersonagens.add(CartaEnum.CARMEN);
-		        cartasPersonagens.add(CartaEnum.PANTERA);
-		        cartasPersonagens.add(CartaEnum.EDMORT);
-		        cartasPersonagens.add(CartaEnum.BATMAN);
+		        ArrayList<CartaType> cartasPersonagens = new ArrayList<CartaType>();
+		        cartasPersonagens.add(CartaType.L);
+		        cartasPersonagens.add(CartaType.SHERLOCK);
+		        cartasPersonagens.add(CartaType.CARMEN);
+		        cartasPersonagens.add(CartaType.PANTERA);
+		        cartasPersonagens.add(CartaType.EDMORT);
+		        cartasPersonagens.add(CartaType.BATMAN);
 		        
-		        for( CartaEnum cartaTipo : cartasPersonagens ) {
+		        for( CartaType cartaTipo : cartasPersonagens ) {
 			        carta = new AtorCarta();
 			        carta.definirCarta( cartaTipo );
 			        carta.addMouseListener( new mouseListener_seletor(carta) );

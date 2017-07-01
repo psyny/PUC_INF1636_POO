@@ -217,53 +217,53 @@ public class Salvador {
 			}
 		}
 		
-		private CartaEnum obterCarta(String nome)
+		private CartaType obterCarta(String nome)
 		{
 			switch (nome) 
 			{
 			
 				case "SALA_DE_JOGOS":
-					return CartaEnum.SALA_DE_JOGOS;
+					return CartaType.SALA_DE_JOGOS;
 				case "BATRANGUE":
-					return CartaEnum.BATRANGUE;
+					return CartaType.BATRANGUE;
 				case "COZINHA":
-					return CartaEnum.COZINHA;
+					return CartaType.COZINHA;
 				case "SALA_DE_ESTAR":
-					return CartaEnum.SALA_DE_ESTAR;
+					return CartaType.SALA_DE_ESTAR;
 				case "DIAMANTE":
-					return CartaEnum.DIAMANTE;
+					return CartaType.DIAMANTE;
 				case "PANTERA":
-					return CartaEnum.PANTERA;
+					return CartaType.PANTERA;
 				case "SHERLOCK":
-					return CartaEnum.SHERLOCK;
+					return CartaType.SHERLOCK;
 				case "CARMEN":
-					return CartaEnum.CARMEN;
+					return CartaType.CARMEN;
 				case "FEDORA":
-					return CartaEnum.FEDORA;
+					return CartaType.FEDORA;
 				case "SALA_DE_JANTAR":
-					return CartaEnum.SALA_DE_JANTAR;
+					return CartaType.SALA_DE_JANTAR;
 				case "BIBLIOTECA":
-					return CartaEnum.BIBLIOTECA;
+					return CartaType.BIBLIOTECA;
 				case "REVOLVER":
-					return CartaEnum.REVOLVER;
+					return CartaType.REVOLVER;
 				case "BATMAN":
-					return CartaEnum.BATMAN;
+					return CartaType.BATMAN;
 				case "L":
-					return CartaEnum.L;
+					return CartaType.L;
 				case "ENTRADA":
-					return CartaEnum.ENTRADA;
+					return CartaType.ENTRADA;
 				case "SALA_DE_MUSICA":
-					return CartaEnum.SALA_DE_MUSICA;
+					return CartaType.SALA_DE_MUSICA;
 				case "ESCRITORIO":
-					return CartaEnum.ESCRITORIO;
+					return CartaType.ESCRITORIO;
 				case "CACHIMBO":
-					return CartaEnum.CACHIMBO;
+					return CartaType.CACHIMBO;
 				case "DEATH_NOTE":
-					return CartaEnum.DEATH_NOTE;
+					return CartaType.DEATH_NOTE;
 				case "JARDIM_INVERNO":
-					return CartaEnum.JARDIM_INVERNO;
+					return CartaType.JARDIM_INVERNO;
 				case "EDMORT":
-					return CartaEnum.EDMORT;
+					return CartaType.EDMORT;
 	
 				default:
 					return null;

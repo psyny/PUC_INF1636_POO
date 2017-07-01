@@ -7,12 +7,6 @@ public class Palpite {
 	public Carta arma;
 	public Carta suspeito;
 	
-	public Palpite(Carta comodo, Carta arma, Carta suspeito)
-	{
-		this.comodo = comodo;
-		this.arma = arma;
-		this.suspeito = suspeito;
-	}
 	
 	public ArrayList<Carta> obterListaCartas()
 	{

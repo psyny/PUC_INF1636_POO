@@ -13,29 +13,29 @@ public class Baralho {
 	
 	public Baralho()
 	{
-		pilhaArmas.add(new Carta(CartaEnum.DEATH_NOTE));
-		pilhaArmas.add(new Carta(CartaEnum.DIAMANTE));
-		pilhaArmas.add(new Carta(CartaEnum.FEDORA));
-		pilhaArmas.add(new Carta(CartaEnum.BATRANGUE));
-		pilhaArmas.add(new Carta(CartaEnum.CACHIMBO));
-		pilhaArmas.add(new Carta(CartaEnum.REVOLVER));
+		pilhaArmas.add(new Carta(CartaType.DEATH_NOTE));
+		pilhaArmas.add(new Carta(CartaType.DIAMANTE));
+		pilhaArmas.add(new Carta(CartaType.FEDORA));
+		pilhaArmas.add(new Carta(CartaType.BATRANGUE));
+		pilhaArmas.add(new Carta(CartaType.CACHIMBO));
+		pilhaArmas.add(new Carta(CartaType.REVOLVER));
 		
-		pilhaComodos.add(new Carta(CartaEnum.BIBLIOTECA));
-		pilhaComodos.add(new Carta(CartaEnum.COZINHA));
-		pilhaComodos.add(new Carta(CartaEnum.ENTRADA));
-		pilhaComodos.add(new Carta(CartaEnum.ESCRITORIO));
-		pilhaComodos.add(new Carta(CartaEnum.JARDIM_INVERNO));
-		pilhaComodos.add(new Carta(CartaEnum.SALA_DE_ESTAR));
-		pilhaComodos.add(new Carta(CartaEnum.SALA_DE_JANTAR));
-		pilhaComodos.add(new Carta(CartaEnum.SALA_DE_MUSICA));
-		pilhaComodos.add(new Carta(CartaEnum.SALA_DE_JOGOS));
+		pilhaComodos.add(new Carta(CartaType.BIBLIOTECA));
+		pilhaComodos.add(new Carta(CartaType.COZINHA));
+		pilhaComodos.add(new Carta(CartaType.ENTRADA));
+		pilhaComodos.add(new Carta(CartaType.ESCRITORIO));
+		pilhaComodos.add(new Carta(CartaType.JARDIM_INVERNO));
+		pilhaComodos.add(new Carta(CartaType.SALA_DE_ESTAR));
+		pilhaComodos.add(new Carta(CartaType.SALA_DE_JANTAR));
+		pilhaComodos.add(new Carta(CartaType.SALA_DE_MUSICA));
+		pilhaComodos.add(new Carta(CartaType.SALA_DE_JOGOS));
 		
-		pilhaSuspeitos.add(new Carta(CartaEnum.L));
-		pilhaSuspeitos.add(new Carta(CartaEnum.SHERLOCK));
-		pilhaSuspeitos.add(new Carta(CartaEnum.CARMEN));
-		pilhaSuspeitos.add(new Carta(CartaEnum.PANTERA));
-		pilhaSuspeitos.add(new Carta(CartaEnum.EDMORT));
-		pilhaSuspeitos.add(new Carta(CartaEnum.BATMAN));
+		pilhaSuspeitos.add(new Carta(CartaType.L));
+		pilhaSuspeitos.add(new Carta(CartaType.SHERLOCK));
+		pilhaSuspeitos.add(new Carta(CartaType.CARMEN));
+		pilhaSuspeitos.add(new Carta(CartaType.PANTERA));
+		pilhaSuspeitos.add(new Carta(CartaType.EDMORT));
+		pilhaSuspeitos.add(new Carta(CartaType.BATMAN));
 		
 		baralho.addAll(pilhaArmas);
 		baralho.addAll(pilhaComodos);
@@ -77,7 +77,7 @@ public class Baralho {
 		return mao;
 	}
 	
-	public Carta obterCarta(CartaEnum nome)
+	public Carta obterCarta(CartaType nome)
 	{
 		for (Carta carta : baralho) {
 			if(carta.tipo == nome)

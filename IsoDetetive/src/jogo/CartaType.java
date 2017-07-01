@@ -1,6 +1,6 @@
 package jogo;
 
-public enum CartaEnum {
+public enum CartaType {
 		DEATH_NOTE,
 		BATRANGUE,
 		CACHIMBO,

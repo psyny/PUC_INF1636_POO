@@ -154,28 +154,28 @@ public class Jogador {
 		return null;
 	}
 	
-	private CartaEnum obterCartaEnumComodo(Casa casa)
+	private CartaType obterCartaEnumComodo(Casa casa)
 	{
 		switch (casa.type) {
 		
 			case BIBLIOTECA:
-				return CartaEnum.BIBLIOTECA;
+				return CartaType.BIBLIOTECA;
 			case COZINHA:
-				return CartaEnum.COZINHA;
+				return CartaType.COZINHA;
 			case ENTRADA:
-				return CartaEnum.ENTRADA;
+				return CartaType.ENTRADA;
 			case SL_ESTAR:
-				return CartaEnum.SALA_DE_ESTAR;
+				return CartaType.SALA_DE_ESTAR;
 			case SL_JOGOS:
-				return CartaEnum.SALA_DE_JOGOS;
+				return CartaType.SALA_DE_JOGOS;
 			case SL_INVERNO:
-				return CartaEnum.JARDIM_INVERNO;
+				return CartaType.JARDIM_INVERNO;
 			case SL_MUSICA:
-				return CartaEnum.SALA_DE_MUSICA;
+				return CartaType.SALA_DE_MUSICA;
 			case ESCRITORIO:
-				return CartaEnum.ESCRITORIO;
+				return CartaType.ESCRITORIO;
 			case SL_JANTAR:
-				return CartaEnum.SALA_DE_JANTAR;
+				return CartaType.SALA_DE_JANTAR;
 	
 			default:
 				return null;
