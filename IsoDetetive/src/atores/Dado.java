@@ -13,16 +13,23 @@ public class Dado extends ActorPhysics implements AnimationEndObserved {
 	
 	private Vetor3D_double posicaoAlvo = new Vetor3D_double( 0, 0 ,0 );
 	
+	private int realLayer = 0;
+	
 	public Dado( int sizeX , int sizeY ) {
 		super(sizeX,sizeY);
 		
 		setVisible(false);
-		
+
 		addAnimatedSprite( "dice.txt" , new Vetor2D_int(0,0) , 0 );
 	}
 
 	public Dado() {
 		this(180, 180);
+	}
+	
+	public void setDesiredLayer( int desiredLayer ) { 
+		super.setDesiredLayer(desiredLayer);
+		this.realLayer = this.desiredLayer;
 	}
 	
 	public void Lancar( Vetor2D_double posicaoAlvo , int resultado ) {
@@ -38,6 +45,8 @@ public class Dado extends ActorPhysics implements AnimationEndObserved {
 		this.resultado = resultado;
 		acceleration.z = -1;
 		speed.y = 2;	
+		
+		this.desiredLayer = 9999999;
 	}
 	
 	@Override
@@ -80,6 +89,8 @@ public class Dado extends ActorPhysics implements AnimationEndObserved {
 	}
 	
 	private void animationEndNotityObservers() {
+		this.desiredLayer = this.realLayer;
+		
 		for( AnimationEndObserver ob : animationEndObserverList ) {
 			ob.animationEndNotify(this);
 		}

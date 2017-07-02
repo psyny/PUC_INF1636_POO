@@ -49,10 +49,14 @@ public class CenaAcusacao extends Scene {
 		setBackground(Color.WHITE);
 		setOpaque(false);
 		
-		confirma = new AtorBotaoMenuJogo( "botao_confirmar.txt" );
+
+        AtorEtiqueta titulo = new AtorEtiqueta( AtorEtiqueta.Tipo.ACUSAR );
+        addActor( titulo , 1 );
+        titulo.setLocation(0, -30);							confirma = new AtorBotaoMenuJogo( "botao_confirmar.txt" );
 		confirma.setLocation( 820 , 20 );  
 		confirma.addMouseListener( new mouseListener_confirma() );
 		this.addActor( confirma , 10 );	
+
 
 		fechar = new AtorBotaoMenuJogo( "botao_fechar.txt" );
 		fechar.setLocation( 880 , 20 );  

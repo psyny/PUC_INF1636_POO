@@ -297,6 +297,10 @@ public class Actor extends JLayeredPane implements Animavel {
 		}
 	}
 	
+	public void setDesiredLayer( int desiredLayer ) {
+		this.desiredLayer = desiredLayer;
+	}
+	
 	public int getLayer() {
 		int layer = 0;
 		

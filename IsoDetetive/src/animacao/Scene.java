@@ -45,7 +45,7 @@ public class Scene extends JLayeredPane implements Animavel {
 	}	
 	
 	public synchronized void addActor( Actor actor , int layer ) {
-		actor.desiredLayer = layer;
+		actor.setDesiredLayer( layer );
 		actor.parentScene = this;
 		
 		this.toAdd.add( actor );

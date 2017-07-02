@@ -62,6 +62,10 @@ public class AtorEtiqueta extends Actor {
 				botaoFile = "label_bloco.txt";
 				break;
 				
+			case FACA_SEU_PALPITE:
+				botaoFile = "label_palpite.txt";
+				break;				
+				
 			case SUA_MAO:
 				botaoFile = "label_mao.txt";
 				break;
