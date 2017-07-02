@@ -103,6 +103,10 @@ public class Casa {
 	public boolean isBlocked() {
 		return this.ehBloqueado;
 	}
+	
+	public void definirBloqueado( boolean flag ) {
+		this.ehBloqueado = flag;
+	}
 
 
 	

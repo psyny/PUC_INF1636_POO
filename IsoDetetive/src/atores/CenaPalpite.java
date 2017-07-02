@@ -45,6 +45,10 @@ public class CenaPalpite extends Scene {
 		setBackground(Color.WHITE);
 		setOpaque(false);
 		
+        AtorEtiqueta titulo = new AtorEtiqueta( AtorEtiqueta.Tipo.FACA_SEU_PALPITE );
+        addActor( titulo , 1 );
+        titulo.setLocation(0, -30);				
+		
 		//TODO - tornar o botão confirma dinamico em função do numero de cartas selecionadas	
 		Actor confirma;
 		confirma = new AtorBotaoMenuJogo( "botao_confirmar.txt" );

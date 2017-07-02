@@ -21,9 +21,10 @@ public class TradutorTabuleiro {
 		public int x;
 		public int y;
 		
-		public ArrayList<Actor> atoresCortaveis = new ArrayList<Actor>();
-		public ArrayList<Actor> atoresOcultaveis = new ArrayList<Actor>();
-		public ArrayList<Actor> atoresTemporarios = new ArrayList<Actor>();
+		public ArrayList<AtorParede> atoresParedes = new ArrayList<AtorParede>();
+		public ArrayList<AtorPilar> atoresPilares = new ArrayList<AtorPilar>();
+		public ArrayList<Actor> atoresDecoracoes = new ArrayList<Actor>();
+		public ArrayList<Actor> atoresOutros = new ArrayList<Actor>();
 		
 		public Casa casa = null;
 		
@@ -45,6 +46,9 @@ public class TradutorTabuleiro {
 	protected ArrayList<ArrayList<Celula>> 	celulasGraficas = new ArrayList<ArrayList<Celula>>();
 	protected ArrayList<Celula> 			registro_celulasGraficas = new ArrayList<Celula>();
 	
+	protected ArrayList<Celula> 			paredesEscondidas = new ArrayList<Celula>();
+	
+	
 	public TradutorTabuleiro( int casa_largura , int casa_altura ) {
 		// Checa se os objetos necessarios foram registrados no fluxo de jogo
 		MediadorFluxoDeJogo.getInstance().checarRegistroCenaTabuleiro();
@@ -54,6 +58,53 @@ public class TradutorTabuleiro {
 		this.casa_altura 	= casa_altura;
 		
 		this.gerarCelulas();
+	}
+	
+	//Checa se dois inteiros fazem parte do tabuleiro
+	protected boolean ehNaGrade( int x , int y ) {
+		if( x < 0 ) {
+			return false;
+		}
+		if( x >= this.colunas ) {
+			return false;
+		}
+		if( y < 0 ) {
+			return false;
+		}
+		if( y >= this.linhas ) {
+			return false;
+		}
+		return true;
+	}	
+	
+	// Retorna a celulaGrafica contida no (x, y) do tabuleiro
+	protected Celula obterCelula( int x , int y ) {
+		if( this.ehNaGrade(x, y) == false ) {
+			return null;
+		}
+		
+		return this.celulasGraficas.get(y).get(x);
+	}	
+	
+	protected ArrayList<Celula> obterCelulasNaDist( Celula celulaOrigem , int distancia ) {
+		ArrayList<Celula> celulas = new ArrayList<Celula>();
+		
+		int ox = celulaOrigem.x;
+		int oy = celulaOrigem.y;
+		
+		Celula celulaTemp = null;
+		for( int x = ox - distancia ; x <= ox + distancia ; x ++ ) {
+			for( int y = oy - distancia ; y <= oy + distancia ; y ++ ) {
+				if( x == ox && y == oy ) continue;
+				
+				celulaTemp = obterCelula( x , y );
+				if( celulaTemp != null ) {
+					celulas.add( celulaTemp );
+				}
+ 			}
+		}
+		
+		return celulas;
 	}
 	
 	public void popularTabuleiroGrafico() {
@@ -233,9 +284,16 @@ public class TradutorTabuleiro {
 		// Processa as informacoes das celulas, gerando atores graficos e alterando a controladora de jogo
 		public void compilarCelulas() {
 			
+			// Primeira passada - peredes internas
 			for( Celula celulaGrafica : registro_celulasGraficas ) {
 				// Verifica se e parede
 				processarParede( celulaGrafica );
+			}
+			
+			// Primeira passada - pilares de conexoes
+			for( Celula celulaGrafica : registro_celulasGraficas ) {
+				// Verifica se e parede
+				processarPilaresConexoes( celulaGrafica );
 			}
 		}
 		
@@ -252,6 +310,128 @@ public class TradutorTabuleiro {
 			}
 			
 			return;
+		}
+		
+		private void processarPilaresConexoes( Celula celulaGrafica ) {
+			// Checa quais pilares sao possiveis de adicionar a esta celula grafica
+			int[] pilaresPossiveis = { 1 , 2 , 3 , 4 };
+			
+			for( AtorParede atorParede : celulaGrafica.atoresParedes ) {
+				if( atorParede.direcao == Tabuleiro.DIRECOES.NORTE ) {
+					if( atorParede.paredeFlag == 1 || atorParede.paredeFlag == 2 ) {
+						pilaresPossiveis[1] = 0;
+					}
+					if( atorParede.paredeFlag == 1 || atorParede.paredeFlag == 3 ) {
+						pilaresPossiveis[0] = 0;
+					}
+				}
+				else if( atorParede.direcao == Tabuleiro.DIRECOES.SUL ) {
+					if( atorParede.paredeFlag == 1 || atorParede.paredeFlag == 2 ) {
+						pilaresPossiveis[2] = 0;
+					}
+					if( atorParede.paredeFlag == 1 || atorParede.paredeFlag == 3 ) {
+						pilaresPossiveis[3] = 0;
+					}
+				}
+				else if( atorParede.direcao == Tabuleiro.DIRECOES.OESTE ) {
+					if( atorParede.paredeFlag == 1 || atorParede.paredeFlag == 2 ) {
+						pilaresPossiveis[0] = 0;
+					}
+					if( atorParede.paredeFlag == 1 || atorParede.paredeFlag == 3 ) {
+						pilaresPossiveis[3] = 0;
+					}
+				}
+				else if( atorParede.direcao == Tabuleiro.DIRECOES.LESTE ) {
+					if( atorParede.paredeFlag == 1 || atorParede.paredeFlag == 2 ) {
+						pilaresPossiveis[1] = 0;
+					}
+					if( atorParede.paredeFlag == 1 || atorParede.paredeFlag == 3 ) {
+						pilaresPossiveis[2] = 0;
+					}
+				}
+			}
+			
+			// Checa se sobrou algum pillar...
+			if( pilaresPossiveis[0] == 0 && pilaresPossiveis[1] == 0 && pilaresPossiveis[2] == 0 && pilaresPossiveis[3] == 0 ) {
+				return;
+			}
+			
+			// Para cada pilar possivel, calcular se eh necessario
+			int x = celulaGrafica.x;
+			int y = celulaGrafica.y;
+			
+			Celula celulaNorte 	= this.obterCelula( x , y-1 );
+			Celula celulaSul 	= this.obterCelula( x , y+1 );
+			Celula celulaOeste 	= this.obterCelula( x-1 , y );
+			Celula celulaLeste 	= this.obterCelula( x+1 , y );
+			
+			int[] pilaresFlags = { 0 , 0 , 0 , 0 };
+			
+			if( celulaNorte != null ) {
+				for( AtorParede atorParede : celulaNorte.atoresParedes ) {
+					if( pilaresPossiveis[0] > 0 && atorParede.direcao == Tabuleiro.DIRECOES.OESTE ) {
+						if( atorParede.paredeFlag == 1 || atorParede.paredeFlag == 3 ) {
+							pilaresFlags[0] = 1;
+						}
+					}
+					
+					if( pilaresPossiveis[1] > 0 && atorParede.direcao == Tabuleiro.DIRECOES.LESTE ) {
+						if( atorParede.paredeFlag == 1 || atorParede.paredeFlag == 3 ) {
+							pilaresFlags[1] = 2;
+						}
+					}
+				}
+			}
+			
+			if( celulaSul != null ) {
+				for( AtorParede atorParede : celulaSul.atoresParedes ) {
+					if( pilaresPossiveis[2] > 0 && atorParede.direcao == Tabuleiro.DIRECOES.LESTE ) {
+						if( atorParede.paredeFlag == 1 || atorParede.paredeFlag == 2 ) {
+							pilaresFlags[2] = 3;
+						}
+					}
+					
+					if( pilaresPossiveis[3] > 0 && atorParede.direcao == Tabuleiro.DIRECOES.OESTE ) {
+						if( atorParede.paredeFlag == 1 || atorParede.paredeFlag == 2 ) {
+							pilaresFlags[3] = 4;
+						}
+					}
+				}
+			}
+			
+			if( celulaLeste != null ) { 
+				for( AtorParede atorParede : celulaLeste.atoresParedes ) {
+					if( pilaresPossiveis[1] > 0 && atorParede.direcao == Tabuleiro.DIRECOES.NORTE ) {
+						if( atorParede.paredeFlag == 1 || atorParede.paredeFlag == 3 ) {
+							pilaresFlags[1] = 2;
+						}
+					}
+					
+					if( pilaresPossiveis[2] > 0 && atorParede.direcao == Tabuleiro.DIRECOES.SUL ) {
+						if( atorParede.paredeFlag == 1 || atorParede.paredeFlag == 3 ) {
+							pilaresFlags[2] = 3;
+						}
+					}
+				}
+			}
+			
+			if( celulaOeste != null ) { 
+				for( AtorParede atorParede : celulaOeste.atoresParedes ) {
+					if( pilaresPossiveis[0] > 0 && atorParede.direcao == Tabuleiro.DIRECOES.NORTE ) {
+						if( atorParede.paredeFlag == 1 || atorParede.paredeFlag == 2 ) {
+							pilaresFlags[0] = 1;
+						}
+					}
+					
+					if( pilaresPossiveis[3] > 0 && atorParede.direcao == Tabuleiro.DIRECOES.SUL ) {
+						if( atorParede.paredeFlag == 1 || atorParede.paredeFlag == 2 ) {
+							pilaresFlags[3] = 4;
+						}
+					}
+				}
+			}
+			
+			adicionarPilaresACena( celulaGrafica , pilaresFlags , false );
 		}
 		
 		private void processarParede_comodo( Celula celulaGrafica ) {
@@ -333,7 +513,10 @@ public class TradutorTabuleiro {
 			MediadorFluxoDeJogo.getInstance().cenaAtores.addActor( atorParede , layer );
 			atorParede.setVirtualPosition( posicao.x , posicao.y , 0 );	
 			
-			celulaGrafica.atoresCortaveis.add( atorParede );
+			celulaGrafica.atoresParedes.add( atorParede );
+			
+			// Marca a casa como bloquada
+			celulaGrafica.casa.definirBloqueado(true);
 		}
 		
 		private int[] obterFlagsPilar( int paredeFlag_NORTE , int paredeFlag_SUL , int paredeFlag_LESTE , int paredeFlag_OESTE ) {
@@ -362,8 +545,11 @@ public class TradutorTabuleiro {
 			return pillarFlags;
 		}		
 		
-
 		private void adicionarPilaresACena( Celula celulaGrafica , int[] flagsPilares ) {
+			adicionarPilaresACena( celulaGrafica , flagsPilares , false );
+		}
+
+		private void adicionarPilaresACena( Celula celulaGrafica , int[] flagsPilares , boolean checaExistencia ) {
 			Casa centro = celulaGrafica.casa;
 			
 			int layer = 0;
@@ -404,7 +590,62 @@ public class TradutorTabuleiro {
 				MediadorFluxoDeJogo.getInstance().cenaAtores.addActor( atorPilar , layer );
 				atorPilar.setVirtualPosition( posicao.x , posicao.y , 0 );	
 				
-				celulaGrafica.atoresCortaveis.add( atorPilar );
+				
+				
+				celulaGrafica.atoresPilares.add( atorPilar );
 			}
-		}		
+		}	
+		
+	// Escondendo paredes
+		private void adicionarParedeEscondida( Celula celula ) {
+			if( paredesEscondidas.indexOf( celula ) < 0 ) {
+				paredesEscondidas.add( celula );
+			}
+		}
+		protected void esconderParedes( ArrayList<Casa> aoRedorDe ) {
+			paredesEscondidas.clear();
+			
+			ArrayList<Celula> vizinhos = new ArrayList<Celula>();
+			
+			// Descobrir casas
+			for( Casa casa : aoRedorDe ) {
+				// Todas as casas passadas sao adicionadas
+				Celula celula = obterCelula( casa.position.x , casa.position.y );
+				adicionarParedeEscondida( celula );
+				
+				// E tambem suas vizinhas
+				int x = celula.x;
+				int y = celula.y;
+				
+				vizinhos = obterCelulasNaDist( celula , 2 );
+				
+				for( Celula vizinho : vizinhos ) {
+					adicionarParedeEscondida( vizinho );
+				}
+			}
+			
+			// Esconder as paredes
+			for( Celula celula : paredesEscondidas ) {
+				for( AtorParede atorParede : celula.atoresParedes ) {
+					atorParede.ehPelaMetade( true );
+				}
+				for( AtorPilar atorPilar : celula.atoresPilares ) {
+					atorPilar.ehPelaMetade( true );
+				}
+			}
+		}
+		
+		protected void exibirParedes() {
+			// Exibir as paredes
+			for( Celula celula : paredesEscondidas ) {
+				for( AtorParede atorParede : celula.atoresParedes ) {
+					atorParede.ehPelaMetade( false );
+				}
+				for( AtorPilar atorPilar : celula.atoresPilares ) {
+					atorPilar.ehPelaMetade( false );
+				}
+			}
+			
+			paredesEscondidas.clear();
+		}
 } 

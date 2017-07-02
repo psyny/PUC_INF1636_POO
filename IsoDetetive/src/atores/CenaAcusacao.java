@@ -43,6 +43,10 @@ public class CenaAcusacao extends Scene {
 		setBackground(Color.WHITE);
 		setOpaque(false);
 		
+        AtorEtiqueta titulo = new AtorEtiqueta( AtorEtiqueta.Tipo.ACUSAR );
+        addActor( titulo , 1 );
+        titulo.setLocation(0, -30);					
+				
 		Actor confirma;
 		confirma = new AtorBotaoMenuJogo( "botao_confirmar.txt" );
 		confirma.setLocation( 820 , 20 );  

@@ -24,7 +24,8 @@ public class TradutorMovimentacao implements Observer_CasaSelecionada , MouseLis
 	}
 	
 	public void marcarCasas() {
-		for( Casa casa : ControladoraDoJogo.getInstance().obterMovimentacaoPossivel() ) {
+		ArrayList<Casa> casas = ControladoraDoJogo.getInstance().obterMovimentacaoPossivel();
+		for( Casa casa : casas ) {
 			Marcador marcador = new Marcador();
 			marcador.casaReferente.x = casa.position.x;
 			marcador.casaReferente.y = casa.position.y;
@@ -35,6 +36,8 @@ public class TradutorMovimentacao implements Observer_CasaSelecionada , MouseLis
 			Vetor2D_double posicao = MediadorFluxoDeJogo.getInstance().tradutorTabuleiro.obterCentroDaCasa( casa.position.x , casa.position.y );
 			marcador.setVirtualPosition( posicao.x , posicao.y , 0 );
 		}
+		
+		MediadorFluxoDeJogo.getInstance().tradutorTabuleiro.esconderParedes( casas );
 	}
 	
 	public void desmarcarCasas() {
@@ -42,6 +45,8 @@ public class TradutorMovimentacao implements Observer_CasaSelecionada , MouseLis
 			ator.setToDestroy();
 		}
 		casasMarcadas.clear();
+		
+		MediadorFluxoDeJogo.getInstance().tradutorTabuleiro.exibirParedes();
 	}
 
 	@Override

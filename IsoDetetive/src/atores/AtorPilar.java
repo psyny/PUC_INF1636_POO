@@ -6,11 +6,13 @@ import jogo.Tabuleiro;
 import mediadores.TradutorTabuleiro;
 
 public class AtorPilar extends Actor {
-	protected TileSetSprite spritePilar;
-	protected int	tile = 1;
+	protected 	TileSetSprite 	spritePilar;
+	protected 	int				tile = 1;
+	public 		int				flag = 0;
 
 	public AtorPilar( int flagPilar ) {
 		super( 128 , 256 );
+		flag = flagPilar;
 	
 		Vetor2D_int offset = new Vetor2D_int( 0 , 0 );
 		
@@ -36,7 +38,7 @@ public class AtorPilar extends Actor {
 		
 		
 		// Desenhando o sprite em si
-		ehPelaMetade( true );
+		ehPelaMetade( false );
 	}
 	
 	public void ehPelaMetade( boolean flag ) {

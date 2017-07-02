@@ -166,8 +166,10 @@ public class MediadorFluxoDeJogo {
 				if( jogadorDaVez.obterPosicao().isRoom() ) {
 					// Checa se o jogador tem a possibilidade de andar
 					ArrayList<Casa> casasPossiveis = tabuleiro.obterCasasNaDistancia( jogadorDaVez , 1 );
-					if( casasPossiveis.size() == 0 ) {
+					if( casasPossiveis.size() == 0 && jogadorDaVez.moveuSeForcadamente == false ) {
 						cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_PASSAR );
+					} else {
+						cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_DADO );
 					}
 				} 
 				else {
