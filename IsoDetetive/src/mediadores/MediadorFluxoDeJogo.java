@@ -121,6 +121,15 @@ public class MediadorFluxoDeJogo {
 		
 	// Nova Jogada ------------------------------------------------------------------		
 		public void iniciarJogadaDaVez() {
+			if(ControladoraDoJogo.getInstance().obterJogadorDaVez().obeterInteligenciaArtificial() == null)
+				jogadaHumana();
+			else
+				jogadaMecanica();
+		}
+		
+	// Turno dos jogadores humanos
+		protected void jogadaHumana() {
+			
 			// Limpando Interface Grafica
 			this.deletarDados();
 			this.tradutorMovimentacao.desmarcarCasas();
@@ -181,6 +190,12 @@ public class MediadorFluxoDeJogo {
 			Vetor2D_double posicaoVirtualJogador = tradutorTabuleiro.obterCentroDaCasa(ControladoraDoJogo.getInstance().obterJogadorDaVez().obterPosicao());
 			this.centralizarCameraEmPosicaoVirtual(posicaoVirtualJogador);
 		}
+		
+	// Turno dos jogadores mecanicos
+		protected void jogadaMecanica() {
+			
+		}
+				
 		
 	// Finalizar a jogada
 		public void finalizarJogada() {

@@ -69,9 +69,15 @@ public class TradutorMenus {
 	
 	class MouseListener_cartaSelecaoUnicaTipada extends MouseAdapter {
 		protected ReferenciaCartaAtor carta = null;
+		protected int minimoDeCartas = 0;
 		
 		public MouseListener_cartaSelecaoUnicaTipada(ReferenciaCartaAtor carta) {
 			this.carta = carta;
+		}
+		
+		public MouseListener_cartaSelecaoUnicaTipada(ReferenciaCartaAtor carta, int minimoDeCartas) {
+			this.carta = carta;
+			this.minimoDeCartas = minimoDeCartas;
 		}
 		
 		@Override
@@ -336,6 +342,16 @@ public class TradutorMenus {
 			return false;
 		}
 		
+		//retorna quantas cartas da cena estão selecionadas
+		public int obeterNumeroCartasSelecionadas()
+		{
+			int numeroCartasSelecionadas = 0;
+			for (ReferenciaCartaAtor referenciaCartaAtor : referenciasCartasAtor) {
+				if(referenciaCartaAtor.atorCarta.getSelecionado())
+					numeroCartasSelecionadas++;
+			}
+			return numeroCartasSelecionadas;
+		}
 		
 		public String obterArquivoCartaa(Carta carta)
 		{

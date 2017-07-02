@@ -82,6 +82,18 @@ public class QuadroSelecaoDeJogadores extends JPanel {
 		}
 	}
 	
+	public class tipoJogador
+	{
+		public PersonagemEnum personagem;
+		public boolean inteligenciaArtificial;
+		
+		public tipoJogador(PersonagemEnum personagem, boolean inteligenciaArtificial)
+		{
+			this.personagem = personagem;
+			this.inteligenciaArtificial = inteligenciaArtificial;
+		}
+	}
+	
 	// -------------------------------------------------------------------------
 	
 	private ArrayList<AtorCarta> cartas = new ArrayList<AtorCarta>();
@@ -161,34 +173,34 @@ public class QuadroSelecaoDeJogadores extends JPanel {
 	}
 	
 	private void iniciarNovoJogo() {
-		ArrayList<PersonagemEnum> personagensSelecionados = new ArrayList<PersonagemEnum>();
+		ArrayList<tipoJogador> personagensSelecionados = new ArrayList<tipoJogador>();
 		
 		for( AtorCarta atorCarta : cartas ) {
 			
 			if( atorCarta.getSelecionado() == true ) {
 				switch( atorCarta.obterTipo() ) {
 					case L:
-						personagensSelecionados.add( PersonagemEnum.L );
+						personagensSelecionados.add( new tipoJogador(PersonagemEnum.L, false) );
 						break;
 						
 					case SHERLOCK:
-						personagensSelecionados.add( PersonagemEnum.SHERLOCK );
+						personagensSelecionados.add( new tipoJogador(PersonagemEnum.SHERLOCK, false) );
 						break;
 						
 					case CARMEN:
-						personagensSelecionados.add( PersonagemEnum.CARMEN );
+						personagensSelecionados.add( new tipoJogador(PersonagemEnum.CARMEN, false) );
 						break;
 						
 					case PANTERA:
-						personagensSelecionados.add( PersonagemEnum.PANTERA );
+						personagensSelecionados.add( new tipoJogador(PersonagemEnum.PANTERA, false) );
 						break;
 						
 					case EDMORT:
-						personagensSelecionados.add( PersonagemEnum.EDMORT );
+						personagensSelecionados.add( new tipoJogador(PersonagemEnum.EDMORT, false) );
 						break;
 						
 					case BATMAN:
-						personagensSelecionados.add( PersonagemEnum.BATMAN );
+						personagensSelecionados.add( new tipoJogador(PersonagemEnum.BATMAN, false) );
 						break;
 						
 					default:

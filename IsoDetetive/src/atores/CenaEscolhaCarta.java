@@ -19,27 +19,21 @@ public class CenaEscolhaCarta extends Scene {
 	class mouseListener_fechar extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent arg0)  {
-			// TODO - corrigir logica que impede q o jogador feche com nem uma carta selecionada
-			/*for (AtorCarta carta : cartasNaCena) {
-				if(carta.flagSelecionado)
-				{
-					limparCena();
-					MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.MENU_PRINCIPAL);
-					TradutorMenus.getInstance().registrarCartaEscolhida();
-				}
-			}*/
-			
-			limparCena();
-			MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.MENU_PRINCIPAL);
-			TradutorMenus.getInstance().registrarCartaEscolhida();
+			if(TradutorMenus.getInstance().obeterNumeroCartasSelecionadas() == numeroDeSelecionadas)
+			{
+				limparCena();
+				MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.MENU_PRINCIPAL);
+				TradutorMenus.getInstance().registrarCartaEscolhida();
+			}
 		}
 	}
 	
 	protected ArrayList<AtorCarta> cartasNaCena = new ArrayList<AtorCarta>();
 	protected Vetor2D_int proximaPosicao = new Vetor2D_int(70, 100);
 	
-	protected Actor fechar = null;
+	protected Actor confirma;
 	protected Vetor2D_int fecharPos = new Vetor2D_int( 0 , 20 );
+	protected int numeroDeSelecionadas = 1;
 	
 	public CenaEscolhaCarta()
 	{
@@ -48,10 +42,10 @@ public class CenaEscolhaCarta extends Scene {
 		setBackground(Color.WHITE);
 		setOpaque(false);
 		
-		fechar = new AtorBotaoMenuJogo( "botao_confirmar.txt" );
-		fechar.setLocation( fecharPos.x , fecharPos.y );  
-		fechar.addMouseListener( new mouseListener_fechar() );
-		this.addActor( fechar , 10 );	
+		confirma = new AtorBotaoMenuJogo( "botao_confirmar.txt" );
+		confirma.setLocation( fecharPos.x , fecharPos.y );  
+		confirma.addMouseListener( new mouseListener_fechar() );
+		this.addActor( confirma , 10 );	
 		
 		this.limparCena();
 	}
@@ -80,6 +74,11 @@ public class CenaEscolhaCarta extends Scene {
 		proximaPosicao = new Vetor2D_int(70, 130);
 	}
 	
+	public void ajustarConfirmaVisible(boolean estado)
+	{
+		confirma.setVisible(estado);
+	}
+	
 	private void ajustarProximaPosicao()
 	{
 		proximaPosicao.x += 128;
@@ -91,7 +90,7 @@ public class CenaEscolhaCarta extends Scene {
 		
 		if( fecharPos.x < proximaPosicao.x ) {
 			fecharPos.x = proximaPosicao.x - 80;
-			fechar.setLocation( fecharPos.x , fecharPos.y );
+			confirma.setLocation( fecharPos.x , fecharPos.y );
 		}
 	}
 }

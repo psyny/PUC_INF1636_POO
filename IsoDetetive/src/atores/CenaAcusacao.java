@@ -19,9 +19,12 @@ public class CenaAcusacao extends Scene {
 	class mouseListener_confirma extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent arg0)  {
-			limparCena();
-			MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.MENU_PRINCIPAL);
-			TradutorMenus.getInstance().gerarAcusacao();
+			if(TradutorMenus.getInstance().obeterNumeroCartasSelecionadas() == numeroDeSelecionadas)
+			{
+				limparCena();
+				MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.MENU_PRINCIPAL);
+				TradutorMenus.getInstance().gerarAcusacao();
+			}
 		}
 	}
 	
@@ -35,6 +38,9 @@ public class CenaAcusacao extends Scene {
 	
 	protected ArrayList<AtorCarta> cartasNaCena = new ArrayList<AtorCarta>();
 	protected Vetor2D_int proximaPosicao = new Vetor2D_int(70, 130);
+	protected Actor confirma;
+	protected Actor fechar;
+	protected int numeroDeSelecionadas = 3;
 	
 	public CenaAcusacao()
 	{
@@ -43,13 +49,11 @@ public class CenaAcusacao extends Scene {
 		setBackground(Color.WHITE);
 		setOpaque(false);
 		
-		Actor confirma;
 		confirma = new AtorBotaoMenuJogo( "botao_confirmar.txt" );
 		confirma.setLocation( 820 , 20 );  
 		confirma.addMouseListener( new mouseListener_confirma() );
 		this.addActor( confirma , 10 );	
-		
-		Actor fechar;
+
 		fechar = new AtorBotaoMenuJogo( "botao_fechar.txt" );
 		fechar.setLocation( 880 , 20 );  
 		fechar.addMouseListener( new mouseListener_fechar() );
@@ -81,6 +85,11 @@ public class CenaAcusacao extends Scene {
 		
 		cartasNaCena.clear();
 		proximaPosicao = new Vetor2D_int(70, 130);
+	}
+	
+	public void ajustarConfirmaVisible(boolean estado)
+	{
+		confirma.setVisible(estado);
 	}
 	
 	private void ajustarProximaPosicao()

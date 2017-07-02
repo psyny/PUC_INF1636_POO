@@ -30,23 +30,25 @@ public class Jogador implements Observed_JogadorReposicionado  {
 	protected Personagem 	personagem;
 	protected boolean		emJogo;
 	public boolean 			moveuSeForcadamente = false;
-	protected boolean		inteligenciaArtificial = false;
+	protected Agente		inteligenciaArtificial = null;
 	protected ArrayList<Carta> 	mao;
 	protected ArrayList<Nota> 	blocoDeNotas;
 	
 	private ArrayList<Observer_JogadorReposicionado> jogadorReposicionadoObserverList = new ArrayList<Observer_JogadorReposicionado>();
 	
-	public Jogador( PersonagemEnum personagem ) {
-		this( personagem , "<SEM NOME>" );
+	public Jogador( PersonagemEnum personagem, boolean inteligenciaArtificial ) {
+		this( personagem , "<SEM NOME>" , inteligenciaArtificial);
 	}
 	
-	public Jogador( PersonagemEnum personagem , String nomeJogador  ) {
+	public Jogador( PersonagemEnum personagem , String nomeJogador, boolean inteligenciaArtificial  ) {
 		this.personagem = PersonagemLista.getInstance().obterPersonagem( personagem );
 		
 		this.nome 		= nomeJogador;
 		this.emJogo 	= true;
 		this.mao = new ArrayList<Carta>();
 		this.blocoDeNotas = new ArrayList<Nota>();
+		if(inteligenciaArtificial)
+			this.inteligenciaArtificial = new Agente(this);
 	}
 	
 	public void definirPosicao( Casa casa ) {
@@ -63,6 +65,10 @@ public class Jogador implements Observed_JogadorReposicionado  {
 	
 	public Personagem obterPersonagem() {
 		return this.personagem;
+	}
+	
+	public Agente obeterInteligenciaArtificial(){
+		return inteligenciaArtificial;
 	}
 	
 	public ArrayList<Carta> obterMao()

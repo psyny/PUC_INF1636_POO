@@ -5,6 +5,7 @@ import java.awt.event.MouseEvent;
 
 import animacao.Actor;
 import animacao.AnimatedSprite;
+import atores.AtorBotaoMenuJogo.Tipo;
 import estruturas.Vetor2D_int;
 import jogo.Carta;
 import jogo.CartaType;
@@ -33,6 +34,7 @@ public class AtorCarta extends Actor {
 	private AnimatedSprite 	marcador = null;
 	private AnimatedSprite 	seletor = null;
 	protected boolean 	flagSelecionado = false;
+	protected TipoMarcador tipoMarcador = TipoMarcador.VAZIO;
 	
 	private CartaType	tipo;
 	
@@ -121,6 +123,11 @@ public class AtorCarta extends Actor {
 		return flagSelecionado;
 	}
 	
+	public TipoMarcador getTipoMarcador()
+	{
+		return tipoMarcador;
+	}
+	
 	public void definirSelecionado(boolean flag)
 	{
 		flagSelecionado = flag;
@@ -135,6 +142,7 @@ public class AtorCarta extends Actor {
 	}
 	
 	public void definirMarcador( AtorCarta.TipoMarcador tipoMarcador ) {
+		this.tipoMarcador = tipoMarcador;
 		switch( tipoMarcador ) {
 			case VAZIO:
 				marcador.playAnimation(1);
