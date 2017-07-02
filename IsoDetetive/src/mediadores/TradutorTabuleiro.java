@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import animacao.Actor;
 import atores.AtorJogador;
 import atores.AtorParede;
+import atores.AtorPilar;
 import atores.AtorPiso;
 import atores.CenaTabuleiro;
 import atores.Marcador;
@@ -20,7 +21,9 @@ public class TradutorTabuleiro {
 		public int x;
 		public int y;
 		
-		public ArrayList<Actor> atores = new ArrayList<Actor>();
+		public ArrayList<Actor> atoresCortaveis = new ArrayList<Actor>();
+		public ArrayList<Actor> atoresOcultaveis = new ArrayList<Actor>();
+		public ArrayList<Actor> atoresTemporarios = new ArrayList<Actor>();
 		
 		public Casa casa = null;
 		
@@ -30,6 +33,8 @@ public class TradutorTabuleiro {
 		}
 		
 	}
+	
+	private static int			wallBaseLayer = 7;
 	
 	protected int 				casa_largura;
 	protected int				casa_altura;
@@ -263,10 +268,13 @@ public class TradutorTabuleiro {
 			int paredeFlagLeste = obterFlagParede( casaCentro , casaLeste , casaSul , casaNorte );
 			int paredeFlagOeste = obterFlagParede( casaCentro , casaOeste , casaSul , casaNorte );
 
-			adicionarParedeACena( casaCentro , Tabuleiro.DIRECOES.NORTE , paredeFlagNorte );
-			adicionarParedeACena( casaCentro , Tabuleiro.DIRECOES.SUL , paredeFlagSul );
-			adicionarParedeACena( casaCentro , Tabuleiro.DIRECOES.LESTE , paredeFlagLeste );
-			adicionarParedeACena( casaCentro , Tabuleiro.DIRECOES.OESTE , paredeFlagOeste );
+			adicionarParedeACena( celulaGrafica , Tabuleiro.DIRECOES.NORTE , paredeFlagNorte );
+			adicionarParedeACena( celulaGrafica , Tabuleiro.DIRECOES.SUL , paredeFlagSul );
+			adicionarParedeACena( celulaGrafica , Tabuleiro.DIRECOES.LESTE , paredeFlagLeste );
+			adicionarParedeACena( celulaGrafica , Tabuleiro.DIRECOES.OESTE , paredeFlagOeste );
+			
+			int[] flagsPilar = this.obterFlagsPilar( paredeFlagNorte , paredeFlagSul , paredeFlagLeste , paredeFlagOeste);
+			this.adicionarPilaresACena(celulaGrafica, flagsPilar);
 			
 			
 		}
@@ -299,18 +307,22 @@ public class TradutorTabuleiro {
 			return paredeFlag;
 		}
 		
-		private void adicionarParedeACena( Casa centro , Tabuleiro.DIRECOES direcao , int paredeFlag ) {
+		private void adicionarParedeACena( Celula celulaGrafica , Tabuleiro.DIRECOES direcao , int paredeFlag ) {
 			// Verifica se ha alguma parede pare adicionar
 			if( paredeFlag == 0 ) {
 				return;
 			}
 			
-			// Define o layer de acordo com a direcao
-			int layer = 8;
-			if( direcao == Tabuleiro.DIRECOES.SUL || direcao == Tabuleiro.DIRECOES.LESTE ) {
-				layer++;
-			}
+			Casa centro = celulaGrafica.casa;
 			
+			// Define o layer de acordo com a direcao
+			int layer = TradutorTabuleiro.wallBaseLayer;
+			if( direcao == Tabuleiro.DIRECOES.NORTE || direcao == Tabuleiro.DIRECOES.OESTE ) {
+				layer += 1;
+			}
+			else if( direcao == Tabuleiro.DIRECOES.SUL || direcao == Tabuleiro.DIRECOES.LESTE ) {
+				layer += 3;
+			}
 			
 			// Adiciona
 			Vetor2D_double posicao;
@@ -320,5 +332,79 @@ public class TradutorTabuleiro {
 			atorParede = new AtorParede( direcao , paredeFlag );
 			MediadorFluxoDeJogo.getInstance().cenaAtores.addActor( atorParede , layer );
 			atorParede.setVirtualPosition( posicao.x , posicao.y , 0 );	
+			
+			celulaGrafica.atoresCortaveis.add( atorParede );
 		}
+		
+		private int[] obterFlagsPilar( int paredeFlag_NORTE , int paredeFlag_SUL , int paredeFlag_LESTE , int paredeFlag_OESTE ) {
+			int pillarFlags[] = { 0 , 0 , 0 , 0 };
+			
+			if( paredeFlag_NORTE == 0 && paredeFlag_SUL == 0 && paredeFlag_LESTE == 0 && paredeFlag_OESTE == 0 ) {
+				return pillarFlags;
+			}
+			
+			if( paredeFlag_NORTE == 2 || paredeFlag_NORTE == 4 || paredeFlag_OESTE == 3 || paredeFlag_OESTE == 4 ) {
+				pillarFlags[0] = 1;
+			}
+			
+			if( paredeFlag_NORTE == 3 || paredeFlag_NORTE == 4 || paredeFlag_LESTE == 3 || paredeFlag_LESTE == 4 ) {
+				pillarFlags[1] = 2;
+			}
+			
+			if( paredeFlag_SUL == 2 || paredeFlag_SUL == 4 || paredeFlag_OESTE == 2 || paredeFlag_OESTE == 4 ) {
+				pillarFlags[3] = 4;
+			}			
+			
+			if( paredeFlag_SUL == 3 || paredeFlag_SUL == 4 || paredeFlag_LESTE == 2 || paredeFlag_LESTE == 4 ) {
+				pillarFlags[2] = 3;
+			}	
+			
+			return pillarFlags;
+		}		
+		
+
+		private void adicionarPilaresACena( Celula celulaGrafica , int[] flagsPilares ) {
+			Casa centro = celulaGrafica.casa;
+			
+			int layer = 0;
+			
+			for( int i = 0 ; i < 4 ; i++ ) {
+				if( flagsPilares[i] == 0 ) {
+					continue;
+				}
+				
+				// Define o layer
+				layer = TradutorTabuleiro.wallBaseLayer;
+				
+				switch( flagsPilares[i] ){
+				case 1:
+					layer += 0;
+					break;
+					
+				case 2:
+					layer += 2;
+					break;
+					
+				case 3:
+					layer += 4;
+					break;
+					
+				case 4:
+					layer += 2;
+					break;				
+				}
+				
+				
+				// Adiciona
+				Vetor2D_double posicao;
+				AtorPilar atorPilar;
+				
+				posicao = obterCentroDaCasa( centro.position.x , centro.position.y );
+				atorPilar = new AtorPilar( flagsPilares[i] );
+				MediadorFluxoDeJogo.getInstance().cenaAtores.addActor( atorPilar , layer );
+				atorPilar.setVirtualPosition( posicao.x , posicao.y , 0 );	
+				
+				celulaGrafica.atoresCortaveis.add( atorPilar );
+			}
+		}		
 } 

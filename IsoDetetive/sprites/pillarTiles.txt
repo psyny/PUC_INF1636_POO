@@ -9,7 +9,7 @@ Full		; Set Name
 -1		; Total number of tiles ( -1 set to rows*cols )
 
 Half		; Set Name
-2		; Set ID code
+11		; Set ID code
 512,0 		; Set start position
 128,256		; Single tile size
 128,256		; Advancement step ( usually = tile size )
