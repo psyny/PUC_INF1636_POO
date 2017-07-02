@@ -42,7 +42,7 @@ public class Agente {
 				
 				for(CasaType tipo : salasNaoVisitadas)
 				{
-					for(Casa candidato : ControladoraDoJogo.getInstance().tabuleiro.obterCasasAdjacentePorta(Casa.tipoSalaParaTipoPorta(tipo)))
+					for(Casa candidato : ControladoraDoJogo.getInstance().obterTabuleiro().obterCasasEntradaDeComodo(Casa.tipoSalaParaTipoPorta(tipo)))
 					{
 						if(casa.getManDistTo(candidato) < melhorDistantcia)
 						{
@@ -59,7 +59,7 @@ public class Agente {
 					return casa;
 				}
 				
-				for(Casa candidato : ControladoraDoJogo.getInstance().tabuleiro.obterCasasAdjacentePorta())
+				for(Casa candidato : ControladoraDoJogo.getInstance().obterTabuleiro().obterCasasEntradaDeComodo())
 				{
 					if(casa.getManDistTo(candidato) < melhorDistantcia)
 					{

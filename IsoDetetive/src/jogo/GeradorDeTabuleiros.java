@@ -73,6 +73,7 @@ public class GeradorDeTabuleiros {
 	    		Casa novaCasa = new Casa( x , y );
 	    		novaLinhaDeCasas.add( novaCasa );
 	    		
+
 	    		switch( line.charAt(x) ) {
 	    		case '#':
 	    			novaCasa.type = CasaType.VACUO;
@@ -188,7 +189,9 @@ public class GeradorDeTabuleiros {
 	    file.close();
 	    
 	    // Criando novo tabueliro
-	    return new Tabuleiro( casas );
+	    Tabuleiro tabuleiro = new Tabuleiro( casas );
+	    CompiladorDeTabuleiros.compilarTabuleiro(tabuleiro);
+	    return tabuleiro;
 	}
 
 }

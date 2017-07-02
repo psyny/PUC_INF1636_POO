@@ -4,22 +4,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-import animacao.Actor;
-import atores.AtorJogador;
-import atores.AtorPiso;
-import atores.CenaAtores;
-import atores.CenaTabuleiro;
-import atores.Marcador;
-import estruturas.Vetor2D_double;
-import estruturas.Vetor2D_int;
-import jogo.Casa;
-import jogo.CasaType;
-import jogo.ControladoraDoJogo;
-import jogo.ControladoraDoJogo.EstadoDaJogada;
-import jogo.Jogador;
-import jogo.Tabuleiro;
+import atores.*;
+import estruturas.*;
+import jogo.*;
+import observers.*;
 
-public class TradutorMovimentacao implements CasaSelecionadaObserver , MouseListener {
+
+public class TradutorMovimentacao implements Observer_CasaSelecionada , MouseListener {
 	private ArrayList<Marcador>	casasMarcadas = new ArrayList<Marcador>();
 	
 	public TradutorMovimentacao( ) {
@@ -28,7 +19,7 @@ public class TradutorMovimentacao implements CasaSelecionadaObserver , MouseList
 		MediadorFluxoDeJogo.getInstance().checarRegistroTradutorTabuleiro();
 		MediadorFluxoDeJogo.getInstance().checarRegistroTradutorJogadores();
 		
-		MediadorFluxoDeJogo.getInstance().cenaTabuleiro.casaSelecionadaObservedRegister(this);
+		MediadorFluxoDeJogo.getInstance().cenaTabuleiro.register_casaSelecionadaObserved(this);
 		MediadorFluxoDeJogo.getInstance().cenaTabuleiro.addMouseListener(this);
 	}
 	
@@ -54,7 +45,7 @@ public class TradutorMovimentacao implements CasaSelecionadaObserver , MouseList
 	}
 
 	@Override
-	public void observerNotify(CasaSelecionadaObserved observed) {
+	public void observerNotify(Observed_CasaSelecionada observed) {
 		Vetor2D_int casaSelecionada = observed.obterCasaSelecionada();
 		
 		for( Marcador ator : casasMarcadas ) {

@@ -2,7 +2,10 @@ package jogo;
 
 import java.util.ArrayList;
 
-public class Jogador {
+import observers.Observed_JogadorReposicionado;
+import observers.Observer_JogadorReposicionado;
+
+public class Jogador implements Observed_JogadorReposicionado  {
 	
 	public class Nota {
 		public Carta carta;
@@ -22,12 +25,16 @@ public class Jogador {
 		}
 	}
 	
-	protected Casa 	posicao;
-	protected String 	nome;
-	protected Personagem personagem;
-	protected boolean	emJogo;
-	protected ArrayList<Carta> mao;
-	protected ArrayList<Nota> blocoDeNotas;
+	protected Casa 			posicao;
+	protected String 		nome;
+	protected Personagem 	personagem;
+	protected boolean		emJogo;
+	public boolean 			moveuSeForcadamente = false;
+	protected boolean		inteligenciaArtificial = false;
+	protected ArrayList<Carta> 	mao;
+	protected ArrayList<Nota> 	blocoDeNotas;
+	
+	private ArrayList<Observer_JogadorReposicionado> jogadorReposicionadoObserverList = new ArrayList<Observer_JogadorReposicionado>();
 	
 	public Jogador( PersonagemEnum personagem ) {
 		this( personagem , "<SEM NOME>" );
@@ -44,6 +51,10 @@ public class Jogador {
 	
 	public void definirPosicao( Casa casa ) {
 		posicao = casa;
+		
+		for( Observer_JogadorReposicionado observer : this.jogadorReposicionadoObserverList ) {
+			observer.ObserverNotify_JogadorReposicionado( this.personagem.personagem , casa.position );
+		}
 	}
 	
 	public Casa obterPosicao() {
@@ -64,7 +75,7 @@ public class Jogador {
 		return this.blocoDeNotas;
 	}
 	
-	public void adicionarMao(Carta carta) {
+	public void adicionarCartaAMao(Carta carta) {
 		mao.add(carta);
 		blocoDeNotas.add(new Nota(carta, true));
 	}
@@ -146,41 +157,19 @@ public class Jogador {
 	{
 		ArrayList<Carta> comodos = Baralho.pilhaComodos;
 		
+		CasaType comodoAtual = posicao.type;
+		CartaType cartaTipoComodoAtual = Carta.tipoCasaParaTipoCarta( comodoAtual );
+		
 		for (Carta carta : comodos) {
-			if(carta.tipo == obterCartaEnumComodo(posicao))
+			if(carta.tipo == cartaTipoComodoAtual) {
 				return carta;
+			}
 		}
 		
 		return null;
 	}
 	
-	private CartaType obterCartaEnumComodo(Casa casa)
-	{
-		switch (casa.type) {
-		
-			case BIBLIOTECA:
-				return CartaType.BIBLIOTECA;
-			case COZINHA:
-				return CartaType.COZINHA;
-			case ENTRADA:
-				return CartaType.ENTRADA;
-			case SL_ESTAR:
-				return CartaType.SALA_DE_ESTAR;
-			case SL_JOGOS:
-				return CartaType.SALA_DE_JOGOS;
-			case SL_INVERNO:
-				return CartaType.JARDIM_INVERNO;
-			case SL_MUSICA:
-				return CartaType.SALA_DE_MUSICA;
-			case ESCRITORIO:
-				return CartaType.ESCRITORIO;
-			case SL_JANTAR:
-				return CartaType.SALA_DE_JANTAR;
-	
-			default:
-				return null;
-		}
-	}
+
 	
 	public Nota obterNota(Carta carta)
 	{
@@ -190,6 +179,16 @@ public class Jogador {
 		}
 		
 		return null;
+	}
+
+	@Override
+	public void register_JogadorReposicionadoObserved(Observer_JogadorReposicionado observer) {
+		jogadorReposicionadoObserverList.add( observer );
+	}
+
+	@Override
+	public void unRegister_JogadorReposicionadoObserved(Observer_JogadorReposicionado observer) {
+		jogadorReposicionadoObserverList.remove( observer );
 	}
 
 }

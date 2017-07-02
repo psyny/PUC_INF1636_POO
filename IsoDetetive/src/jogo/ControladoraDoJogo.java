@@ -1,5 +1,6 @@
 package jogo;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import com.sun.xml.internal.ws.api.Cancelable;
@@ -7,6 +8,7 @@ import com.sun.xml.internal.ws.api.Cancelable;
 import atores.CameraMenu.Modos;
 import mediadores.MediadorFluxoDeJogo;
 import mediadores.TradutorMenus;
+import observers.Observed_JogadorReposicionado;
 
 public class ControladoraDoJogo {
 	// Singleton com LazyHolder para tratar threads
@@ -27,114 +29,79 @@ public class ControladoraDoJogo {
 	}	
 	
 	// ----------------------------
-	public enum EstadoDaJogada {
-		INICIO,
-		CONFIRMANDO_MOVIMENTO,
-		AGUARDANDO_MOVIMENTO,
-		PALPITE,
-		ACUSACAO
-	}	
+	public boolean				debug_mode = true;
 	
-	protected ArrayList<Jogador> listaDeJogadores;
-	
-	protected EstadoDaJogada 	estadoDaJogada = EstadoDaJogada.INICIO; 
-	protected Jogador 			jogadorDaVez = null;
-	protected int				valorDoDado = 0;
-	protected Baralho 			baralho;
-	protected ArrayList<Casa>	movimentacaoPossivel;
-	protected ArrayList<Carta> 	crime;
-	
-	public Tabuleiro	tabuleiro = null;
-	
+	protected ArrayList<Casa>	movimentacaoPossivel;	
+	protected EstadoDoJogo		estadoDoJogo = null;
+
 	private ControladoraDoJogo() {
-		listaDeJogadores = new ArrayList<Jogador>();
 	}
 	
+	public void definirEstadoDoJogo( EstadoDoJogo estadoDoJogo ) {
+		this.estadoDoJogo = estadoDoJogo;
+	}
+	
+	public Tabuleiro obterTabuleiro() {
+		return estadoDoJogo.tabuleiro;
+	}
+	
+
 	public ArrayList<Jogador> obterListaDeJogadores() {
-		return this.listaDeJogadores;
+		return this.estadoDoJogo.listaDeJogadores;
+	}
+	
+	protected Jogador obterJogadorDoPersonagem( PersonagemEnum personagem ) {
+		for( Jogador jogador : this.obterListaDeJogadores() ) {
+			if( jogador.personagem.personagem == personagem ) {
+				return jogador;
+			}
+		}
+		
+		return null;
 	}
 	
 	public Jogador obterJogadorDaVez() {
-		return this.jogadorDaVez;
+		return this.estadoDoJogo.jogadorDaVez;
 	}
 	
 	public int obterValorDoUltimoDado() {
-		return this.valorDoDado;
-	}
-	
-	public ArrayList<Carta> obterCrime() {
-		return this.crime;
+		return this.estadoDoJogo.valorDoDado;
 	}
 	
 	public ArrayList<Casa> obterMovimentacaoPossivel() {
 		return new ArrayList<Casa>( this.movimentacaoPossivel );
 	}	
 	
-	public EstadoDaJogada obterEstadoDaJogada() {
-		return this.estadoDaJogada;
+	public EstadoDoJogo.EtapaDaJogada obterEstadoDaJogada() {
+		return this.estadoDoJogo.etapaDaJogada;
 	}	
+	
+	public ArrayList<Carta> obterCrime() {
+		return estadoDoJogo.crime;
+	}
+	
 	
 	
 	public void adicionarJogador( Jogador jog ) {
-		this.listaDeJogadores.add( jog );
-	}
-	
-	public void iniciarPartida()
-	{
-		baralho = new Baralho();
-		crime = baralho.gerarCrime();
-		for (Carta carta : crime) {
-			System.out.println(carta.tipo);
-		}
-		distribuirCartas();
-	}
-	
-	public void distribuirCartas()
-	{
-		while(baralho.baralho.size() > 0) {
-			for (Jogador jogador : listaDeJogadores) {
-				if(jogador.emJogo)
-					jogador.adicionarMao(baralho.distribuirCarta());
-				if(baralho.baralho.size() == 0)
-					break;
-			}
-		}
+		this.estadoDoJogo.listaDeJogadores.add( jog );
 	}
 
 	
 	public void iniciarProximaJogada() {
-		// Descobrir quem é o proximo jogador
-		if( jogadorDaVez == null ) {
-			jogadorDaVez = listaDeJogadores.get(0);
-		} else {
-			int idx = listaDeJogadores.indexOf( jogadorDaVez ); 
-			int idxCandidato;
-			
-			if( idx == listaDeJogadores.size() - 1 ) {
-				idxCandidato = 0;
-			} else {
-				idxCandidato = idx + 1;
-			}
-			
-			while( (listaDeJogadores.get(idxCandidato)).emJogo == false) {
-				idxCandidato++;
-				if(idxCandidato == listaDeJogadores.size())
-					idxCandidato = 0;
-			}
-			
-			jogadorDaVez = listaDeJogadores.get(idxCandidato);
-		}
+		estadoDoJogo.jogadorDaVez.moveuSeForcadamente = false;
 		
-		// Resetar variaveis de turno
-		valorDoDado = 0;
+		estadoDoJogo.jogadorDaVez = estadoDoJogo.obterProximoJogador();
+		
+		// Resetar variaveis gerais de turno
+		estadoDoJogo.valorDoDado = 0;
 		movimentacaoPossivel = new ArrayList<Casa>();
-		estadoDaJogada = EstadoDaJogada.INICIO; 
+		estadoDoJogo.etapaDaJogada = EstadoDoJogo.EtapaDaJogada.INICIO; 
 	}
 	
 	public int rolarDadoParaMovimentacao( int valorPredeterminado ) {
-		valorDoDado = valorPredeterminado;
+		estadoDoJogo.valorDoDado = valorPredeterminado;
 		calcularMovimentacaoPossivel();
-		return valorDoDado;
+		return estadoDoJogo.valorDoDado;
 	}	
 	
 	public int rolarDadoParaMovimentacao() {
@@ -146,65 +113,67 @@ public class ControladoraDoJogo {
 	private void calcularMovimentacaoPossivel() {
 		ArrayList<Casa> casasPossiveis;
 		
-		casasPossiveis = tabuleiro.obterCasasNaDistancia( jogadorDaVez , valorDoDado );
-		
-		// Adiciona a propria posicao atual do jogador
-		//casasPossiveis.add( jogadorDaVez.posicao );
+		casasPossiveis = estadoDoJogo.tabuleiro.obterCasasNaDistancia( estadoDoJogo.jogadorDaVez , estadoDoJogo.valorDoDado );
 		
 		movimentacaoPossivel = casasPossiveis;
 		
-		estadoDaJogada = EstadoDaJogada.AGUARDANDO_MOVIMENTO; 
+		estadoDoJogo.etapaDaJogada = EstadoDoJogo.EtapaDaJogada.AGUARDANDO_MOVIMENTO; 
 	}
 	
 	public void decidindoMovimento() {
-		estadoDaJogada = EstadoDaJogada.CONFIRMANDO_MOVIMENTO;
+		estadoDoJogo.etapaDaJogada = EstadoDoJogo.EtapaDaJogada.CONFIRMANDO_MOVIMENTO;
 	}
 	
 	public void validarPalpite(ArrayList<Carta> palpite)
 	{
-		//iterar sobre jogadores, na ordem da roda
-		int idxInicial = listaDeJogadores.indexOf( jogadorDaVez );
-		int idxProximo;
+		// Traz o jogador mencionado para o comodo atual
+		for( Carta carta : palpite ) {
+			if( carta.isSuspeito() == false  ) {
+				continue;
+			}
 		
-		
-		if( idxInicial == listaDeJogadores.size() - 1 ) {
-			idxProximo = 0;
-		} else {
-			idxProximo = idxInicial + 1;
+			// Obtem jogador mencionado
+			PersonagemEnum personagemMencionado = Carta.tipoCartaParaPersonagemEnum( carta.tipo );
+			Jogador jogadorMencionado = obterJogadorDoPersonagem( personagemMencionado );
+			
+			// Reposiciona o jogador mencionado
+			Casa casaNova = estadoDoJogo.tabuleiro.obterUmaCasaLivreTipo( this.estadoDoJogo.jogadorDaVez.posicao.type );
+			jogadorMencionado.definirPosicao( casaNova );
+			jogadorMencionado.moveuSeForcadamente = true;
 		}
 		
-		while(idxProximo != idxInicial)
-		{
-			Jogador candidato = listaDeJogadores.get(idxProximo);
-			if(candidato.temCarta(palpite))
+		
+		// iterar sobre jogadores, na ordem da roda
+		ArrayList<Jogador> ordemDeJogadores = estadoDoJogo.obterProximosJogadores();
+		
+		for( Jogador jogador : ordemDeJogadores ) {
+			if( jogador.temCarta(palpite) )
 			{
-				
 				MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.ESCOLHA_CARTA);
-				TradutorMenus.getInstance().desenharEscolhaCarta(MediadorFluxoDeJogo.getInstance().cameraMenu.cenaEscolhaCarta, candidato, palpite);
+				TradutorMenus.getInstance().desenharEscolhaCarta(MediadorFluxoDeJogo.getInstance().cameraMenu.cenaEscolhaCarta, jogador, palpite);
 				return;
-			}
-			
-			idxProximo++;
-			if( idxProximo == listaDeJogadores.size() ) {
-				idxProximo = 0;
 			}
 		}
 	}
 	
 	public boolean validarAcusacao(ArrayList<Carta> acusacao)
 	{
-		if(acusacao.containsAll(crime))
+		if(acusacao.containsAll(estadoDoJogo.crime))
 		{
 			//TODO - end-Game, alguem vençeu
-			System.out.println(jogadorDaVez.personagem.nome + " venceu");
+			System.out.println(estadoDoJogo.jogadorDaVez.personagem.nome + " venceu");
 			return true;
 		}
 		else
 		{
-			jogadorDaVez.emJogo = false;
+			estadoDoJogo.jogadorDaVez.emJogo = false;
 			MediadorFluxoDeJogo.getInstance().iniciarJogadaDaVez();
 			return false;
 		}
 	}
 	
+	
+	public void salvarPartidaEmArquivo( File file ) {
+		this.estadoDoJogo.salvarEstadoEmArquivo( file );
+	}
 }

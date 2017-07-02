@@ -2,7 +2,10 @@ package mediadores;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.util.ArrayList;
+
+import javax.swing.JFileChooser;
 
 import animacao.Scene;
 import atores.AtorCarta;
@@ -11,10 +14,12 @@ import atores.CenaBlocoNotas;
 import atores.CenaEscolhaCarta;
 import atores.CenaMao;
 import atores.CenaPalpite;
+import interfaceGrafica.JanelaPrincipal;
 import jogo.Baralho;
 import jogo.Carta;
 import jogo.CartaType;
 import jogo.ControladoraDoJogo;
+import jogo.EstadoDoJogo;
 import jogo.Jogador;
 import jogo.Jogador.Nota;
 
@@ -383,4 +388,27 @@ public class TradutorMenus {
 					return "carta_dummy.txt";
 			}
 		}
+		
+		
+	// Salvar Jogo
+		public void salvarJogo() {
+			JFileChooser fileChooser = new JFileChooser();
+			fileChooser.showOpenDialog( JanelaPrincipal.getInstance() );
+			
+			File file = fileChooser.getSelectedFile();
+			
+			ControladoraDoJogo.getInstance().salvarPartidaEmArquivo( file );
+		}
+		
+	// Carregar Jogo
+		public void carregarJogo() {
+			JFileChooser fileChooser = new JFileChooser();
+			fileChooser.showOpenDialog( JanelaPrincipal.getInstance() );
+			
+			// Cria o novo estado do jogo
+			EstadoDoJogo estadoDoJogo = new EstadoDoJogo();
+			estadoDoJogo.carregarPartidaDoArquivo( fileChooser.getSelectedFile() );
+			
+			ControladoraDoJogo.getInstance().definirEstadoDoJogo(estadoDoJogo);
+		}		
 }

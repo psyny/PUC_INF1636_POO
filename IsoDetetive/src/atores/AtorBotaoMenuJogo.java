@@ -5,7 +5,6 @@ import java.awt.event.MouseEvent;
 
 import animacao.*;
 import estruturas.Vetor2D_int;
-import jogo.ControladoraDoJogo.EstadoDaJogada;
 import mediadores.MediadorFluxoDeJogo;
 
 @SuppressWarnings("serial")
@@ -25,6 +24,7 @@ public class AtorBotaoMenuJogo extends Actor {
 		BOTAO_PASSAR,
 		BOTAO_FECHAR,
 		BOTAO_NOTAS,
+		BOTAO_SALVAR,
 		
 		DESCONHECIDO
 	}
@@ -116,11 +116,16 @@ public class AtorBotaoMenuJogo extends Actor {
 				botaoFile = "botao_blocodenotas.txt";
 				break;
 				
+			case BOTAO_SALVAR:
+				mouseOverChange = true;
+				botaoFile = "botao_salvar.txt";
+				break;				
+				
 			case BOTAO_FECHAR:
 				mouseOverChange = false;
 				botaoFile = "botao_fechar.txt";
 				break;
-				
+
 			default:
 				mouseOverChange = false;
 				botaoFile = "botao_fechar.txt";

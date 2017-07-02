@@ -5,7 +5,6 @@ import java.awt.event.MouseEvent;
 
 import animacao.*;
 import estruturas.Vetor2D_int;
-import jogo.ControladoraDoJogo.EstadoDaJogada;
 import mediadores.MediadorFluxoDeJogo;
 
 @SuppressWarnings("serial")

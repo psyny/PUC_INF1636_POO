@@ -5,14 +5,13 @@ import java.util.ArrayList;
 import estruturas.*;
 
 public class Casa {
-
 	// Apenas para Consulta
 	public Vetor2D_int 	position;//Posição da Casa
 	public CasaType 	type;//Tipo da Casa
 	public Casa			casaAnterior;//Casa Anterior
 	
-	public boolean		ehAndavel = false;
-	public boolean		ehBloqueado = true;
+	protected boolean		ehAndavel = false;
+	protected boolean		ehBloqueado = true;
 	
 	//Construtor de Cada
 	public Casa( int x , int y ) {
@@ -78,14 +77,34 @@ public class Casa {
 		}
 	}
 	
+	public boolean isStartPosition() {
+		switch( type ) {
+		default:
+			return false;
+			
+		case INICIO_L:
+		case INICIO_SHERLOCK:
+		case INICIO_CARMEN:
+		case INICIO_PANTERA:
+		case INICIO_EDMORT:
+		case INICIO_BATMAN:
+			return true;
+		}
+	}	
+	
 	public boolean isWalkable() {
-		if( this.ehBloqueado == true ) {
+		if( this.isBlocked() == true ) {
 			return false;
 		} else {
 			return this.ehAndavel;
 		}
 	}
 	
+	public boolean isBlocked() {
+		return this.ehBloqueado;
+	}
+
+
 	
 	public static CasaType tipoPortaParaTipoSala( CasaType tipoPorta ) {
 		switch( tipoPorta ) {

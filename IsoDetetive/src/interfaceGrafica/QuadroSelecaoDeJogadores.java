@@ -161,31 +161,34 @@ public class QuadroSelecaoDeJogadores extends JPanel {
 	}
 	
 	private void iniciarNovoJogo() {
+		ArrayList<PersonagemEnum> personagensSelecionados = new ArrayList<PersonagemEnum>();
+		
 		for( AtorCarta atorCarta : cartas ) {
+			
 			if( atorCarta.getSelecionado() == true ) {
 				switch( atorCarta.obterTipo() ) {
 					case L:
-						MediadorFluxoDeJogo.getInstance().adicionarNovoJogador( PersonagemEnum.L );
+						personagensSelecionados.add( PersonagemEnum.L );
 						break;
 						
 					case SHERLOCK:
-						MediadorFluxoDeJogo.getInstance().adicionarNovoJogador( PersonagemEnum.SHERLOCK );
+						personagensSelecionados.add( PersonagemEnum.SHERLOCK );
 						break;
 						
 					case CARMEN:
-						MediadorFluxoDeJogo.getInstance().adicionarNovoJogador( PersonagemEnum.CARMEN );
+						personagensSelecionados.add( PersonagemEnum.CARMEN );
 						break;
 						
 					case PANTERA:
-						MediadorFluxoDeJogo.getInstance().adicionarNovoJogador( PersonagemEnum.PANTERA );
+						personagensSelecionados.add( PersonagemEnum.PANTERA );
 						break;
 						
 					case EDMORT:
-						MediadorFluxoDeJogo.getInstance().adicionarNovoJogador( PersonagemEnum.EDMORT );
+						personagensSelecionados.add( PersonagemEnum.EDMORT );
 						break;
 						
 					case BATMAN:
-						MediadorFluxoDeJogo.getInstance().adicionarNovoJogador( PersonagemEnum.BATMAN );
+						personagensSelecionados.add( PersonagemEnum.BATMAN );
 						break;
 						
 					default:
@@ -194,6 +197,14 @@ public class QuadroSelecaoDeJogadores extends JPanel {
 			}
 		}
 		
+		// Cria um novo estado de jogo
+		EstadoDoJogo estadoDoJogo = new EstadoDoJogo();
+		estadoDoJogo.gerarEstadoInicial( personagensSelecionados , null );
+		ControladoraDoJogo.getInstance().definirEstadoDoJogo(estadoDoJogo);
+		
+		// TODO: Inteligencia Artificial ou Jogador?
+		
+		// Carregar quadro de jogo
 		JanelaPrincipal.getInstance().carregarQuadro( new QuadroJogo() );
 	}
 	

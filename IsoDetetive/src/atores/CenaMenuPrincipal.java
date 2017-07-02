@@ -16,8 +16,6 @@ import atores.CameraMenu.Modos;
 import estruturas.Vetor2D_int;
 import interfaceGrafica.JanelaPrincipal;
 import jogo.ControladoraDoJogo;
-import jogo.ControladoraDoJogo.EstadoDaJogada;
-import jogo.Salvador;
 import mediadores.MediadorFluxoDeJogo;
 import mediadores.TradutorMenus;
 
@@ -30,7 +28,8 @@ public class CenaMenuPrincipal extends Scene {
 			MediadorFluxoDeJogo.getInstance().rolarDados();
 			
 			botao_mover.setVisible(true);
-	
+			
+			botao_salvar.setVisible( false );
 			botao_dado.setVisible(false);			
 			botao_passar.setVisible(false);
 			botao_mao.setVisible(false);
@@ -52,6 +51,7 @@ public class CenaMenuPrincipal extends Scene {
 			botao_mao.setVisible(true);
 			botao_notas.setVisible(true);
 			botao_acusar.setVisible(true);
+			botao_salvar.setVisible(true);
 			
 			revalidarPosicaoDosBotoes();
 		}
@@ -60,15 +60,17 @@ public class CenaMenuPrincipal extends Scene {
 	class mouseListener_acusar extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent arg0)  {
-			//MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.ACUSACAO);
-			//TradutorMenus.getInstance().desenharAcusacao(MediadorFluxoDeJogo.getInstance().cameraMenu.cenaAcusacao);
-			
-			JFileChooser fileChooser = new JFileChooser();
-			fileChooser.showOpenDialog( JanelaPrincipal.getInstance() );
-			Salvador.getInstance().configurarFile(fileChooser.getSelectedFile());
-			Salvador.getInstance().salvarPartida(ControladoraDoJogo.getInstance().obterListaDeJogadores(), ControladoraDoJogo.getInstance().obterCrime(), ControladoraDoJogo.getInstance().obterJogadorDaVez());
+			MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.ACUSACAO);
+			TradutorMenus.getInstance().desenharAcusacao(MediadorFluxoDeJogo.getInstance().cameraMenu.cenaAcusacao);
 		}
 	}
+	
+	class mouseListener_salvar extends MouseAdapter {
+		@Override
+		public void mouseClicked(MouseEvent arg0)  {
+			TradutorMenus.getInstance().salvarJogo();
+		}
+	}	
 
 	class mouseListener_verCartas extends MouseAdapter {
 		@Override
@@ -89,7 +91,7 @@ public class CenaMenuPrincipal extends Scene {
 	class mouseListener_passar extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent arg0)  {
-			MediadorFluxoDeJogo.getInstance().iniciarJogadaDaVez();
+			MediadorFluxoDeJogo.getInstance().finalizarJogada();
 		}
 	}
 	
@@ -99,7 +101,8 @@ public class CenaMenuPrincipal extends Scene {
 	protected AtorBotaoMenuJogo personagem_carmen;
 	protected AtorBotaoMenuJogo personagem_edmort;
 	protected AtorBotaoMenuJogo personagem_batman;
-	
+
+	protected AtorBotaoMenuJogo botao_salvar;
 	protected AtorBotaoMenuJogo botao_dado;
 	protected AtorBotaoMenuJogo botao_mover;
 	protected AtorBotaoMenuJogo botao_acusar;
@@ -152,6 +155,10 @@ public class CenaMenuPrincipal extends Scene {
 		this.addActor( personagem_batman , 10 );	
 		
 		// Controle de jogo		
+		botao_salvar = new AtorBotaoMenuJogo( AtorBotaoMenuJogo.Tipo.BOTAO_SALVAR );
+		botao_salvar.addMouseListener( new mouseListener_salvar() );
+		this.addActor( botao_salvar , 10 );			
+		
 		botao_acusar = new AtorBotaoMenuJogo( AtorBotaoMenuJogo.Tipo.BOTAO_ACUSAR );
 		botao_acusar.addMouseListener( new mouseListener_acusar() );
 		this.addActor( botao_acusar , 10 );		

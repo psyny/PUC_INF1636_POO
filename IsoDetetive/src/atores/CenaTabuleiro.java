@@ -14,12 +14,14 @@ import animacao.*;
 import estruturas.Vetor2D_double;
 import estruturas.Vetor2D_int;
 import mediadores.*;
+import observers.Observed_CasaSelecionada;
+import observers.Observer_CasaSelecionada;
 
-public class CenaTabuleiro extends CenaIsometrica implements CasaSelecionadaObserved {
+public class CenaTabuleiro extends CenaIsometrica implements Observed_CasaSelecionada {
 	public Vetor2D_int ultimaCasaApontada = new Vetor2D_int(0,0);
-	CasaSelecionadaObserver a;
+	Observer_CasaSelecionada a;
 	
-	public ArrayList<CasaSelecionadaObserver> casaSelecionadaObserverList = new ArrayList<CasaSelecionadaObserver>();
+	public ArrayList<Observer_CasaSelecionada> casaSelecionadaObserverList = new ArrayList<Observer_CasaSelecionada>();
 
 	public CenaTabuleiro(int x, int y, int w, int h) {
 		super(x, y, w, h);
@@ -67,16 +69,16 @@ public class CenaTabuleiro extends CenaIsometrica implements CasaSelecionadaObse
 	}
 	
 	// OBSERVER PATTERN Method Group
-	public void casaSelecionadaObservedRegister(CasaSelecionadaObserver observer) {
+	public void register_casaSelecionadaObserved(Observer_CasaSelecionada observer) {
 		this.casaSelecionadaObserverList.add(observer);
 	}
 	
-	public void casaSelecionadaObservedUnRegister(CasaSelecionadaObserver observer) {
+	public void unRegister_casaSelecionadaObserved(Observer_CasaSelecionada observer) {
 		this.casaSelecionadaObserverList.remove(observer);
 	}
 	
 	private void animationEndNotityObservers() {
-		for( CasaSelecionadaObserver ob : this.casaSelecionadaObserverList ) {
+		for( Observer_CasaSelecionada ob : this.casaSelecionadaObserverList ) {
 			ob.observerNotify(this);
 		}
 	}	

@@ -86,7 +86,7 @@ public class Baralho {
 		return null;
 	}
 	
-	public Carta distribuirCarta()
+	public Carta comprarCarta()
 	{
 		Random random = new Random();
 		Carta carta;

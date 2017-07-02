@@ -1,11 +1,15 @@
 package mediadores;
 
+import java.util.ArrayList;
+
+import javax.swing.JFileChooser;
+
 import animacao.*;
 import atores.*;
 import atores.CameraMenu.Modos;
 import estruturas.*;
+import interfaceGrafica.JanelaPrincipal;
 import jogo.*;
-import jogo.ControladoraDoJogo.EstadoDaJogada;
 
 class Observer_animationEnd_Dados implements AnimationEndObserver {
 	@Override
@@ -121,9 +125,6 @@ public class MediadorFluxoDeJogo {
 			this.deletarDados();
 			this.tradutorMovimentacao.desmarcarCasas();
 			
-			// Notificando a controladora do jogo
-			ControladoraDoJogo.getInstance().iniciarProximaJogada();
-			
 			// Criando o menu com as opções disponiveis para o jogador atual
 				cameraMenu.menuPrincipal.esconderBotoes();
 				Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
@@ -156,24 +157,50 @@ public class MediadorFluxoDeJogo {
 					}
 					
 				// Botões sempre disponiveis
+				cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_SALVAR );
 				cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_ACUSAR );
 				cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_MAO );
 				cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_NOTAS );
 				
 				// Botões de situacao
-				// TODO
-				cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_DADO );
-				cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_PASSAR );
+				if( jogadorDaVez.obterPosicao().isRoom() ) {
+					// Checa se o jogador tem a possibilidade de andar
+					ArrayList<Casa> casasPossiveis = tabuleiro.obterCasasNaDistancia( jogadorDaVez , 1 );
+					if( casasPossiveis.size() == 0 ) {
+						cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_PASSAR );
+					}
+				} 
+				else {
+					cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_DADO );
+					cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_PASSAR );
+				}
+				
+				
 			
 			// Posicionar Camera no personagem
 			Vetor2D_double posicaoVirtualJogador = tradutorTabuleiro.obterCentroDaCasa(ControladoraDoJogo.getInstance().obterJogadorDaVez().obterPosicao());
 			this.centralizarCameraEmPosicaoVirtual(posicaoVirtualJogador);
 		}
+		
+	// Finalizar a jogada
+		public void finalizarJogada() {
+			// Notificando a controladora do jogo
+			ControladoraDoJogo.getInstance().iniciarProximaJogada();
+			
+			// Inicializando uma nova jogada
+			this.iniciarJogadaDaVez();
+		}
+		
+	// Carrega dados iniciais da controladora de jogo  ----------------------------------------------------------------
+		public void carregarDadosDaControladora()
+		{
+			this.tabuleiro = ControladoraDoJogo.getInstance().obterTabuleiro();
+		}		
 			
 	// Inicio do Jogo ----------------------------------------------------------------
 		public void iniciarJogo()
 		{
-			ControladoraDoJogo.getInstance().iniciarPartida();
+			//ControladoraDoJogo.getInstance().iniciarPartida();
 		}
 		
 	// Movimentacao ------------------------------------------------------------------
@@ -243,7 +270,7 @@ public class MediadorFluxoDeJogo {
 			camera.setIsFixedOnTarget( false );
 		}
 		
-		public EstadoDaJogada obterEstadoDoJogo() {
+		public EstadoDoJogo.EtapaDaJogada obterEstadoDoJogo() {
 			return ControladoraDoJogo.getInstance().obterEstadoDaJogada();
 		}
 		
@@ -257,7 +284,7 @@ public class MediadorFluxoDeJogo {
 			{
 				cameraMenu.definirModo(Modos.PALPITE);
 				TradutorMenus.getInstance().desenharMenuPalpite(cameraMenu.cenaPalpite);
-				tradutorJogadores.reposicionarJogador(jogadorDaVez, tabuleiro.obterPosicaoLivreTipo(jogadorDaVez.obterPosicao().type).position);
+				tradutorJogadores.reposicionarJogador(jogadorDaVez, tabuleiro.obterUmaCasaLivreTipo(jogadorDaVez.obterPosicao().type).position);
 			}
 
 			tradutorMovimentacao.desmarcarCasas();
@@ -279,9 +306,5 @@ public class MediadorFluxoDeJogo {
 			//camera.setPositionCenteredOn( centroProjetado.x , centroProjetado.y );
 		}
 		
-	// Novos jogadores
-		public void adicionarNovoJogador( PersonagemEnum personagem ) {
-			Jogador jogador = new Jogador( personagem );
-			ControladoraDoJogo.getInstance().adicionarJogador( jogador );	
-		}
+
 }
