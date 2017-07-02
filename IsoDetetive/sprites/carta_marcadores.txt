@@ -35,4 +35,23 @@ neutro		; animation name
 1,1		; number of rows and cols of frames
 -1		; total number of frames ( usually rows*cols )
 1000		; frame change speed ( millis )
+
+humano		; animation name
+5		; animation ID code
+240,0 		; animation frame start position
+120,180 	; single frame size
+120,180 	; advancement step ( usually frame size )
+1,1		; number of rows and cols of frames
+-1		; total number of frames ( usually rows*cols )
+1000		; frame change speed ( millis )
+
+int art		; animation name
+6		; animation ID code
+240,180		; animation frame start position
+120,180 	; single frame size
+120,180 	; advancement step ( usually frame size )
+1,1		; number of rows and cols of frames
+-1		; total number of frames ( usually rows*cols )
+1000		; frame change speed ( millis )
+
 #		; End of File Mark
