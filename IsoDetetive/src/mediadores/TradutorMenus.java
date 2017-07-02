@@ -212,11 +212,6 @@ public class TradutorMenus {
 			Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
 			referenciasCartasAtor.clear();
 			
-			if(obeterNumeroCartasSelecionadas() >= 3)
-				cena.getConfirma().setVisible(true);
-			else
-				cena.getConfirma().setVisible(false);
-			
 			for (Carta carta : pilhaSuspeitos) {
 				desenharMenuPalpite_auxiliar_desenharCartaNaCena( carta , cena , true );
 			}
@@ -237,11 +232,6 @@ public class TradutorMenus {
 		
 			ArrayList<Carta> cartas = jogador.temCartasNaMao(palpite);
 			referenciasCartasAtor.clear();
-			
-			if(obeterNumeroCartasSelecionadas() >= 1)
-				cena.getConfirma().setVisible(true);
-			else
-				cena.getConfirma().setVisible(false);
 			
 			for (Carta carta : cartas) {
 				ReferenciaCartaAtor referenciaCartaAtor = new ReferenciaCartaAtor( carta , new AtorCarta() );
@@ -276,11 +266,6 @@ public class TradutorMenus {
 		
 			ArrayList<Carta> baralho = Baralho.todasCartas();
 			referenciasCartasAtor.clear();
-			
-			if(obeterNumeroCartasSelecionadas() >= 3)
-				cena.getConfirma().setVisible(true);
-			else
-				cena.getConfirma().setVisible(false);
 			
 			for (Carta carta : baralho) {
 				ReferenciaCartaAtor referenciaCartaAtor = new ReferenciaCartaAtor( carta , new AtorCarta() );

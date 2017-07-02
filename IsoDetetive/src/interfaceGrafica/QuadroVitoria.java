@@ -69,17 +69,17 @@ public class QuadroVitoria extends JPanel{
 	{
 		switch (personagem) {
 			case L:
-				return "L.txt";
+				return "bg_mainscreen.txt";
 			case CARMEN:
-				return "L.txt";
+				return "bg_mainscreen.txt";
 			case SHERLOCK:
-				return "L.txt";
+				return "bg_mainscreen.txt";
 			case EDMORT:
-				return "L.txt";
+				return "bg_mainscreen.txt";
 			case PANTERA:
-				return "L.txt";
+				return "bg_mainscreen.txt";
 			case BATMAN:
-				return "L.txt";
+				return "bg_mainscreen.txt";
 		}
 		
 		return null;
