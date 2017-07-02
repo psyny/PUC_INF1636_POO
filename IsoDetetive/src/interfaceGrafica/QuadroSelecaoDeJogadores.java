@@ -19,6 +19,8 @@ import javax.swing.event.ListSelectionListener;
 import animacao.Camera;
 import animacao.Scene;
 import atores.AtorBackground;
+import atores.AtorBotaoMenuJogo.Tipo;
+import atores.AtorCarta.TipoMarcador;
 import atores.AtorBotaoMenuPreJogo;
 import atores.AtorCarta;
 import atores.AtorEtiqueta;
@@ -44,16 +46,15 @@ public class QuadroSelecaoDeJogadores extends JPanel {
 	}	
 	
 	private class mouseListener_seletor extends MouseAdapter {
-		AtorCarta atorCarta;
+		EstadoCarta estadoCarta;
 		
-		public mouseListener_seletor( AtorCarta atorCarta ) {
-			this.atorCarta = atorCarta;
-			atorCarta.definirSelecionado(false);
+		public mouseListener_seletor( EstadoCarta estadoCarta) {
+			this.estadoCarta = estadoCarta;
 		}
 		
 		@Override
 		public void mouseClicked(MouseEvent arg0)  {
-			atorCarta.definirSelecionado( !atorCarta.getSelecionado() );
+			estadoCarta.proximoEstado();
 			
 			certificarJogadoresMinimos();
 		}
@@ -82,21 +83,56 @@ public class QuadroSelecaoDeJogadores extends JPanel {
 		}
 	}
 	
-	public class tipoJogador
+	public class EstadoCarta
 	{
-		public PersonagemEnum personagem;
-		public boolean inteligenciaArtificial;
-		
-		public tipoJogador(PersonagemEnum personagem, boolean inteligenciaArtificial)
+		protected AtorCarta atorCarta;
+		protected TipoMarcador tipoJogador;
+
+		public EstadoCarta(AtorCarta atorCarta)
 		{
-			this.personagem = personagem;
-			this.inteligenciaArtificial = inteligenciaArtificial;
+			this.atorCarta = atorCarta;
+			tipoJogador = TipoMarcador.VAZIO;
+			atualizarAtorCarta();
+		}
+		
+		public void proximoEstado()
+		{
+			switch (tipoJogador) {
+				case VAZIO:
+					tipoJogador = TipoMarcador.HUMANO;
+					break;
+					
+				case HUMANO:
+					tipoJogador = TipoMarcador.IA;
+					break;
+					
+				case IA:
+					tipoJogador = TipoMarcador.VAZIO;
+					break;
+			}
+			
+			atualizarAtorCarta();
+		}
+		
+		private void atualizarAtorCarta()
+		{
+			switch (tipoJogador) {
+				case VAZIO:
+					atorCarta.definirMarcador(tipoJogador);
+					atorCarta.definirSelecionado(false);
+					break;
+				case HUMANO:
+				case IA:
+					atorCarta.definirMarcador(tipoJogador);
+					atorCarta.definirSelecionado(true);
+					break;
+			}
 		}
 	}
 	
 	// -------------------------------------------------------------------------
 	
-	private ArrayList<AtorCarta> cartas = new ArrayList<AtorCarta>();
+	private ArrayList<EstadoCarta> estadoCartas = new ArrayList<EstadoCarta>();
 	private AtorBotaoMenuPreJogo iniciarJogo = null;
 	
 	public QuadroSelecaoDeJogadores() {
@@ -133,6 +169,7 @@ public class QuadroSelecaoDeJogadores extends JPanel {
 	        
 	        // Cartas
 		        AtorCarta carta;
+		        EstadoCarta estadoCarta;
 		        int x = 110;
 		        int y = 350;
 		        int incX = 160;
@@ -148,9 +185,10 @@ public class QuadroSelecaoDeJogadores extends JPanel {
 		        for( CartaType cartaTipo : cartasPersonagens ) {
 			        carta = new AtorCarta();
 			        carta.definirCarta( cartaTipo );
-			        carta.addMouseListener( new mouseListener_seletor(carta) );
+			        estadoCarta = new EstadoCarta(carta);
+			        estadoCartas.add( estadoCarta );
+			        carta.addMouseListener( new mouseListener_seletor(estadoCarta) );
 			        cena.addActor( carta , 5 );
-			        cartas.add( carta );
 			        carta.setLocation( x,  y );			        
 			        x += incX;
 		        }
@@ -159,8 +197,8 @@ public class QuadroSelecaoDeJogadores extends JPanel {
 	
 	private void certificarJogadoresMinimos() {
 		int jogadores = 0;
-		for( AtorCarta atorCarta : cartas ) {
-			if( atorCarta.getSelecionado() == true ) {
+		for( EstadoCarta estadoCarta : estadoCartas ) {
+			if( estadoCarta.atorCarta.getSelecionado() == true ) {
 				jogadores++;
 			}
 		}
@@ -173,45 +211,54 @@ public class QuadroSelecaoDeJogadores extends JPanel {
 	}
 	
 	private void iniciarNovoJogo() {
-		ArrayList<tipoJogador> personagensSelecionados = new ArrayList<tipoJogador>();
+		ArrayList<EstadoDoJogo.TipoNovoJogador> novosJogadores = new ArrayList<EstadoDoJogo.TipoNovoJogador>();
 		
-		for( AtorCarta atorCarta : cartas ) {
+		for( EstadoCarta estadoCarta : estadoCartas ) {
+			EstadoDoJogo.TipoNovoJogador novoJogador = new EstadoDoJogo.TipoNovoJogador();
 			
-			if( atorCarta.getSelecionado() == true ) {
-				switch( atorCarta.obterTipo() ) {
-					case L:
-						personagensSelecionados.add( new tipoJogador(PersonagemEnum.L, false) );
-						break;
-						
-					case SHERLOCK:
-						personagensSelecionados.add( new tipoJogador(PersonagemEnum.SHERLOCK, false) );
-						break;
-						
-					case CARMEN:
-						personagensSelecionados.add( new tipoJogador(PersonagemEnum.CARMEN, false) );
-						break;
-						
-					case PANTERA:
-						personagensSelecionados.add( new tipoJogador(PersonagemEnum.PANTERA, false) );
-						break;
-						
-					case EDMORT:
-						personagensSelecionados.add( new tipoJogador(PersonagemEnum.EDMORT, false) );
-						break;
-						
-					case BATMAN:
-						personagensSelecionados.add( new tipoJogador(PersonagemEnum.BATMAN, false) );
-						break;
-						
-					default:
-						break;
-				}
+			switch( estadoCarta.atorCarta.obterTipo() ) {
+				case L:
+					novoJogador.personagemEnum = PersonagemEnum.L;
+					break;
+					
+				case SHERLOCK:
+					novoJogador.personagemEnum = PersonagemEnum.SHERLOCK;
+					break;
+					
+				case CARMEN:
+					novoJogador.personagemEnum = PersonagemEnum.CARMEN;
+					break;
+					
+				case PANTERA:
+					novoJogador.personagemEnum = PersonagemEnum.PANTERA;
+					break;
+					
+				case EDMORT:
+					novoJogador.personagemEnum = PersonagemEnum.EDMORT;
+					break;
+					
+				case BATMAN:
+					novoJogador.personagemEnum = PersonagemEnum.BATMAN;
+					break;
+					
+				default:
+					break;
 			}
+			
+			if(estadoCarta.tipoJogador == TipoMarcador.VAZIO)
+				novoJogador.emJogo = false;
+			else
+				novoJogador.emJogo = true;
+			
+			if(estadoCarta.tipoJogador == TipoMarcador.IA)
+				novoJogador.inteligenciaArtificial = true;
+			
+			novosJogadores.add(novoJogador);
 		}
 		
 		// Cria um novo estado de jogo
 		EstadoDoJogo estadoDoJogo = new EstadoDoJogo();
-		estadoDoJogo.gerarEstadoInicial( personagensSelecionados , null );
+		estadoDoJogo.gerarEstadoInicial( novosJogadores , null );
 		ControladoraDoJogo.getInstance().definirEstadoDoJogo(estadoDoJogo);
 		
 		// TODO: Inteligencia Artificial ou Jogador?

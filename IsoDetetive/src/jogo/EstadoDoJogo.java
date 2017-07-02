@@ -10,7 +10,6 @@ import atores.AtorJogador;
 import estruturas.Vetor2D_double;
 import interfaceGrafica.JanelaPrincipal;
 import interfaceGrafica.QuadroJogo;
-import interfaceGrafica.QuadroSelecaoDeJogadores.tipoJogador;
 import jogo.Jogador.Nota;
 import mediadores.MediadorFluxoDeJogo;
 import mediadores.TradutorJogadores.AtoresDoJogador;
@@ -22,6 +21,13 @@ public class EstadoDoJogo {
 		AGUARDANDO_MOVIMENTO,
 		PALPITE,
 		ACUSACAO
+	}
+	
+	public static class TipoNovoJogador
+	{
+		public PersonagemEnum personagemEnum;
+		public boolean emJogo;
+		public boolean inteligenciaArtificial = false;
 	}
 	
 	// Dados de controle
@@ -42,27 +48,25 @@ public class EstadoDoJogo {
 		listaDeJogadores = new ArrayList<Jogador>();
 	}
 	
-	public void gerarEstadoInicial( ArrayList<tipoJogador> listaDePersonagens , String arquivoTabuleiro ) {
+	public void gerarEstadoInicial( ArrayList<TipoNovoJogador> listaDePersonagens , String arquivoTabuleiro ) {
 		// Importante carregar o tabuleiro primeiro para obter dados do posicionamento dos personagens
 		this.carregarTabuleiro( arquivoTabuleiro );
 		
 		// Cria e posiciona os jogadores 
 		listaDeJogadores = new ArrayList<Jogador>();
 		for( PersonagemEnum personagemEnum : PersonagemEnum.values() ) {
-			Jogador jogador = null;
+			TipoNovoJogador novoJogador = null;
 			
-			if( listaDePersonagens.indexOf( personagemEnum ) < 0 ) {
-				jogador = new Jogador( personagemEnum, false );
-				jogador.emJogo = false;
-			}
-			else {
-				if(listaDePersonagens.get( listaDePersonagens.indexOf( personagemEnum ) ).inteligenciaArtificial)
-					jogador = new Jogador( personagemEnum, true );
-				else
-					jogador = new Jogador( personagemEnum, false );
-				jogador.emJogo = true;
+			for (TipoNovoJogador tipoNovoJogador : listaDePersonagens) {
+				if(tipoNovoJogador.personagemEnum == personagemEnum)
+				{
+					novoJogador = tipoNovoJogador;
+					break;
+				}
 			}
 			
+			Jogador jogador = new Jogador( personagemEnum, novoJogador.inteligenciaArtificial );
+			jogador.emJogo = novoJogador.emJogo;
 			
 			jogador.definirPosicao( PersonagemLista.getInstance().obterPersonagem(personagemEnum).obterCasaInicial() );
 			

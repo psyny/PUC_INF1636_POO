@@ -7,7 +7,7 @@ import jogo.Jogador.Nota;
 public class Agente {
 
 	private Jogador personagem;
-	private ArrayList<CasaType> salasNaoVisitadas; 
+	private ArrayList<CasaType> salasNaoVisitadas = new ArrayList<CasaType>(); 
 	private ArrayList<Carta> crime;
 	
 	public Agente(Jogador personagem)

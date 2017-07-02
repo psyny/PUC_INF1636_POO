@@ -123,8 +123,6 @@ public class QuadroJogo extends JLayeredPane {
         menuCenaPrincipal.adicionarCena( menuCamera.cenaEscolhaCarta , 2);
         
         menuCamera.definirModo( CameraMenu.Modos.MENU_PRINCIPAL );
-        
-        
 		
 		//Inicia o primerio turno
 		MediadorFluxoDeJogo.getInstance().iniciarJogo();

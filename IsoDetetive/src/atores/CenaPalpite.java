@@ -21,12 +21,9 @@ public class CenaPalpite extends Scene {
 	class mouseListener_confirma extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent arg0)  {
-			if(TradutorMenus.getInstance().obeterNumeroCartasSelecionadas() == numeroDeSelecionadas)
-			{
-				limparCena();
-				MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.MENU_PRINCIPAL);
-				TradutorMenus.getInstance().gerarPalpite();
-			}
+			limparCena();
+			MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.MENU_PRINCIPAL);
+			TradutorMenus.getInstance().gerarPalpite();
 		}
 	}
 	
@@ -42,7 +39,6 @@ public class CenaPalpite extends Scene {
 	protected Vetor2D_int proximaPosicao = new Vetor2D_int(70, 130);
 	protected Actor confirma;
 	protected Actor fechar;
-	protected int numeroDeSelecionadas = 3;
 	
 	public CenaPalpite()
 	{
@@ -50,9 +46,12 @@ public class CenaPalpite extends Scene {
 		
 		setBackground(Color.WHITE);
 		setOpaque(false);
-AtorEtiqueta titulo = new AtorEtiqueta( AtorEtiqueta.Tipo.FACA_SEU_PALPITE );
+		
+		AtorEtiqueta titulo = new AtorEtiqueta( AtorEtiqueta.Tipo.FACA_SEU_PALPITE );
         addActor( titulo , 1 );
-        titulo.setLocation(0, -30);						confirma = new AtorBotaoMenuJogo( "botao_confirmar.txt" );
+        titulo.setLocation(0, -30);	
+        
+        confirma = new AtorBotaoMenuJogo( "botao_confirmar.txt" );
 		confirma.setLocation( 820 , 20 );  
 		confirma.addMouseListener( new mouseListener_confirma() );
 		this.addActor( confirma , 10 );	
@@ -87,6 +86,11 @@ AtorEtiqueta titulo = new AtorEtiqueta( AtorEtiqueta.Tipo.FACA_SEU_PALPITE );
 		
 		cartasNaCena.clear();
 		proximaPosicao = new Vetor2D_int(70, 130);
+	}
+	
+	public Actor getConfirma()
+	{
+		return confirma;
 	}
 	
 	public void ajustarConfirmaVisible(boolean estado)

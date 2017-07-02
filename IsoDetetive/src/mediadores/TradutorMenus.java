@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
 
+import animacao.Actor;
 import animacao.Scene;
 import atores.AtorCarta;
 import atores.CenaAcusacao;
@@ -69,21 +70,28 @@ public class TradutorMenus {
 	
 	class MouseListener_cartaSelecaoUnicaTipada extends MouseAdapter {
 		protected ReferenciaCartaAtor carta = null;
-		protected int minimoDeCartas = 0;
+		protected int numeroDeCartasNecessario = 0;
+		protected Actor confirma;
 		
 		public MouseListener_cartaSelecaoUnicaTipada(ReferenciaCartaAtor carta) {
 			this.carta = carta;
 		}
 		
-		public MouseListener_cartaSelecaoUnicaTipada(ReferenciaCartaAtor carta, int minimoDeCartas) {
+		public MouseListener_cartaSelecaoUnicaTipada(ReferenciaCartaAtor carta, Actor confirma, int numeroDeCartasNecessario) {
 			this.carta = carta;
-			this.minimoDeCartas = minimoDeCartas;
+			this.confirma = confirma;
+			this.numeroDeCartasNecessario = numeroDeCartasNecessario;
 		}
 		
 		@Override
 		public void mouseClicked(MouseEvent arg0)  {
 			carta.atorCarta.definirSelecionado(!(carta.atorCarta.getSelecionado()));
-			desmarcarCartaTipo(carta.carta);
+			desmarcarOutrasCartaTipo(carta.carta);
+			
+			if(obeterNumeroCartasSelecionadas() >= numeroDeCartasNecessario)
+				confirma.setVisible(true);
+			else
+				confirma.setVisible(false);
 		}
 	}
 	
@@ -97,7 +105,7 @@ public class TradutorMenus {
 		@Override
 		public void mouseClicked(MouseEvent arg0)  {
 			carta.atorCarta.definirSelecionado(!(carta.atorCarta.getSelecionado()));
-			desmarcarCarta(carta.carta);
+			desmarcarOutrasCarta(carta.carta);
 		}
 	}
 	
@@ -277,7 +285,7 @@ public class TradutorMenus {
 			referenciaCartaAtor.atorCarta.definirCarta( carta.tipo );
 			
 			if( addListener == true ) {
-				referenciaCartaAtor.atorCarta.addMouseListener(new MouseListener_cartaSelecaoUnicaTipada(referenciaCartaAtor));
+				referenciaCartaAtor.atorCarta.addMouseListener(new MouseListener_cartaSelecaoUnicaTipada(referenciaCartaAtor, cena.getConfirma(), 3));
 			} else {
 				referenciaCartaAtor.atorCarta.definirSelecionado(true);
 			}
@@ -310,7 +318,7 @@ public class TradutorMenus {
 			}
 		}
 		
-		public void desmarcarCartaTipo(Carta carta)
+		public void desmarcarOutrasCartaTipo(Carta carta)
 		{
 			for (ReferenciaCartaAtor cartaAtor : referenciasCartasAtor) {
 				if(mesmoTipoCarta(cartaAtor.carta, carta) && !cartaAtor.carta.equals(carta))
@@ -320,7 +328,7 @@ public class TradutorMenus {
 			}
 		}
 		
-		public void desmarcarCarta(Carta carta)
+		public void desmarcarOutrasCarta(Carta carta)
 		{
 			for (ReferenciaCartaAtor cartaAtor : referenciasCartasAtor) {
 				if(!cartaAtor.carta.equals(carta))

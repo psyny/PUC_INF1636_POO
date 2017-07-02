@@ -27,14 +27,15 @@ public class AtorCarta extends Actor {
 		VAZIO,
 		SUSPEITO,
 		INOCENTE,
-		NEUTRO
+		NEUTRO,
+		HUMANO,
+		IA
 	}
 
 	private AnimatedSprite 	carta = null;	
 	private AnimatedSprite 	marcador = null;
 	private AnimatedSprite 	seletor = null;
 	protected boolean 	flagSelecionado = false;
-	protected TipoMarcador tipoMarcador = TipoMarcador.VAZIO;
 	
 	private CartaType	tipo;
 	
@@ -122,12 +123,7 @@ public class AtorCarta extends Actor {
 	{
 		return flagSelecionado;
 	}
-	
-	public TipoMarcador getTipoMarcador()
-	{
-		return tipoMarcador;
-	}
-	
+
 	public void definirSelecionado(boolean flag)
 	{
 		flagSelecionado = flag;
@@ -142,7 +138,6 @@ public class AtorCarta extends Actor {
 	}
 	
 	public void definirMarcador( AtorCarta.TipoMarcador tipoMarcador ) {
-		this.tipoMarcador = tipoMarcador;
 		switch( tipoMarcador ) {
 			case VAZIO:
 				marcador.playAnimation(1);
@@ -158,6 +153,14 @@ public class AtorCarta extends Actor {
 				
 			case NEUTRO:
 				marcador.playAnimation(1);
+				break;
+				
+			case HUMANO:
+				marcador.playAnimation(5);
+				break;
+				
+			case IA:
+				marcador.playAnimation(6);
 				break;
 		}
 	}
