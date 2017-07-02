@@ -82,6 +82,11 @@ public class CenaAcusacao extends Scene {
 		ajustarProximaPosicao();
 	}
 	
+	public Actor getConfirma()
+	{
+		return confirma;
+	}
+	
 	public void limparCena()
 	{
 		for (AtorCarta carta : cartasNaCena) {

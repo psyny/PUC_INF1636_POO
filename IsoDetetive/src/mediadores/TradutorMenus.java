@@ -73,8 +73,9 @@ public class TradutorMenus {
 		protected int numeroDeCartasNecessario = 0;
 		protected Actor confirma;
 		
-		public MouseListener_cartaSelecaoUnicaTipada(ReferenciaCartaAtor carta) {
+		public MouseListener_cartaSelecaoUnicaTipada(ReferenciaCartaAtor carta, Actor confirma) {
 			this.carta = carta;
+			this.confirma = confirma;
 		}
 		
 		public MouseListener_cartaSelecaoUnicaTipada(ReferenciaCartaAtor carta, Actor confirma, int numeroDeCartasNecessario) {
@@ -97,15 +98,29 @@ public class TradutorMenus {
 	
 	class MouseListener_cartaSelecaoUnicaNaoTipada extends MouseAdapter {
 		protected ReferenciaCartaAtor carta = null;
+		protected int numeroDeCartasNecessario = 0;
+		protected Actor confirma;
 		
-		public MouseListener_cartaSelecaoUnicaNaoTipada(ReferenciaCartaAtor carta) {
+		public MouseListener_cartaSelecaoUnicaNaoTipada(ReferenciaCartaAtor carta, Actor confirma) {
 			this.carta = carta;
+			this.confirma = confirma;
+		}
+		
+		public MouseListener_cartaSelecaoUnicaNaoTipada(ReferenciaCartaAtor carta, Actor confirma, int numeroDeCartasNecessario) {
+			this.carta = carta;
+			this.confirma = confirma;
+			this.numeroDeCartasNecessario = numeroDeCartasNecessario;
 		}
 		
 		@Override
 		public void mouseClicked(MouseEvent arg0)  {
 			carta.atorCarta.definirSelecionado(!(carta.atorCarta.getSelecionado()));
 			desmarcarOutrasCarta(carta.carta);
+			
+			if(obeterNumeroCartasSelecionadas() >= numeroDeCartasNecessario)
+				confirma.setVisible(true);
+			else
+				confirma.setVisible(false);
 		}
 	}
 	
@@ -197,6 +212,11 @@ public class TradutorMenus {
 			Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
 			referenciasCartasAtor.clear();
 			
+			if(obeterNumeroCartasSelecionadas() >= 3)
+				cena.getConfirma().setVisible(true);
+			else
+				cena.getConfirma().setVisible(false);
+			
 			for (Carta carta : pilhaSuspeitos) {
 				desenharMenuPalpite_auxiliar_desenharCartaNaCena( carta , cena , true );
 			}
@@ -218,13 +238,18 @@ public class TradutorMenus {
 			ArrayList<Carta> cartas = jogador.temCartasNaMao(palpite);
 			referenciasCartasAtor.clear();
 			
+			if(obeterNumeroCartasSelecionadas() >= 1)
+				cena.getConfirma().setVisible(true);
+			else
+				cena.getConfirma().setVisible(false);
+			
 			for (Carta carta : cartas) {
 				ReferenciaCartaAtor referenciaCartaAtor = new ReferenciaCartaAtor( carta , new AtorCarta() );
 				referenciasCartasAtor.add( referenciaCartaAtor );
 				referenciaCartaAtor.atorCarta.definirCarta( carta.tipo );
 				
 				// Adiciona o mouseListener para multipla seleção
-				referenciaCartaAtor.atorCarta.addMouseListener( new MouseListener_cartaSelecaoUnicaNaoTipada(referenciaCartaAtor) );	
+				referenciaCartaAtor.atorCarta.addMouseListener( new MouseListener_cartaSelecaoUnicaNaoTipada(referenciaCartaAtor, cena.getConfirma(), 1) );	
 				
 				// Desenhar marcacao do tipo de carta ( feedback para o jogador )
 				definirMarcadorCarta( referenciaCartaAtor , jogadorDaVez );
@@ -252,13 +277,18 @@ public class TradutorMenus {
 			ArrayList<Carta> baralho = Baralho.todasCartas();
 			referenciasCartasAtor.clear();
 			
+			if(obeterNumeroCartasSelecionadas() >= 3)
+				cena.getConfirma().setVisible(true);
+			else
+				cena.getConfirma().setVisible(false);
+			
 			for (Carta carta : baralho) {
 				ReferenciaCartaAtor referenciaCartaAtor = new ReferenciaCartaAtor( carta , new AtorCarta() );
 				referenciasCartasAtor.add( referenciaCartaAtor );
 				referenciaCartaAtor.atorCarta.definirCarta( carta.tipo );
 				
 				// Adiciona o mouseListener para multipla seleção
-				referenciaCartaAtor.atorCarta.addMouseListener( new MouseListener_cartaSelecaoUnicaTipada(referenciaCartaAtor) );	
+				referenciaCartaAtor.atorCarta.addMouseListener( new MouseListener_cartaSelecaoUnicaTipada(referenciaCartaAtor, cena.getConfirma(), 3) );	
 				
 				// Desenhar marcacao do tipo de carta ( feedback para o jogador )
 				definirMarcadorCarta( referenciaCartaAtor , jogadorDaVez );
