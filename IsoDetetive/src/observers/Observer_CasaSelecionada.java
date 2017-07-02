@@ -1,6 +1,6 @@
 package observers;
 
 public interface Observer_CasaSelecionada {
-	public void observerNotify(Observed_CasaSelecionada observed);
+	public void observerNotify_CasaSelecionada(Observed_CasaSelecionada observed);
 
 }

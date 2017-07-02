@@ -10,8 +10,10 @@ import jogo.*;
 import observers.*;
 
 
-public class TradutorMovimentacao implements Observer_CasaSelecionada , MouseListener {
+public class TradutorMovimentacao implements Observer_CasaSelecionada ,  Observed_CasaClicada , MouseListener {
 	private ArrayList<Marcador>	casasMarcadas = new ArrayList<Marcador>();
+	private ArrayList<Observer_CasaClicada>	Observer_CasaClicada_Register = new ArrayList<Observer_CasaClicada>();
+	
 	
 	public TradutorMovimentacao( ) {
 		// Checa se os objetos necessarios foram registrados no fluxo de jogo
@@ -50,7 +52,7 @@ public class TradutorMovimentacao implements Observer_CasaSelecionada , MouseLis
 	}
 
 	@Override
-	public void observerNotify(Observed_CasaSelecionada observed) {
+	public void observerNotify_CasaSelecionada(Observed_CasaSelecionada observed) {
 		Vetor2D_int casaSelecionada = observed.obterCasaSelecionada();
 		
 		for( Marcador ator : casasMarcadas ) {
@@ -64,7 +66,15 @@ public class TradutorMovimentacao implements Observer_CasaSelecionada , MouseLis
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent arg0) {
+	public void mouseClicked(MouseEvent arg0) {	
+		// Obter Casa Clicada
+		Vetor2D_int casaDestino = MediadorFluxoDeJogo.getInstance().cenaTabuleiro.ultimaCasaApontada;
+		
+		// Posiciona camera no local clicado
+		Vetor2D_double localDoClique = MediadorFluxoDeJogo.getInstance().tradutorTabuleiro.obterCentroDaCasa( casaDestino.x , casaDestino.y );
+		MediadorFluxoDeJogo.getInstance().centralizarCameraEmPosicaoVirtual( localDoClique );
+		
+ 		// ----
 		switch (ControladoraDoJogo.getInstance().obterEstadoDaJogada()) {
 			case AGUARDANDO_MOVIMENTO:
 			case CONFIRMANDO_MOVIMENTO:
@@ -72,13 +82,7 @@ public class TradutorMovimentacao implements Observer_CasaSelecionada , MouseLis
 	
 			default:
 				return;
-		}
-		
-		Vetor2D_int casaDestino = MediadorFluxoDeJogo.getInstance().cenaTabuleiro.ultimaCasaApontada;
-		
-		// Posiciona camera no local clicado
-		Vetor2D_double localDoClique = MediadorFluxoDeJogo.getInstance().tradutorTabuleiro.obterCentroDaCasa( casaDestino.x , casaDestino.y );
-		MediadorFluxoDeJogo.getInstance().centralizarCameraEmPosicaoVirtual( localDoClique );
+		}		
 		
 		// Checa se é possivel ir para a casa desejada
 		boolean exitFlag = true;
@@ -91,6 +95,11 @@ public class TradutorMovimentacao implements Observer_CasaSelecionada , MouseLis
 		if( exitFlag == true ) {
 			return;
 		}
+		
+		// Chamando os OBSERVERS:
+		for( Observer_CasaClicada observer : this.Observer_CasaClicada_Register ) {
+			observer.observerNotify_CasaClicada(this);
+		}		
 
 		// Vai para a casa desejada
 		Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
@@ -112,6 +121,21 @@ public class TradutorMovimentacao implements Observer_CasaSelecionada , MouseLis
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
+	}
+
+	@Override
+	public void register_casaClicada(Observer_CasaClicada observer) {
+		Observer_CasaClicada_Register.add( observer );
+	}
+
+	@Override
+	public void unRegister_casaClicada(Observer_CasaClicada observer) {
+		Observer_CasaClicada_Register.remove( observer );
+	}
+
+	@Override
+	public Vetor2D_int obterCasaClicada() {
+		return MediadorFluxoDeJogo.getInstance().cenaTabuleiro.ultimaCasaApontada;
 	}
 
 } 

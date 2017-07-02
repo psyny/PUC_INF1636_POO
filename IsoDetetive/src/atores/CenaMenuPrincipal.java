@@ -18,16 +18,18 @@ import interfaceGrafica.JanelaPrincipal;
 import jogo.ControladoraDoJogo;
 import mediadores.MediadorFluxoDeJogo;
 import mediadores.TradutorMenus;
+import observers.Observed_CasaClicada;
+import observers.Observer_CasaClicada;
 
 
 
-public class CenaMenuPrincipal extends Scene {
+public class CenaMenuPrincipal extends Scene implements Observer_CasaClicada {
 	class mouseListener_dado extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent arg0)  {
 			MediadorFluxoDeJogo.getInstance().rolarDados();
 			
-			botao_mover.setVisible(true);
+			botao_mover.setVisible(false);
 			
 			botao_salvar.setVisible( false );
 			botao_dado.setVisible(false);			
@@ -230,5 +232,13 @@ public class CenaMenuPrincipal extends Scene {
 	private void resetarPosicaoInicial() {
 		proximaPosicao.x = 50;
 		proximaPosicao.y = 50;
+	}
+
+	@Override
+	public void observerNotify_CasaClicada(Observed_CasaClicada observed) {
+		if( botao_mover.isVisible() == false ) {
+			botao_mover.setVisible(true);	
+			revalidarPosicaoDosBotoes();
+		}
 	}
 }

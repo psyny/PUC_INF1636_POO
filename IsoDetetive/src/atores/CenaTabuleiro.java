@@ -79,11 +79,13 @@ public class CenaTabuleiro extends CenaIsometrica implements Observed_CasaSeleci
 	
 	private void animationEndNotityObservers() {
 		for( Observer_CasaSelecionada ob : this.casaSelecionadaObserverList ) {
-			ob.observerNotify(this);
+			ob.observerNotify_CasaSelecionada(this);
 		}
 	}	
 	
 	public Vetor2D_int obterCasaSelecionada() {
 		return this.ultimaCasaApontada;
 	}
+
+
 }

@@ -100,6 +100,7 @@ public class QuadroJogo extends JLayeredPane {
         
         //Cena Menu Principal
         menuCamera.menuPrincipal = new CenaMenuPrincipal();
+        tradutorMovimentacao.register_casaClicada(menuCamera.menuPrincipal);
         menuCenaPrincipal.adicionarCena( menuCamera.menuPrincipal , 1 );    
         
         //Cena Mao

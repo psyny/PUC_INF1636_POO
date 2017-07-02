@@ -393,7 +393,7 @@ public class Tabuleiro {
 			Random random = new Random();
 			
 			for (Casa casa : casas) {
-				if(isFree(casa))
+				if(isFree(casa) && casa.isWalkable() == false )
 					casasDisponiveis.add(casa);
 			}
 			
