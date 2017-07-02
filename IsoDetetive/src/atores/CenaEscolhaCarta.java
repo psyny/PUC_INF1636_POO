@@ -32,7 +32,7 @@ public class CenaEscolhaCarta extends Scene {
 	protected Vetor2D_int proximaPosicao = new Vetor2D_int(70, 100);
 	
 	protected Actor confirma;
-	protected Vetor2D_int fecharPos = new Vetor2D_int( 0 , 20 );
+	protected Vetor2D_int confirmaPos = new Vetor2D_int( 0 , 20 );
 	protected int numeroDeSelecionadas = 1;
 	
 	public CenaEscolhaCarta()
@@ -43,8 +43,9 @@ public class CenaEscolhaCarta extends Scene {
 		setOpaque(false);
 		
 		confirma = new AtorBotaoMenuJogo( "botao_confirmar.txt" );
-		confirma.setLocation( fecharPos.x , fecharPos.y );  
+		confirma.setLocation( confirmaPos.x , confirmaPos.y );  
 		confirma.addMouseListener( new mouseListener_fechar() );
+		confirma.setVisible(false);
 		this.addActor( confirma , 10 );	
 		
 		this.limparCena();
@@ -77,6 +78,8 @@ public class CenaEscolhaCarta extends Scene {
 		
 		cartasNaCena.clear();
 		proximaPosicao = new Vetor2D_int(70, 130);
+		confirmaPos = new Vetor2D_int( 0 , 20 );
+		confirma.setVisible(false);
 	}
 	
 	public void ajustarConfirmaVisible(boolean estado)
@@ -93,9 +96,9 @@ public class CenaEscolhaCarta extends Scene {
 			proximaPosicao.y += 190;
 		}
 		
-		if( fecharPos.x < proximaPosicao.x ) {
-			fecharPos.x = proximaPosicao.x - 80;
-			confirma.setLocation( fecharPos.x , fecharPos.y );
+		if( confirmaPos.x < proximaPosicao.x ) {
+			confirmaPos.x = proximaPosicao.x - 80;
+			confirma.setLocation( confirmaPos.x , confirmaPos.y );
 		}
 	}
 }

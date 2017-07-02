@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import com.sun.xml.internal.ws.api.Cancelable;
 
 import atores.CameraMenu.Modos;
+import interfaceGrafica.JanelaPrincipal;
+import interfaceGrafica.QuadroVitoria;
 import mediadores.MediadorFluxoDeJogo;
 import mediadores.TradutorMenus;
 import observers.Observed_JogadorReposicionado;
@@ -162,11 +164,13 @@ public class ControladoraDoJogo {
 		{
 			//TODO - end-Game, alguem vençeu
 			System.out.println(estadoDoJogo.jogadorDaVez.personagem.nome + " venceu");
+			JanelaPrincipal.getInstance().carregarQuadro( new QuadroVitoria(estadoDoJogo.jogadorDaVez.personagem.personagem, acusacao));
 			return true;
 		}
 		else
 		{
 			estadoDoJogo.jogadorDaVez.emJogo = false;
+			iniciarProximaJogada();
 			MediadorFluxoDeJogo.getInstance().iniciarJogadaDaVez();
 			return false;
 		}

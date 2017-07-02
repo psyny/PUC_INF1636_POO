@@ -54,6 +54,7 @@ public class CenaPalpite extends Scene {
         confirma = new AtorBotaoMenuJogo( "botao_confirmar.txt" );
 		confirma.setLocation( 820 , 20 );  
 		confirma.addMouseListener( new mouseListener_confirma() );
+		confirma.setVisible(false);
 		this.addActor( confirma , 10 );	
 		
 		fechar = new AtorBotaoMenuJogo( "botao_fechar.txt" );
@@ -86,6 +87,7 @@ public class CenaPalpite extends Scene {
 		
 		cartasNaCena.clear();
 		proximaPosicao = new Vetor2D_int(70, 130);
+		confirma.setVisible(false);
 	}
 	
 	public Actor getConfirma()
