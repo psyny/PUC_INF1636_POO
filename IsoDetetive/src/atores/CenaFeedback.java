@@ -27,7 +27,7 @@ public class CenaFeedback extends Scene {
 	
 	protected ArrayList<AtorCarta> cartasNaCena = new ArrayList<AtorCarta>();
 	protected Vetor2D_int proximaPosicao = new Vetor2D_int(70, 100);
-	protected AtorBotaoMenuJogo marcadorJogador;
+	protected AtorBotaoMenuJogo marcadorJogador = null;
 	
 	protected Actor fechar;
 	protected Vetor2D_int confirmaPos = new Vetor2D_int( 0 , 20 );
@@ -66,6 +66,7 @@ public class CenaFeedback extends Scene {
 	{
 		atorPersonagem.setLocation(0, 0);
 		this.addActor(atorPersonagem, 20);
+		marcadorJogador = atorPersonagem;
 	}
 	
 	public void limparCena()
@@ -73,6 +74,8 @@ public class CenaFeedback extends Scene {
 		for (AtorCarta carta : cartasNaCena) {
 			carta.setToDestroy();
 		}
+		if(marcadorJogador != null)
+			marcadorJogador.setToDestroy();
 		
 		cartasNaCena.clear();
 		proximaPosicao = new Vetor2D_int(70, 130);

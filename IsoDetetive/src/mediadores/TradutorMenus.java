@@ -9,6 +9,7 @@ import javax.swing.JFileChooser;
 
 import animacao.Actor;
 import animacao.Scene;
+import atores.AtorBotaoMenuJogo;
 import atores.AtorCarta;
 import atores.AtorCarta.TipoMarcador;
 import atores.CameraMenu.Modos;
@@ -268,6 +269,8 @@ public class TradutorMenus {
 			definirMarcadorCarta( referenciaCartaAtor , jogadorDaVez );
 			
 			cena.desenharCarta( referenciaCartaAtor.atorCarta );
+			
+			//cena.desenharPersonagem( new AtorBotaoMenuJogo( ControladoraDoJogo.getInstance().obterJogadorReacao().obterPersonagem().obterNome() ) );
 		}
 		
 		public void registrarCartaEscolhida()
