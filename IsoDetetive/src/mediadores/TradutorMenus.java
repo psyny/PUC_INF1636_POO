@@ -251,6 +251,8 @@ public class TradutorMenus {
 				
 				cena.desenharCarta( referenciaCartaAtor.atorCarta );
 			}
+			
+			cena.desenharPersonagem( new AtorBotaoMenuJogo( MediadorFluxoDeJogo.getInstance().tradutorJogadores.converterPersonagemEnumTipoBotao( ControladoraDoJogo.getInstance().obterJogadorReacao().obterPersonagem().obterNome() ) ) );
 		}
 		
 	// Menu: Feedback	
@@ -270,9 +272,9 @@ public class TradutorMenus {
 			
 			cena.desenharCarta( referenciaCartaAtor.atorCarta );
 			
-			//cena.desenharPersonagem( new AtorBotaoMenuJogo( ControladoraDoJogo.getInstance().obterJogadorReacao().obterPersonagem().obterNome() ) );
+			cena.desenharPersonagem( new AtorBotaoMenuJogo( MediadorFluxoDeJogo.getInstance().tradutorJogadores.converterPersonagemEnumTipoBotao( ControladoraDoJogo.getInstance().obterJogadorReacao().obterPersonagem().obterNome() ) ) );
 		}
-		
+
 		public void registrarCartaEscolhida()
 		{
 			Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();

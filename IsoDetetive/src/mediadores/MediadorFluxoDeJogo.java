@@ -139,31 +139,7 @@ public class MediadorFluxoDeJogo {
 				Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
 				
 				// Icone do Jogador
-					switch( jogadorDaVez.obterPersonagem().obterEnum() ) {
-						case L:
-							cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.PERSONAGEM_L );
-							break;
-							
-						case SHERLOCK:
-							cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.PERSONAGEM_SHERLOCK );
-							break;
-							
-						case CARMEN:
-							cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.PERSONAGEM_CARMEN );
-							break;
-							
-						case PANTERA:
-							cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.PERSONAGEM_PANTERA );
-							break;
-							
-						case EDMORT:
-							cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.PERSONAGEM_EDMORT );
-							break;
-							
-						case BATMAN:
-							cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.PERSONAGEM_BATMAN );
-							break;	
-					}
+				cameraMenu.menuPrincipal.ativarBotao = tradutorJogadores.converterPersonagemEnumTipoBotao( jogadorDaVez.obterPersonagem().obterEnum() );
 					
 				// Botões sempre disponiveis
 				cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_SALVAR );

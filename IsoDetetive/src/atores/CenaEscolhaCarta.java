@@ -27,6 +27,7 @@ public class CenaEscolhaCarta extends Scene {
 	
 	protected ArrayList<AtorCarta> cartasNaCena = new ArrayList<AtorCarta>();
 	protected Vetor2D_int proximaPosicao = new Vetor2D_int(70, 100);
+	protected AtorBotaoMenuJogo marcadorJogador = null;
 	
 	protected Actor confirma;
 	protected Vetor2D_int confirmaPos = new Vetor2D_int( 0 , 20 );
@@ -62,6 +63,13 @@ public class CenaEscolhaCarta extends Scene {
 		ajustarProximaPosicao();
 	}
 	
+	public void desenharPersonagem(AtorBotaoMenuJogo atorPersonagem)
+	{
+		atorPersonagem.setLocation(0, 0);
+		this.addActor(atorPersonagem, 20);
+		marcadorJogador = atorPersonagem;
+	}
+	
 	public Actor getConfirma()
 	{
 		return confirma;
@@ -72,6 +80,8 @@ public class CenaEscolhaCarta extends Scene {
 		for (AtorCarta carta : cartasNaCena) {
 			carta.setToDestroy();
 		}
+		if(marcadorJogador != null)
+			marcadorJogador.setToDestroy();
 		
 		cartasNaCena.clear();
 		proximaPosicao = new Vetor2D_int(70, 130);
