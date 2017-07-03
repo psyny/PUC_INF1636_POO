@@ -34,7 +34,7 @@ public class CenaVitoria extends Scene {
 	}
 	
 	protected ArrayList<AtorCarta> cartasNaCena = new ArrayList<AtorCarta>();
-	protected Vetor2D_int proximaPosicao = new Vetor2D_int(70, 130);
+	protected Vetor2D_int proximaPosicao = new Vetor2D_int(70, 250);
 	protected int numeroDeSelecionadas = 3;
 	
 	public CenaVitoria()
@@ -44,11 +44,11 @@ public class CenaVitoria extends Scene {
 		setBackground(Color.WHITE);
 		setOpaque(false);
 		
-
+		/*
         AtorEtiqueta titulo = new AtorEtiqueta( AtorEtiqueta.Tipo.VITORIA );
         addActor( titulo , 1 );
         titulo.setLocation(0, -30);			
-        
+        */
 		
 		this.limparCena();
 	}
@@ -67,6 +67,12 @@ public class CenaVitoria extends Scene {
 		ajustarProximaPosicao();
 	}
 	
+	public void desenharBG( String fileName ) {
+		AtorBackground atorBG  = new AtorBackground(fileName);
+        this.addActor( atorBG , 0 );
+        atorBG.setLocation(0, 0);
+	}
+	
 
 	public void limparCena()
 	{
@@ -75,7 +81,7 @@ public class CenaVitoria extends Scene {
 		}
 		
 		cartasNaCena.clear();
-		proximaPosicao = new Vetor2D_int(70, 130);
+		proximaPosicao = new Vetor2D_int(70, 250);
 	}
 	
 	

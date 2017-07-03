@@ -225,6 +225,15 @@ public class ControladoraDoJogo {
 		}
 	}
 	
+	public PersonagemEnum obterPersonagemVitorioso() {
+		if (this.jogadorVitorioso == null ) {
+			return null;
+		}
+		else {
+			return this.jogadorVitorioso.obterPersonagem().obterEnum();
+		}
+	}
+	
 	public void salvarPartidaEmArquivo( File file ) {
 		this.estadoDoJogo.salvarEstadoEmArquivo( file );
 	}

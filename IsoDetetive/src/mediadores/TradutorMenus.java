@@ -330,6 +330,36 @@ public class TradutorMenus {
 			if( ControladoraDoJogo.getInstance().jogoAcabou() == true ) {
 				MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.VITORIA);
 				desenharVitoria( MediadorFluxoDeJogo.getInstance().cameraMenu.cenaVitoria );
+				
+				String arquivo = "";
+				switch( ControladoraDoJogo.getInstance().obterPersonagemVitorioso() ) {
+				
+					case SHERLOCK:
+						arquivo = "vitoria_sherlock.txt";
+						break;
+						
+					case L:
+						arquivo = "vitoria_l.txt";
+						break;
+						
+					case CARMEN:
+						arquivo = "vitoria_carmen.txt";
+						break;
+						
+					case PANTERA:
+						arquivo = "vitoria_pantera.txt";
+						break;
+						
+					case EDMORT:
+						arquivo = "vitoria_edmort.txt";
+						break;
+						
+					case BATMAN:
+						arquivo = "vitoria_batman.txt";
+						break;
+				}
+				
+				MediadorFluxoDeJogo.getInstance().cameraMenu.cenaVitoria.desenharBG(arquivo);
 			}
 			else {
 				MediadorFluxoDeJogo.getInstance().iniciarJogadaDaVez();
