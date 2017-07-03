@@ -103,7 +103,7 @@ public class TradutorJogadores implements Observer_JogadorReposicionado {
 		atoresDosJogadores = new ArrayList<AtoresDoJogador>();
 	}
 	
-	public AtorBotaoMenuJogo.Tipo converterPersonagemEnumTipoBotao( PersonagemEnum personagemEnum ) {
+	public static AtorBotaoMenuJogo.Tipo converterPersonagemEnumTipoBotao( PersonagemEnum personagemEnum ) {
 		switch( personagemEnum ) {
 			case L:
 				return AtorBotaoMenuJogo.Tipo.PERSONAGEM_L;

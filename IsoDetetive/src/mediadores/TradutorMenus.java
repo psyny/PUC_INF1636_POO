@@ -26,6 +26,7 @@ import jogo.CartaType;
 import jogo.ControladoraDoJogo;
 import jogo.EstadoDoJogo;
 import jogo.Jogador;
+import jogo.PersonagemEnum;
 import jogo.Jogador.Nota;
 
 public class TradutorMenus {
@@ -252,7 +253,10 @@ public class TradutorMenus {
 				cena.desenharCarta( referenciaCartaAtor.atorCarta );
 			}
 			
-			cena.desenharPersonagem( new AtorBotaoMenuJogo( MediadorFluxoDeJogo.getInstance().tradutorJogadores.converterPersonagemEnumTipoBotao( ControladoraDoJogo.getInstance().obterJogadorReacao().obterPersonagem().obterNome() ) ) );
+			PersonagemEnum personagemEnum = ControladoraDoJogo.getInstance().obterJogadorReacao().obterPersonagem().obterEnum();
+			AtorBotaoMenuJogo.Tipo tipoBotao = TradutorJogadores.converterPersonagemEnumTipoBotao(personagemEnum);
+			AtorBotaoMenuJogo atorBotao = new AtorBotaoMenuJogo( tipoBotao );
+			cena.desenharPersonagem( atorBotao );
 		}
 		
 	// Menu: Feedback	
@@ -272,7 +276,10 @@ public class TradutorMenus {
 			
 			cena.desenharCarta( referenciaCartaAtor.atorCarta );
 			
-			cena.desenharPersonagem( new AtorBotaoMenuJogo( MediadorFluxoDeJogo.getInstance().tradutorJogadores.converterPersonagemEnumTipoBotao( ControladoraDoJogo.getInstance().obterJogadorReacao().obterPersonagem().obterNome() ) ) );
+			PersonagemEnum personagemEnum = ControladoraDoJogo.getInstance().obterJogadorReacao().obterPersonagem().obterEnum();
+			AtorBotaoMenuJogo.Tipo tipoBotao = TradutorJogadores.converterPersonagemEnumTipoBotao(personagemEnum);
+			AtorBotaoMenuJogo atorBotao = new AtorBotaoMenuJogo( tipoBotao );
+			cena.desenharPersonagem( atorBotao );
 		}
 
 		public void registrarCartaEscolhida()

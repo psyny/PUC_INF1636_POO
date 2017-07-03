@@ -139,7 +139,9 @@ public class MediadorFluxoDeJogo {
 				Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
 				
 				// Icone do Jogador
-				cameraMenu.menuPrincipal.ativarBotao = tradutorJogadores.converterPersonagemEnumTipoBotao( jogadorDaVez.obterPersonagem().obterEnum() );
+				PersonagemEnum personagemEnum = jogadorDaVez.obterPersonagem().obterEnum();
+				AtorBotaoMenuJogo.Tipo tipoBotao = TradutorJogadores.converterPersonagemEnumTipoBotao(personagemEnum);
+				cameraMenu.menuPrincipal.ativarBotao( tipoBotao );
 					
 				// Botões sempre disponiveis
 				cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_SALVAR );
