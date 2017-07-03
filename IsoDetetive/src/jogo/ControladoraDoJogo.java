@@ -3,11 +3,11 @@ package jogo;
 import java.io.File;
 import java.util.ArrayList;
 
+import atores.AtorBotaoMenuJogo;
 import interfaceGrafica.JanelaPrincipal;
 import interfaceGrafica.QuadroInicial;
 import interfaceGrafica.QuadroJogo;
 import interfaceGrafica.QuadroSelecaoDeJogadores;
-import interfaceGrafica.QuadroVitoria;
 
 public class ControladoraDoJogo {
 	// Singleton com LazyHolder para tratar threads
@@ -110,7 +110,17 @@ public class ControladoraDoJogo {
 		estadoDoJogo.etapaDaJogada = EstadoDoJogo.EtapaDaJogada.INICIO; 
 		
 		// Decide se jogador pode mover-se
-		
+		if( estadoDoJogo.jogadorDaVez.obterPosicao().isRoom() ) {
+			ArrayList<Casa> casasPossiveis = estadoDoJogo.tabuleiro.obterCasasNaDistancia( estadoDoJogo.jogadorDaVez , 1 );
+			if( casasPossiveis.size() == 0 && estadoDoJogo.jogadorDaVez.moveuSeForcadamente == false ) {
+				estadoDoJogo.jogadorPodePassar = true;
+			} else {
+				estadoDoJogo.jogadorJaMoveu = false;
+			}
+		} else {
+			estadoDoJogo.jogadorPodePassar = true;
+			estadoDoJogo.jogadorJaMoveu = false;
+		}
 	}
 	
 	public int rolarDadoParaMovimentacao( int valorPredeterminado ) {

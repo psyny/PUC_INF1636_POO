@@ -16,7 +16,8 @@ public class AtorEtiqueta extends Actor {
 		ACUSAR,
 		BLOCO_DE_NOTAS,
 		SUA_MAO,
-		FACA_SEU_PALPITE		
+		FACA_SEU_PALPITE,
+		VITORIA
 	}
 	
 	private class mouseListener_movimento extends MouseAdapter {
@@ -69,6 +70,10 @@ public class AtorEtiqueta extends Actor {
 			case SUA_MAO:
 				botaoFile = "label_mao.txt";
 				break;
+				
+			case VITORIA:
+				botaoFile = "label_vitoria.txt";
+				break;				
 				
 			case INDEFINIDO:
 			default:

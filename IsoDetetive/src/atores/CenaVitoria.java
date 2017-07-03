@@ -42,10 +42,10 @@ public class CenaVitoria extends Scene {
 		super(50, 50, 900, 600);
 		
 		setBackground(Color.WHITE);
-		setOpaque(true);
+		setOpaque(false);
 		
 
-        AtorEtiqueta titulo = new AtorEtiqueta( AtorEtiqueta.Tipo.ACUSAR );
+        AtorEtiqueta titulo = new AtorEtiqueta( AtorEtiqueta.Tipo.VITORIA );
         addActor( titulo , 1 );
         titulo.setLocation(0, -30);			
         

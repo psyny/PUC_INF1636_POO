@@ -150,21 +150,13 @@ public class MediadorFluxoDeJogo {
 				cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_NOTAS );
 				
 				// Botões de situacao
-				if( jogadorDaVez.obterPosicao().isRoom() ) {
-					// Checa se o jogador tem a possibilidade de andar
-					ArrayList<Casa> casasPossiveis = tabuleiro.obterCasasNaDistancia( jogadorDaVez , 1 );
-					if( casasPossiveis.size() == 0 && jogadorDaVez.moveuSeForcadamente == false ) {
-						cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_PASSAR );
-					} else {
-						cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_DADO );
-					}
-				} 
-				else {
-					cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_DADO );
+				if( ControladoraDoJogo.getInstance().jogadorDaVezPodePassar() == true ) {
 					cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_PASSAR );
 				}
-				
-				
+				if( ControladoraDoJogo.getInstance().jogadorDaVezJaMoveu() == false ) {
+					cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_DADO );
+				}
+
 			
 			// Posicionar Camera no personagem
 			Vetor2D_double posicaoVirtualJogador = tradutorTabuleiro.obterCentroDaCasa(ControladoraDoJogo.getInstance().obterJogadorDaVez().obterPosicao());

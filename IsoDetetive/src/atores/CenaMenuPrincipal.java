@@ -53,7 +53,8 @@ public class CenaMenuPrincipal extends Scene implements Observer_CasaClicada {
 			botao_mao.setVisible(true);
 			botao_notas.setVisible(true);
 			botao_acusar.setVisible(true);
-			botao_salvar.setVisible(true);
+			
+			botao_salvar.setVisible(false);
 			
 			revalidarPosicaoDosBotoes();
 		}

@@ -100,8 +100,6 @@ public class JanelaPrincipal extends JFrame {
 			this.quadroAtual = QUADRO.SELECAO_JOGADORES;
 		} else if( cmp instanceof QuadroJogo ) {
 			this.quadroAtual = QUADRO.JOGO;
-		} else if( cmp instanceof QuadroVitoria ) {
-			this.quadroAtual = QUADRO.VITORIA;	
 		} else {
 			this.quadroAtual = QUADRO.DESCONHECIDO;		
 		}
