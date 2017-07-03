@@ -49,6 +49,8 @@ public class Jogador implements Observed_JogadorReposicionado  {
 		this.blocoDeNotas = new ArrayList<Nota>();
 		if(inteligenciaArtificial)
 			this.inteligenciaArtificial = new Agente(this);
+		else
+			this.inteligenciaArtificial = null;
 	}
 	
 	public void definirPosicao( Casa casa ) {

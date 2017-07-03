@@ -102,14 +102,13 @@ public class EstadoDoJogo {
 	}
 	
 	private void carregarTabuleiro( String arquivoTabuleiro ) {
-		this.tabuleiroArquivoOrigem = arquivoTabuleiro;
-		
+
 		if( arquivoTabuleiro == null || arquivoTabuleiro.length() < 4 ) {
-			this.tabuleiro = GeradorDeTabuleiros.carregarDoArquivo();
+			arquivoTabuleiro = "tabuleiro_oficial.txt";
 		}
-		else {
-			this.tabuleiro = GeradorDeTabuleiros.carregarDoArquivo( arquivoTabuleiro );
-		}
+		
+		this.tabuleiroArquivoOrigem = arquivoTabuleiro;
+		this.tabuleiro = GeradorDeTabuleiros.carregarDoArquivo( arquivoTabuleiro );
 	}
 	
 	
@@ -213,6 +212,11 @@ public class EstadoDoJogo {
 					fileWriter.write(",");
 				}
 				fileWriter.write("\n");
+				if(jogador.moveuSeForcadamente)
+					fileWriter.write("1");
+				else
+					fileWriter.write("0");
+				fileWriter.write("\n");
 				if(jogador.emJogo)
 					fileWriter.write("1");
 				else
@@ -234,6 +238,12 @@ public class EstadoDoJogo {
 			fileWriter.write("JogadorDaVez\n");
 			fileWriter.write( Integer.toString( listaDeJogadores.indexOf( jogadorDaVez ) ) );
 			
+			// Etapa da Jogada
+			fileWriter.write("\n");
+			fileWriter.write("EtapaDaJogada\n");
+			fileWriter.write( etapaDaJogada.toString() );
+			fileWriter.write("\n");
+			
 			fileWriter.close();
 		}	
 		catch (Exception e) {
@@ -251,27 +261,28 @@ public class EstadoDoJogo {
 			FileReader fileReader = new FileReader(file);
 			BufferedReader reader = new BufferedReader(fileReader);
 			
-			String line = reader.readLine();;
-			String crimeString[], jogadorDaVezString;
+			String line = reader.readLine();
+			String crimeString[];
 			
 			// Criando um baralho
 			Baralho baralho = new Baralho();		
 			
 			// Le Tabuleiro
-			reader.readLine();
 			String arquivoTabuleiro = reader.readLine();
 			this.carregarTabuleiro( arquivoTabuleiro );
 
 	        // Carregando Personagens
 			int indice = 0;
+			line = reader.readLine();
 			while(!line.equals("Crime"))
 			{
-				String nome, posicao[], mao[], blocoDeNotas[], emJogo;
+				String nome, posicao[], mao[], blocoDeNotas[], moveuSeForcadamente, emJogo;
 				
 				nome = reader.readLine();
 				posicao = reader.readLine().split(",");
 				mao = reader.readLine().split(",");
 				blocoDeNotas = reader.readLine().split(",");
+				moveuSeForcadamente = reader.readLine();
 				emJogo = reader.readLine();
 				
 				// Novos personagens
@@ -284,15 +295,24 @@ public class EstadoDoJogo {
 				// Em jogo?
 				jogador.emJogo = (emJogo.equals("1")) ? true : false;
 				
+				//moveu se forçadamente
+				jogador.moveuSeForcadamente = (moveuSeForcadamente.equals("1")) ? true : false;
+				
 				// Carregando as cartas que o jogador tem ( mao )
 				for (String string : mao) {
-					jogador.mao.add(baralho.obterCarta(obterCarta(string)));
+					if(!string.equals(""))
+					{
+						jogador.mao.add(baralho.obterCarta(obterCarta(string)));
+					}
 				}
 				
 				// Carregando as notas feitas pelo jogador
 				for (String string : blocoDeNotas) {
-					Nota nota = jogador.new Nota(baralho.obterCarta( obterCarta( string.split("-")[0] ) ) , string.split("-")[1].equals("true") ? true : false );
-					jogador.blocoDeNotas.add(nota);
+					if(!string.equals(""))
+					{
+						Nota nota = jogador.new Nota(baralho.obterCarta( obterCarta( string.split("-")[0] ) ) , string.split("-")[1].equals("true") ? true : false );
+						jogador.blocoDeNotas.add(nota);
+					}
 				}
 				
 				// Adiciona novo jogador a lista de jogadores
@@ -315,8 +335,11 @@ public class EstadoDoJogo {
 			int jogadorDaVezIndice = Integer.parseInt( reader.readLine() );
 			jogadorDaVez = listaDeJogadores.get( jogadorDaVezIndice );
 			
+			//Etapa da jogada
+			line = reader.readLine();
+			etapaDaJogada = obterEtapaDaJogada(reader.readLine()); 
+			
 			// Outros dados
-			etapaDaJogada 	= EtapaDaJogada.INICIO; 
 			valorDoDado 	= 0;
 			
 			reader.close();
@@ -326,6 +349,25 @@ public class EstadoDoJogo {
 		}
 	}	
 	
+	private EtapaDaJogada obterEtapaDaJogada(String nome)
+	{
+		switch (nome) 
+		{
+			case "INICIO":
+				return EtapaDaJogada.INICIO;
+			case "CONFIRMANDO_MOVIMENTO":
+				return EtapaDaJogada.CONFIRMANDO_MOVIMENTO;
+			case "AGUARDANDO_MOVIMENTO":
+				return EtapaDaJogada.AGUARDANDO_MOVIMENTO;
+			case "PALPITE":
+				return EtapaDaJogada.PALPITE;
+			case "ACUSACAO":
+				return EtapaDaJogada.ACUSACAO;
+
+			default:
+				return null;
+		}
+	}
 	
 	private PersonagemEnum obterPersonagem(String nome)
 	{
