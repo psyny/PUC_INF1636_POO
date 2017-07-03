@@ -35,6 +35,9 @@ public class ControladoraDoJogo {
 	protected Jogador			jogadorReacao = null;
 	protected ArrayList<Carta>	palpiteReacao;
 
+	protected Jogador 			jogadorVitorioso = null;
+	
+	
 	private ControladoraDoJogo() {
 	}
 	
@@ -165,25 +168,45 @@ public class ControladoraDoJogo {
 		}
 	}
 	
-	public boolean validarAcusacao(ArrayList<Carta> acusacao)
+	public void validarAcusacao(ArrayList<Carta> acusacao)
 	{
 		if(acusacao.containsAll(estadoDoJogo.crime))
 		{
-			//TODO - end-Game, alguem vençeu
+			// Jogador que acusou venceu!
 			System.out.println(estadoDoJogo.jogadorDaVez.personagem.nome + " venceu");
-			JanelaPrincipal.getInstance().carregarQuadro( new QuadroInicial() );
 			
-			// JanelaPrincipal.getInstance().carregarQuadro( new QuadroVitoria(estadoDoJogo.jogadorDaVez.personagem.personagem, acusacao));
-			return true;
+			this.jogadorVitorioso = estadoDoJogo.jogadorDaVez;
 		}
 		else
 		{
+			// Jogador que sobrou venceu!
 			estadoDoJogo.jogadorDaVez.emJogo = false;
-			iniciarProximaJogada();
-			return false;
+			
+			// Descobrir se so sobrou 1
+			int jogadoresEmJogo = 0;
+			Jogador ultimoJogadorEmJogo = null;
+			for( Jogador jogador : estadoDoJogo.listaDeJogadores ) {
+				if( jogador.emJogo == true ) {
+					ultimoJogadorEmJogo = jogador;
+					jogadoresEmJogo++;
+				}
+			}
+			
+			
+			if( jogadoresEmJogo == 1 ) {
+				this.jogadorVitorioso = ultimoJogadorEmJogo;
+			}
 		}
 	}
 	
+	public boolean jogoAcabou() {
+		if (this.jogadorVitorioso == null ) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
 	
 	public void salvarPartidaEmArquivo( File file ) {
 		this.estadoDoJogo.salvarEstadoEmArquivo( file );

@@ -127,6 +127,11 @@ public class QuadroJogo extends JLayeredPane {
         menuCamera.cenaFeedback = new CenaFeedbackDoPalpite();
         menuCenaPrincipal.adicionarCena( menuCamera.cenaFeedback , 2);
         
+        // Cena Vitoria
+        menuCamera.cenaVitoria = new CenaVitoria();
+        menuCenaPrincipal.adicionarCena( menuCamera.cenaVitoria , 3);
+        
+        // Configura menu inicial
         menuCamera.definirModo( CameraMenu.Modos.MENU_PRINCIPAL );
 		
 		//Inicia o primerio turno
