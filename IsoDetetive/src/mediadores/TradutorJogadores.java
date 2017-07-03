@@ -102,4 +102,29 @@ public class TradutorJogadores implements Observer_JogadorReposicionado {
 	{
 		atoresDosJogadores = new ArrayList<AtoresDoJogador>();
 	}
+	
+	public AtorBotaoMenuJogo.Tipo converterPersonagemEnumTipoBotao( PersonagemEnum personagemEnum ) {
+		switch( personagemEnum ) {
+			case L:
+				return AtorBotaoMenuJogo.Tipo.PERSONAGEM_L;
+				
+			case SHERLOCK:
+				return AtorBotaoMenuJogo.Tipo.PERSONAGEM_SHERLOCK;
+				
+			case CARMEN:
+				return AtorBotaoMenuJogo.Tipo.PERSONAGEM_CARMEN;
+				
+			case PANTERA:
+				return AtorBotaoMenuJogo.Tipo.PERSONAGEM_PANTERA;
+				
+			case EDMORT:
+				return AtorBotaoMenuJogo.Tipo.PERSONAGEM_EDMORT;
+				
+			case BATMAN:
+				return AtorBotaoMenuJogo.Tipo.PERSONAGEM_BATMAN;
+				
+			default:
+				return null;
+		}
+	}
 }
