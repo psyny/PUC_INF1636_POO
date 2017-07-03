@@ -108,6 +108,9 @@ public class ControladoraDoJogo {
 		estadoDoJogo.valorDoDado = 0;
 		movimentacaoPossivel = new ArrayList<Casa>();
 		estadoDoJogo.etapaDaJogada = EstadoDoJogo.EtapaDaJogada.INICIO; 
+		
+		// Decide se jogador pode mover-se
+		
 	}
 	
 	public int rolarDadoParaMovimentacao( int valorPredeterminado ) {
@@ -134,6 +137,10 @@ public class ControladoraDoJogo {
 	
 	public void decidindoMovimento() {
 		estadoDoJogo.etapaDaJogada = EstadoDoJogo.EtapaDaJogada.CONFIRMANDO_MOVIMENTO;
+	}
+	
+	public void confirmarMovimento() {
+		estadoDoJogo.jogadorJaMoveu = true;
 	}
 	
 	public void validarPalpite(ArrayList<Carta> palpite)
@@ -211,4 +218,12 @@ public class ControladoraDoJogo {
 	public void salvarPartidaEmArquivo( File file ) {
 		this.estadoDoJogo.salvarEstadoEmArquivo( file );
 	}
+	
+	public boolean jogadorDaVezJaMoveu() {
+		return estadoDoJogo.jogadorJaMoveu;
+	}
+	
+	public boolean jogadorDaVezPodePassar() {
+		return estadoDoJogo.jogadorPodePassar;
+	}	
 }

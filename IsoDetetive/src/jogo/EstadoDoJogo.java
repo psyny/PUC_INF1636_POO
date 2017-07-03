@@ -42,6 +42,9 @@ public class EstadoDoJogo {
 	protected int				valorDoDado = 0;
 	protected ArrayList<Carta> 	crime;
 	
+	protected boolean			jogadorJaMoveu = false;
+	protected boolean			jogadorPodePassar = true;
+	
 	// ------------------------------------------------------------------------
 	
 	public EstadoDoJogo() {
@@ -289,7 +292,9 @@ public class EstadoDoJogo {
 				Jogador jogador = new Jogador( obterPersonagem(nome), false );
 
 				// Posicao
-				Casa casaAtual = new Casa(Integer.parseInt(posicao[0]), Integer.parseInt(posicao[1]));
+				int x = Integer.parseInt(posicao[0]);
+				int y = Integer.parseInt(posicao[1]);
+				Casa casaAtual = this.tabuleiro.getCell(x, y);
 				jogador.definirPosicao( casaAtual );
 				
 				// Em jogo?

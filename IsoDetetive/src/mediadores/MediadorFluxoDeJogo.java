@@ -173,7 +173,7 @@ public class MediadorFluxoDeJogo {
 		
 	// Turno dos jogadores mecanicos
 		protected void jogadaMecanica() {
-			
+			// TODO: IA
 		}
 				
 		
@@ -283,6 +283,9 @@ public class MediadorFluxoDeJogo {
 			}
 
 			tradutorMovimentacao.desmarcarCasas();
+			
+			// Notificar controladores
+			ControladoraDoJogo.getInstance().confirmarMovimento();
 		}
 		
 	// Camera
