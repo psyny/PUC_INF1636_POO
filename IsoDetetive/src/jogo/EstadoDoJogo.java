@@ -13,6 +13,7 @@ import interfaceGrafica.QuadroJogo;
 import jogo.Jogador.Nota;
 import mediadores.MediadorFluxoDeJogo;
 import mediadores.TradutorJogadores.AtoresDoJogador;
+import sun.nio.cs.ext.Johab;
 
 public class EstadoDoJogo {
 	public enum EtapaDaJogada {
@@ -241,11 +242,15 @@ public class EstadoDoJogo {
 			fileWriter.write("JogadorDaVez\n");
 			fileWriter.write( Integer.toString( listaDeJogadores.indexOf( jogadorDaVez ) ) );
 			
+			
 			// Etapa da Jogada
 			fileWriter.write("\n");
 			fileWriter.write("EtapaDaJogada\n");
 			fileWriter.write( etapaDaJogada.toString() );
 			fileWriter.write("\n");
+			fileWriter.write( (jogadorJaMoveu) ? "1" : "0");
+			fileWriter.write("\n");
+			fileWriter.write( (jogadorPodePassar) ? "1" : "0");
 			
 			fileWriter.close();
 		}	
@@ -343,6 +348,11 @@ public class EstadoDoJogo {
 			//Etapa da jogada
 			line = reader.readLine();
 			etapaDaJogada = obterEtapaDaJogada(reader.readLine()); 
+			jogadorJaMoveu = (reader.readLine().equals("1")) ? true : false;
+			jogadorPodePassar = (reader.readLine().equals("1")) ? true : false;
+			
+			System.out.println(jogadorJaMoveu);
+			System.out.println(jogadorPodePassar);
 			
 			// Outros dados
 			valorDoDado 	= 0;
