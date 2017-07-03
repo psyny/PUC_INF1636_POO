@@ -23,9 +23,10 @@ public class Camera extends JScrollPane implements Runnable {
 	private double					maxMoveSpeed = 1000;
 	private double					minMoveSpeed = 1;
 	
-	
 	private boolean					fixedTarget = true;
 	private boolean					animated = true;
+	
+	private boolean					halted = false;
 	
 	private ArrayList<Animavel>		animableList = new ArrayList<Animavel>();
 	
@@ -55,8 +56,16 @@ public class Camera extends JScrollPane implements Runnable {
         this.cameraThread = new Thread(this);
         this.cameraThread.start();
     }	
+    
+    public synchronized void interromper() {
+    	this.halted = true;
+    }
 	
-    private void threadCycle( long passed ) {
+    private synchronized void threadCycle( long passed ) {
+    	if( this.halted == true ) {
+    		return;
+    	}
+    	
     	// Anima a Cena 
     	// synchronized( Singletons.gameCamera ) {	
 	    	for( Component comp : this.scenes ) {

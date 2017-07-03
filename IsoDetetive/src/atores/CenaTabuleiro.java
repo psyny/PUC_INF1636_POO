@@ -13,6 +13,7 @@ import javax.swing.SwingUtilities;
 import animacao.*;
 import estruturas.Vetor2D_double;
 import estruturas.Vetor2D_int;
+import interfaceGrafica.JanelaPrincipal;
 import mediadores.*;
 import observers.Observed_CasaSelecionada;
 import observers.Observer_CasaSelecionada;
@@ -30,9 +31,10 @@ public class CenaTabuleiro extends CenaIsometrica implements Observed_CasaSeleci
 		this.setOpaque( true );
 	}
 
-	@Override
-	public void passTime( long time ) {
-		super.passTime(time);
+	private synchronized void calcularPosicaoMouse() {
+		if( JanelaPrincipal.getInstance().obterQuadroAtual() != JanelaPrincipal.QUADRO.JOGO ) {
+			return;
+		}
 		
 		// Calcula a ultima posicao do mouse
 		Point posicaoAbsolutaDoMouse = MouseInfo.getPointerInfo().getLocation();
@@ -55,6 +57,13 @@ public class CenaTabuleiro extends CenaIsometrica implements Observed_CasaSeleci
 				animationEndNotityObservers();
 			}
 		}
+	}
+	
+	@Override
+	public void passTime( long time ) {
+		super.passTime(time);
+		
+		calcularPosicaoMouse();
 	}
 	
 	public Vetor2D_int obterCasaClicada(Point p)

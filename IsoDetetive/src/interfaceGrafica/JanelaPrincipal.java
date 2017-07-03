@@ -9,20 +9,32 @@ import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import animacao.Camera;
 import estruturas.Vetor2D_int;
 import jogo.ControladoraDoJogo;
 
 
-public class JanelaPrincipal extends JFrame {	
+public class JanelaPrincipal extends JFrame {
+	public enum QUADRO {
+		INICIAL,
+		SELECAO_JOGADORES,
+		JOGO,
+		VITORIA,
+		DESCONHECIDO
+	}
+	
 	private static JanelaPrincipal instance = null;	
 	public Container mainContentPane;
 	public Vetor2D_int tamanho;
+	
+	private QUADRO quadroAtual = QUADRO.DESCONHECIDO;
 	
 	//Contrutor de JanelaPrincipal
 	private JanelaPrincipal() {
@@ -69,7 +81,8 @@ public class JanelaPrincipal extends JFrame {
 	}
 	
 	//Remove todos os componentes do mainContentPane
-	private void removerTodoConteudo() {
+	private synchronized void removerTodoConteudo() {
+		// Remove outros elementos
 		this.mainContentPane.removeAll();	
 	}
 	
@@ -80,10 +93,27 @@ public class JanelaPrincipal extends JFrame {
 	}
 	
 	//Limpa o mainContentPane e dpois adiciona um componente ao ele, e repinta
-	public void carregarQuadro( Component cmp ) {
+	public synchronized void carregarQuadro( Component cmp ) {
+		if( cmp instanceof QuadroInicial ) {
+			this.quadroAtual = QUADRO.INICIAL;
+		} else if( cmp instanceof QuadroSelecaoDeJogadores ) {
+			this.quadroAtual = QUADRO.SELECAO_JOGADORES;
+		} else if( cmp instanceof QuadroJogo ) {
+			this.quadroAtual = QUADRO.JOGO;
+		} else if( cmp instanceof QuadroVitoria ) {
+			this.quadroAtual = QUADRO.VITORIA;	
+		} else {
+			this.quadroAtual = QUADRO.DESCONHECIDO;		
+		}
+				
 		this.removerTodoConteudo();
 		this.mainContentPane.add( cmp );
 		this.revalidar();
+	}
+	
+	// obter quadro
+	public synchronized JanelaPrincipal.QUADRO obterQuadroAtual() {
+		return this.quadroAtual;
 	}
 	
 	//Define o LayoutManager do mainContentPane
