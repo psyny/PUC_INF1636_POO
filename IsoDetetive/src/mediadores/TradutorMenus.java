@@ -15,8 +15,9 @@ import atores.AtorCarta.TipoMarcador;
 import atores.CameraMenu.Modos;
 import atores.CenaAcusacao;
 import atores.CenaBlocoNotas;
-import atores.CenaEscolhaCarta;
-import atores.CenaFeedback;
+import atores.CenaReacaoAoPalpite;
+import atores.CenaVitoria;
+import atores.CenaFeedbackDoPalpite;
 import atores.CenaMao;
 import atores.CenaPalpite;
 import interfaceGrafica.JanelaPrincipal;
@@ -231,7 +232,7 @@ public class TradutorMenus {
 		}
 		
 	// Menu: Escolha Carta	
-		public void desenharEscolhaCarta(CenaEscolhaCarta cena)
+		public void desenharEscolhaCarta(CenaReacaoAoPalpite cena)
 		{
 			Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
 		
@@ -247,9 +248,6 @@ public class TradutorMenus {
 				// Adiciona o mouseListener para multipla seleção
 				referenciaCartaAtor.atorCarta.addMouseListener( new MouseListener_cartaSelecaoUnicaNaoTipada(referenciaCartaAtor, cena.getConfirma(), 1) );	
 				
-				// Desenhar marcacao do tipo de carta ( feedback para o jogador )
-				definirMarcadorCarta( referenciaCartaAtor , jogadorDaVez );
-				
 				cena.desenharCarta( referenciaCartaAtor.atorCarta );
 			}
 			
@@ -260,21 +258,15 @@ public class TradutorMenus {
 		}
 		
 	// Menu: Feedback	
-		public void desenharFeedback(CenaFeedback cena, Carta carta)
+		public void desenharFeedback(CenaFeedbackDoPalpite cena, Carta carta)
 		{
-			Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
-		
-			referenciasCartasAtor.clear();
+			AtorCarta atorCarta  = new AtorCarta();
+			atorCarta.definirCarta( carta.tipo );
+			atorCarta.definirSelecionado( true );
+			atorCarta.definirMarcador( TipoMarcador.VAZIO );
+			atorCarta.temMouseOver(false);
 
-			ReferenciaCartaAtor referenciaCartaAtor = new ReferenciaCartaAtor( carta , new AtorCarta() );
-			referenciasCartasAtor.add( referenciaCartaAtor );
-			referenciaCartaAtor.atorCarta.definirCarta( carta.tipo );
-			referenciaCartaAtor.atorCarta.definirSelecionado( true );
-			
-			// Desenhar marcacao do tipo de carta ( feedback para o jogador )
-			definirMarcadorCarta( referenciaCartaAtor , jogadorDaVez );
-			
-			cena.desenharCarta( referenciaCartaAtor.atorCarta );
+			cena.desenharCarta( atorCarta );
 			
 			PersonagemEnum personagemEnum = ControladoraDoJogo.getInstance().obterJogadorReacao().obterPersonagem().obterEnum();
 			AtorBotaoMenuJogo.Tipo tipoBotao = TradutorJogadores.converterPersonagemEnumTipoBotao(personagemEnum);
@@ -333,7 +325,15 @@ public class TradutorMenus {
 			}
 			
 			ControladoraDoJogo.getInstance().validarAcusacao(acusacao);
-			MediadorFluxoDeJogo.getInstance().iniciarJogadaDaVez();
+			
+			// Verifica se, depois da acusao feita, o jogo ainda pode continuar
+			if( ControladoraDoJogo.getInstance().jogoAcabou() == true ) {
+				MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.VITORIA);
+				desenharVitoria( MediadorFluxoDeJogo.getInstance().cameraMenu.cenaVitoria );
+			}
+			else {
+				MediadorFluxoDeJogo.getInstance().iniciarJogadaDaVez();
+			}
 		}
 		
 		private void desenharMenuPalpite_auxiliar_desenharCartaNaCena( Carta carta , CenaPalpite cena , boolean addListener ) {
@@ -351,7 +351,8 @@ public class TradutorMenus {
 			
 			definirMarcadorCarta( referenciaCartaAtor , ControladoraDoJogo.getInstance().obterJogadorDaVez() );
 		}
-		
+	
+	// Menu Palpite
 		public void gerarPalpite()
 		{
 			ArrayList<Carta> palpite = new ArrayList<Carta>();
@@ -366,6 +367,23 @@ public class TradutorMenus {
 			desenharEscolhaCarta(MediadorFluxoDeJogo.getInstance().cameraMenu.cenaEscolhaCarta);
 		}
 
+	// Menu: Vitoria	
+		public void desenharVitoria(CenaVitoria cena) {
+			// Define fundo do jogo
+			
+			// Desenha cartas do crime
+			ArrayList<Carta> crime = ControladoraDoJogo.getInstance().obterCrime();
+			
+			for( Carta carta : crime ) {
+				AtorCarta atorCarta = new AtorCarta();
+				atorCarta.definirCarta( carta.tipo );
+				atorCarta.definirSelecionado( true );
+				atorCarta.definirMarcador( TipoMarcador.VAZIO );
+				atorCarta.temMouseOver(false);
+				cena.desenharCarta(atorCarta);
+			}
+		}
+		
 	// Funcoes sobre as cartas
 		private void definirMarcadorCarta( ReferenciaCartaAtor referenciaCartaAtor , Jogador jogadorDaVez ) {
 			if( jogadorDaVez.temNota(referenciaCartaAtor.carta) == false ) {

@@ -14,11 +14,13 @@ public class AtorCarta extends Actor {
 	private class mouseListener_mouseOver extends MouseAdapter {
 		@Override
 		public void mouseEntered(MouseEvent arg0)  {
+			if( temMouseOver == false ) return;
 			seletor.playAnimation(2);
 		}
 		
 		@Override
 		public void mouseExited(MouseEvent arg0)  {
+			if( temMouseOver == false ) return;
 			seletor.playAnimation(1);
 		}
 	}
@@ -36,6 +38,8 @@ public class AtorCarta extends Actor {
 	private AnimatedSprite 	marcador = null;
 	private AnimatedSprite 	seletor = null;
 	protected boolean 	flagSelecionado = false;
+	
+	private boolean temMouseOver = true;
 	
 	private CartaType	tipo;
 	
@@ -169,5 +173,8 @@ public class AtorCarta extends Actor {
 		return this.tipo;
 	}
 	
+	public void temMouseOver( boolean flag ) {
+		this.temMouseOver = flag;
+	}
 
 }
