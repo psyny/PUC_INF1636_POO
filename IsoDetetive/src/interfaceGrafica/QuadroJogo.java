@@ -120,11 +120,11 @@ public class QuadroJogo extends JLayeredPane {
         menuCenaPrincipal.adicionarCena( menuCamera.cenaAcusacao , 2);
         
         //Cena Escolha Carta
-        menuCamera.cenaEscolhaCarta = new CenaEscolhaCarta();
+        menuCamera.cenaEscolhaCarta = new CenaReacaoAoPalpite();
         menuCenaPrincipal.adicionarCena( menuCamera.cenaEscolhaCarta , 2);
         
         //Cena Feedback
-        menuCamera.cenaFeedback = new CenaFeedback();
+        menuCamera.cenaFeedback = new CenaFeedbackDoPalpite();
         menuCenaPrincipal.adicionarCena( menuCamera.cenaFeedback , 2);
         
         menuCamera.definirModo( CameraMenu.Modos.MENU_PRINCIPAL );

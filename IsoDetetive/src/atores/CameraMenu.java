@@ -24,8 +24,8 @@ public class CameraMenu extends Camera {
 	public CenaBlocoNotas 		cenaBlocoNotas;
 	public CenaPalpite 			cenaPalpite;
 	public CenaAcusacao 		cenaAcusacao;
-	public CenaEscolhaCarta 	cenaEscolhaCarta;
-	public CenaFeedback 		cenaFeedback;
+	public CenaReacaoAoPalpite 	cenaEscolhaCarta;
+	public CenaFeedbackDoPalpite 		cenaFeedback;
     
 	public CameraMenu( Component viewPort , int x , int y ) {
 		super( viewPort , x , y );

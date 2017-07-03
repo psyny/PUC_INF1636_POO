@@ -14,7 +14,7 @@ import jogo.Jogador;
 import mediadores.MediadorFluxoDeJogo;
 import mediadores.TradutorMenus;
 
-public class CenaEscolhaCarta extends Scene {
+public class CenaReacaoAoPalpite extends Scene {
 	
 	class mouseListener_fechar extends MouseAdapter {
 		@Override
@@ -26,14 +26,14 @@ public class CenaEscolhaCarta extends Scene {
 	}
 	
 	protected ArrayList<AtorCarta> cartasNaCena = new ArrayList<AtorCarta>();
-	protected Vetor2D_int proximaPosicao = new Vetor2D_int(70, 100);
+	protected Vetor2D_int proximaPosicao = new Vetor2D_int(70, 200);
 	protected AtorBotaoMenuJogo marcadorJogador = null;
 	
 	protected Actor confirma;
-	protected Vetor2D_int confirmaPos = new Vetor2D_int( 0 , 20 );
+	protected Vetor2D_int confirmaPos = new Vetor2D_int( 0 , 80 );
 	protected int numeroDeSelecionadas = 1;
 	
-	public CenaEscolhaCarta()
+	public CenaReacaoAoPalpite()
 	{
 		super(50, 50, 900, 600);
 		
@@ -49,7 +49,7 @@ public class CenaEscolhaCarta extends Scene {
 		this.limparCena();
 	}
 	
-	public CenaEscolhaCarta(int x, int y, int w, int h)
+	public CenaReacaoAoPalpite(int x, int y, int w, int h)
 	{
 		super(x, y, w, h);
 	}
@@ -65,7 +65,7 @@ public class CenaEscolhaCarta extends Scene {
 	
 	public void desenharPersonagem(AtorBotaoMenuJogo atorPersonagem)
 	{
-		atorPersonagem.setLocation(0, 0);
+		atorPersonagem.setLocation(50, 50);
 		this.addActor(atorPersonagem, 20);
 		marcadorJogador = atorPersonagem;
 	}
@@ -84,8 +84,8 @@ public class CenaEscolhaCarta extends Scene {
 			marcadorJogador.setToDestroy();
 		
 		cartasNaCena.clear();
-		proximaPosicao = new Vetor2D_int(70, 130);
-		confirmaPos = new Vetor2D_int( 0 , 20 );
+		proximaPosicao = new Vetor2D_int(70, 200);
+		confirmaPos = new Vetor2D_int( 0 , 80 );
 		confirma.setVisible(false);
 	}
 	

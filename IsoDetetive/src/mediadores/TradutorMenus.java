@@ -15,8 +15,8 @@ import atores.AtorCarta.TipoMarcador;
 import atores.CameraMenu.Modos;
 import atores.CenaAcusacao;
 import atores.CenaBlocoNotas;
-import atores.CenaEscolhaCarta;
-import atores.CenaFeedback;
+import atores.CenaReacaoAoPalpite;
+import atores.CenaFeedbackDoPalpite;
 import atores.CenaMao;
 import atores.CenaPalpite;
 import interfaceGrafica.JanelaPrincipal;
@@ -231,7 +231,7 @@ public class TradutorMenus {
 		}
 		
 	// Menu: Escolha Carta	
-		public void desenharEscolhaCarta(CenaEscolhaCarta cena)
+		public void desenharEscolhaCarta(CenaReacaoAoPalpite cena)
 		{
 			Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
 		
@@ -260,7 +260,7 @@ public class TradutorMenus {
 		}
 		
 	// Menu: Feedback	
-		public void desenharFeedback(CenaFeedback cena, Carta carta)
+		public void desenharFeedback(CenaFeedbackDoPalpite cena, Carta carta)
 		{
 			Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
 		
