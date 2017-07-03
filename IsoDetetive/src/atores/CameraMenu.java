@@ -15,7 +15,8 @@ public class CameraMenu extends Camera {
 		PALPITE,
 		ACUSACAO,
 		NOTAS,
-		ESCOLHA_CARTA
+		ESCOLHA_CARTA,
+		FEEDBACK
 	}
 	
 	public CenaMenuPrincipal 	menuPrincipal;
@@ -24,6 +25,7 @@ public class CameraMenu extends Camera {
 	public CenaPalpite 			cenaPalpite;
 	public CenaAcusacao 		cenaAcusacao;
 	public CenaEscolhaCarta 	cenaEscolhaCarta;
+	public CenaFeedback 		cenaFeedback;
     
 	public CameraMenu( Component viewPort , int x , int y ) {
 		super( viewPort , x , y );
@@ -46,6 +48,7 @@ public class CameraMenu extends Camera {
 		if( cenaPalpite != null ) cenaPalpite.setVisible( false );
 		if( cenaAcusacao != null ) cenaAcusacao.setVisible( false );
 		if( cenaEscolhaCarta != null ) cenaEscolhaCarta.setVisible( false );
+		if( cenaFeedback != null ) cenaFeedback.setVisible( false );
 	}
 	
 	public void definirModo( CameraMenu.Modos modo ) {
@@ -80,6 +83,11 @@ public class CameraMenu extends Camera {
 			case ESCOLHA_CARTA:
 				setBounds(0, 0 , 1000 , 700 );
 				if( cenaEscolhaCarta != null ) cenaEscolhaCarta.setVisible(true);		
+				break;
+				
+			case FEEDBACK:
+				setBounds(0, 0 , 1000 , 700 );
+				if( cenaFeedback != null ) cenaFeedback.setVisible(true);		
 				break;
 		
 			default:

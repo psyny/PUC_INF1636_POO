@@ -19,12 +19,9 @@ public class CenaAcusacao extends Scene {
 	class mouseListener_confirma extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent arg0)  {
-			if(TradutorMenus.getInstance().obeterNumeroCartasSelecionadas() == numeroDeSelecionadas)
-			{
-				limparCena();
-				MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.MENU_PRINCIPAL);
-				TradutorMenus.getInstance().gerarAcusacao();
-			}
+			limparCena();
+			MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.MENU_PRINCIPAL);
+			TradutorMenus.getInstance().gerarAcusacao();
 		}
 	}
 	

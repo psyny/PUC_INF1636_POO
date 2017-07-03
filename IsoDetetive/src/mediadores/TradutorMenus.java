@@ -10,9 +10,12 @@ import javax.swing.JFileChooser;
 import animacao.Actor;
 import animacao.Scene;
 import atores.AtorCarta;
+import atores.AtorCarta.TipoMarcador;
+import atores.CameraMenu.Modos;
 import atores.CenaAcusacao;
 import atores.CenaBlocoNotas;
 import atores.CenaEscolhaCarta;
+import atores.CenaFeedback;
 import atores.CenaMao;
 import atores.CenaPalpite;
 import interfaceGrafica.JanelaPrincipal;
@@ -226,17 +229,18 @@ public class TradutorMenus {
 		}
 		
 	// Menu: Escolha Carta	
-		public void desenharEscolhaCarta(CenaEscolhaCarta cena, Jogador jogador, ArrayList<Carta> palpite)
+		public void desenharEscolhaCarta(CenaEscolhaCarta cena)
 		{
 			Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
 		
-			ArrayList<Carta> cartas = jogador.temCartasNaMao(palpite);
+			ArrayList<Carta> cartas = ControladoraDoJogo.getInstance().obterJogadorReacao().temCartasNaMao(ControladoraDoJogo.getInstance().obterPalpiteReacao());
 			referenciasCartasAtor.clear();
 			
 			for (Carta carta : cartas) {
 				ReferenciaCartaAtor referenciaCartaAtor = new ReferenciaCartaAtor( carta , new AtorCarta() );
 				referenciasCartasAtor.add( referenciaCartaAtor );
 				referenciaCartaAtor.atorCarta.definirCarta( carta.tipo );
+				referenciaCartaAtor.atorCarta.definirMarcador( TipoMarcador.VAZIO );
 				
 				// Adiciona o mouseListener para multipla seleção
 				referenciaCartaAtor.atorCarta.addMouseListener( new MouseListener_cartaSelecaoUnicaNaoTipada(referenciaCartaAtor, cena.getConfirma(), 1) );	
@@ -248,15 +252,40 @@ public class TradutorMenus {
 			}
 		}
 		
+	// Menu: Feedback	
+		public void desenharFeedback(CenaFeedback cena, Carta carta)
+		{
+			Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
+		
+			referenciasCartasAtor.clear();
+
+			ReferenciaCartaAtor referenciaCartaAtor = new ReferenciaCartaAtor( carta , new AtorCarta() );
+			referenciasCartasAtor.add( referenciaCartaAtor );
+			referenciaCartaAtor.atorCarta.definirCarta( carta.tipo );
+			referenciaCartaAtor.atorCarta.definirSelecionado( true );
+			
+			// Desenhar marcacao do tipo de carta ( feedback para o jogador )
+			definirMarcadorCarta( referenciaCartaAtor , jogadorDaVez );
+			
+			cena.desenharCarta( referenciaCartaAtor.atorCarta );
+		}
+		
 		public void registrarCartaEscolhida()
 		{
 			Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
+			Carta carta = null;
 			
 			for (ReferenciaCartaAtor referenciaCartaAtor : referenciasCartasAtor) {
 				if(referenciaCartaAtor.atorCarta.getSelecionado())
+				{
 					jogadorDaVez.adicionarBlocoDeNotas(referenciaCartaAtor.carta, true);
+					carta = referenciaCartaAtor.carta;
+					break;
+				}
 			}
 			
+			MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.FEEDBACK);
+			desenharFeedback(MediadorFluxoDeJogo.getInstance().cameraMenu.cenaFeedback , carta);
 		}
 	
 	// Menu: Acusação	
@@ -292,6 +321,7 @@ public class TradutorMenus {
 			}
 			
 			ControladoraDoJogo.getInstance().validarAcusacao(acusacao);
+			MediadorFluxoDeJogo.getInstance().iniciarJogadaDaVez();
 		}
 		
 		private void desenharMenuPalpite_auxiliar_desenharCartaNaCena( Carta carta , CenaPalpite cena , boolean addListener ) {
@@ -320,6 +350,8 @@ public class TradutorMenus {
 			}
 			
 			ControladoraDoJogo.getInstance().validarPalpite(palpite);
+			MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.ESCOLHA_CARTA);
+			desenharEscolhaCarta(MediadorFluxoDeJogo.getInstance().cameraMenu.cenaEscolhaCarta);
 		}
 
 	// Funcoes sobre as cartas

@@ -35,6 +35,8 @@ public class ControladoraDoJogo {
 	
 	protected ArrayList<Casa>	movimentacaoPossivel;	
 	protected EstadoDoJogo		estadoDoJogo = null;
+	protected Jogador			jogadorReacao = null;
+	protected ArrayList<Carta>	palpiteReacao;
 
 	private ControladoraDoJogo() {
 	}
@@ -68,6 +70,14 @@ public class ControladoraDoJogo {
 	
 	public int obterValorDoUltimoDado() {
 		return this.estadoDoJogo.valorDoDado;
+	}
+	
+	public Jogador obterJogadorReacao() {
+		return this.jogadorReacao;
+	}
+	
+	public ArrayList<Carta> obterPalpiteReacao() {
+		return this.palpiteReacao;
 	}
 	
 	public ArrayList<Casa> obterMovimentacaoPossivel() {
@@ -128,6 +138,7 @@ public class ControladoraDoJogo {
 	
 	public void validarPalpite(ArrayList<Carta> palpite)
 	{
+		palpiteReacao = palpite;
 		// Traz o jogador mencionado para o comodo atual
 		for( Carta carta : palpite ) {
 			if( carta.isSuspeito() == false  ) {
@@ -151,8 +162,7 @@ public class ControladoraDoJogo {
 		for( Jogador jogador : ordemDeJogadores ) {
 			if( jogador.temCarta(palpite) )
 			{
-				MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.ESCOLHA_CARTA);
-				TradutorMenus.getInstance().desenharEscolhaCarta(MediadorFluxoDeJogo.getInstance().cameraMenu.cenaEscolhaCarta, jogador, palpite);
+				jogadorReacao = jogador;
 				return;
 			}
 		}
@@ -171,7 +181,6 @@ public class ControladoraDoJogo {
 		{
 			estadoDoJogo.jogadorDaVez.emJogo = false;
 			iniciarProximaJogada();
-			MediadorFluxoDeJogo.getInstance().iniciarJogadaDaVez();
 			return false;
 		}
 	}
