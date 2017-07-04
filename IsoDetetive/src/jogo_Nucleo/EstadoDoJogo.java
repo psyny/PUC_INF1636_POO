@@ -230,14 +230,14 @@ public class EstadoDoJogo {
 			fileWriter.write( Integer.toString( listaDeJogadores.indexOf( jogadorDaVez ) ) );
 			
 			
-			// Etapa da Jogada
-			fileWriter.write("\n");
-			fileWriter.write("EtapaDaJogada\n");
-			//fileWriter.write( etapaDaJogada.toString() );
-			//fileWriter.write("\n");
-			//fileWriter.write( (jogadorJaMoveu) ? "1" : "0");
-			//fileWriter.write("\n");
-			//fileWriter.write( (jogadorPodePassar) ? "1" : "0");
+			// Acoes disponiveis
+			fileWriter.write("\n\n");
+			fileWriter.write("AcoesDisponiveis\n");
+			for( AcoesPossiveisType acao : this.acoesPossiveis ) {
+				fileWriter.write( this.converterAcaoParaString( acao ) );
+				fileWriter.write("\n");
+			}
+			fileWriter.write("<FIM>");
 			
 			fileWriter.close();
 		}	
@@ -333,8 +333,16 @@ public class EstadoDoJogo {
 			jogadorDaVez = listaDeJogadores.get( jogadorDaVezIndice );
 			
 			//Etapa da jogada
+			this.acoesPossiveis = new ArrayList<AcoesPossiveisType>();
+			this.opcoesDeJogadaCalculadas = true;
 			line = reader.readLine();
-			//etapaDaJogada = obterEtapaDaJogada(reader.readLine()); 
+			line = reader.readLine();
+			line = reader.readLine();
+			while( line.compareTo( "<FIM>") != 0  ) {
+				System.out.println(line);
+				this.acoesPossiveis.add( converterStringParaAcao(line) );
+				line = reader.readLine();
+			}
 			
 			// Outros dados
 			valorDoDado 	= 0;
@@ -421,4 +429,75 @@ public class EstadoDoJogo {
 				return null;
 		}
 	}	
+	
+	private String converterAcaoParaString( AcoesPossiveisType acao ) {
+		switch( acao ) {
+		case ACUSAR:
+			return "ACUSAR";
+
+		case MOVER:
+			return "MOVER";
+
+		case NEGAR_PALPITE:
+			return "NEGAR_PALPITE";
+			
+		case PALPITE:
+			return "PALPITE";
+			
+		case PASSAR_A_VEZ:
+			return "PASSAR_A_VEZ";
+			
+		case ROLAR_DADOS:
+			return "ROLAR_DADOS";
+
+		case SALVAR:
+			return "SALVAR";
+			
+		case VER_MAO:
+			return "VER_MAO";
+			
+		case VER_NOTAS:
+			return "VER_NOTAS";
+			
+		default:
+			return "";
+		
+		}
+	}
+	
+	private AcoesPossiveisType converterStringParaAcao( String string ) {
+		switch( string ) {
+		case "ACUSAR":
+			return AcoesPossiveisType.ACUSAR;
+
+		case "MOVER":
+			return AcoesPossiveisType.MOVER;
+
+		case "NEGAR_PALPITE":
+			return AcoesPossiveisType.NEGAR_PALPITE;
+			
+		case "PALPITE":
+			return AcoesPossiveisType.PALPITE;
+			
+		case "PASSAR_A_VEZ":
+			return AcoesPossiveisType.PASSAR_A_VEZ;
+			
+		case "ROLAR_DADOS":
+			return AcoesPossiveisType.ROLAR_DADOS;
+
+		case "SALVAR":
+			return AcoesPossiveisType.SALVAR;
+			
+		case "VER_MAO":
+			return AcoesPossiveisType.VER_MAO;
+			
+		case "VER_NOTAS":
+			return AcoesPossiveisType.VER_NOTAS;
+			
+		default:
+			return null;
+		
+		}
+	}
+	
 }
