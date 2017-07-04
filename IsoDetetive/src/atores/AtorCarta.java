@@ -7,8 +7,8 @@ import animacao.Actor;
 import animacao.AnimatedSprite;
 import atores.AtorBotaoMenuJogo.Tipo;
 import estruturas.Vetor2D_int;
-import jogo.Carta;
-import jogo.CartaType;
+import jogo_Nucleo.Carta;
+import jogo_TiposEnumerados.CartaType;
 
 public class AtorCarta extends Actor {
 	private class mouseListener_mouseOver extends MouseAdapter {

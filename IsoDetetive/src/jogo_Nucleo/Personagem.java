@@ -1,13 +1,14 @@
-package jogo;
+package jogo_Nucleo;
 
 import estruturas.Vetor2D_int;
+import jogo_TiposEnumerados.PersonagemType;
 
 public class Personagem {
-	protected PersonagemEnum 	personagem;
+	protected PersonagemType 	personagem;
 	protected String 			nome;
 	protected Casa				casaInicial;
 	
-	public Personagem( PersonagemEnum per ) {
+	public Personagem( PersonagemType per ) {
 		this.personagem = per;
 		this.casaInicial = null;
 		
@@ -52,7 +53,7 @@ public class Personagem {
 		return this.nome;
 	}
 	
-	public PersonagemEnum obterEnum() {
+	public PersonagemType obterEnum() {
 		return this.personagem;
 	}
 }

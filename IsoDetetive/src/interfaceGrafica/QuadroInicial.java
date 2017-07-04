@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 import animacao.*;
 import atores.*;
 import estruturas.*;
-import mediadores.*;
+import facedes.*;
 
 
 
@@ -30,7 +30,7 @@ public class QuadroInicial extends JPanel {
 		
 		@Override
 		public void mouseClicked(MouseEvent arg0)  {
-			TradutorMenus.getInstance().carregarJogo();
+			Facade_Menus.getInstance().carregarJogo();
 			
 			JanelaPrincipal.getInstance().carregarQuadro( new QuadroJogo() );
 		}

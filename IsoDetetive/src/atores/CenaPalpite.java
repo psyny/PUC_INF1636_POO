@@ -11,10 +11,10 @@ import atores.CameraMenu.Modos;
 import atores.CenaAcusacao.mouseListener_confirma;
 import atores.CenaAcusacao.mouseListener_fechar;
 import estruturas.Vetor2D_int;
-import jogo.ControladoraDoJogo;
-import jogo.Jogador;
-import mediadores.MediadorFluxoDeJogo;
-import mediadores.TradutorMenus;
+import facedes.Facade_FluxoDeJogo;
+import facedes.Facade_Menus;
+import jogo_Nucleo.ControladoraDoJogo;
+import jogo_Nucleo.Jogador;
 
 public class CenaPalpite extends Scene {
 	
@@ -22,8 +22,8 @@ public class CenaPalpite extends Scene {
 		@Override
 		public void mouseClicked(MouseEvent arg0)  {
 			limparCena();
-			MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.MENU_PRINCIPAL);
-			TradutorMenus.getInstance().gerarPalpite();
+			Facade_FluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.MENU_PRINCIPAL);
+			Facade_Menus.getInstance().gerarPalpite();
 		}
 	}
 	
@@ -31,7 +31,7 @@ public class CenaPalpite extends Scene {
 		@Override
 		public void mouseClicked(MouseEvent arg0)  {
 			limparCena();
-			MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.MENU_PRINCIPAL);
+			Facade_FluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.MENU_PRINCIPAL);
 		}
 	}
 	

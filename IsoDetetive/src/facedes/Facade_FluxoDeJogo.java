@@ -1,4 +1,4 @@
-package mediadores;
+package facedes;
 
 import java.util.ArrayList;
 
@@ -9,26 +9,28 @@ import atores.*;
 import atores.CameraMenu.Modos;
 import estruturas.*;
 import interfaceGrafica.JanelaPrincipal;
-import jogo.*;
+import jogo_Nucleo.*;
+import jogo_TiposEnumerados.AcoesPossiveisType;
+import jogo_TiposEnumerados.PersonagemType;
 
 class Observer_animationEnd_Dados implements AnimationEndObserver {
 	@Override
 	public void animationEndNotify(AnimationEndObserved observed) {
-		MediadorFluxoDeJogo.getInstance().iniciarMovimentacao();
+		Facade_FluxoDeJogo.getInstance().iniciarMovimentacao();
 	}
 }
 
-public class MediadorFluxoDeJogo {
+public class Facade_FluxoDeJogo {
 	// Singleton com LazyHolder para tratar threads
 	private static class LazyHolder {
-		static MediadorFluxoDeJogo instance = new MediadorFluxoDeJogo();
+		static Facade_FluxoDeJogo instance = new Facade_FluxoDeJogo();
 		
 		private static void resetSingleton() {
-			LazyHolder.instance = new MediadorFluxoDeJogo();
+			LazyHolder.instance = new Facade_FluxoDeJogo();
 		}
 	}
 	
-	public static MediadorFluxoDeJogo getInstance() {
+	public static Facade_FluxoDeJogo getInstance() {
 		return LazyHolder.instance;
 	}
 	
@@ -46,18 +48,21 @@ public class MediadorFluxoDeJogo {
 	public Camera				camera = null;
 	public CameraMenu			cameraMenu = null;
 	
-	public TradutorJogadores 	tradutorJogadores = null;
-	public TradutorMovimentacao tradutorMovimentacao = null;
-	public TradutorTabuleiro 	tradutorTabuleiro = null;
+	public Facade_Jogadores 	tradutorJogadores = null;
+	public Facade_Movimentacao tradutorMovimentacao = null;
+	public Facade_Tabuleiro 	tradutorTabuleiro = null;
 	
 	// Variaveis internas
 	private Dado dado1 = null;
 	private Dado dado2 = null;
 	
+	
+	// Flags Internas
+	public boolean	estaAguardandoMovimentacao = false;
 
 	// ------
 	
-	public MediadorFluxoDeJogo() {
+	public Facade_FluxoDeJogo() {
 		
 	}
 	
@@ -121,59 +126,43 @@ public class MediadorFluxoDeJogo {
 		
 	// Nova Jogada ------------------------------------------------------------------		
 		public void iniciarJogadaDaVez() {
-			if(ControladoraDoJogo.getInstance().obterJogadorDaVez().obeterInteligenciaArtificial() == null)
-				jogadaHumana();
-			else
-				jogadaMecanica();
+			iniciarJogadaDaVez( false );
 		}
 		
-	// Turno dos jogadores humanos
-		protected void jogadaHumana() {
-			
+		public void iniciarJogadaDaVez( boolean jogoRecemCarregado ) {
 			// Limpando Interface Grafica
 			this.deletarDados();
-			this.tradutorMovimentacao.desmarcarCasas();
+			this.tradutorMovimentacao.desmarcarCasas();			
 			
-			// Criando o menu com as opções disponiveis para o jogador atual
-				cameraMenu.menuPrincipal.esconderBotoes();
-				Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
-				
-				// Icone do Jogador
-				PersonagemEnum personagemEnum = jogadorDaVez.obterPersonagem().obterEnum();
-				AtorBotaoMenuJogo.Tipo tipoBotao = TradutorJogadores.converterPersonagemEnumTipoBotao(personagemEnum);
-				cameraMenu.menuPrincipal.ativarBotao( tipoBotao );
-					
-				// Botões sempre disponiveis
-				cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_SALVAR );
-				cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_ACUSAR );
-				cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_MAO );
-				cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_NOTAS );
-				
-				// Botões de situacao
-				if( ControladoraDoJogo.getInstance().jogadorDaVezPodePassar() == true ) {
-					cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_PASSAR );
-				}
-				if( ControladoraDoJogo.getInstance().jogadorDaVezJaMoveu() == false ) {
-					cameraMenu.menuPrincipal.ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_DADO );
-				}
-
+			// Notificando a controladora do jogo
+			ControladoraDoJogo.getInstance().iniciarProximaJogada( jogoRecemCarregado );
+			
+			// Decide se o proximo jogador é humano ou maquina
+			if(ControladoraDoJogo.getInstance().obterJogadorDaVez().obeterInteligenciaArtificial() == null) {
+				iniciarJogada_Humano();
+			}				
+			else {
+				iniciarJogada_InteligenciaArtificial();
+			}
 			
 			// Posicionar Camera no personagem
-			Vetor2D_double posicaoVirtualJogador = tradutorTabuleiro.obterCentroDaCasa(ControladoraDoJogo.getInstance().obterJogadorDaVez().obterPosicao());
+			Vetor2D_double posicaoVirtualJogador = tradutorTabuleiro.obterCentroDaCasa( ControladoraDoJogo.getInstance().obterJogadorDaVez().obterPosicao() );
 			this.centralizarCameraEmPosicaoVirtual(posicaoVirtualJogador);
 		}
 		
-	// Turno dos jogadores mecanicos
-		protected void jogadaMecanica() {
-			// TODO: IA
+	// Jogada de um jogador humano
+		private void iniciarJogada_Humano() {
+			Facade_Menus.getInstance().menuOpcoesJogada_atualizar();
 		}
-				
+		
+	// Jogada de um jogador que e uma inteligencia artificial
+		private void iniciarJogada_InteligenciaArtificial() {
+			// Esconde botoes do menu de opções de jogada
+			Facade_Menus.getInstance().menuOpcoesJogada_esconderBotoes();
+		}			
 		
 	// Finalizar a jogada
 		public void finalizarJogada() {
-			// Notificando a controladora do jogo
-			ControladoraDoJogo.getInstance().iniciarProximaJogada();
-			
 			// Inicializando uma nova jogada
 			this.iniciarJogadaDaVez();
 		}
@@ -187,7 +176,7 @@ public class MediadorFluxoDeJogo {
 	// Inicio do Jogo ----------------------------------------------------------------
 		public void iniciarJogo()
 		{
-			//ControladoraDoJogo.getInstance().iniciarPartida();
+			iniciarJogadaDaVez(true);
 		}
 		
 	// Movimentacao ------------------------------------------------------------------
@@ -251,30 +240,33 @@ public class MediadorFluxoDeJogo {
 		}
 		
 		public void iniciarMovimentacao() {
+			// Marcacao no chao
 			tradutorMovimentacao.desmarcarCasas();	
 			tradutorMovimentacao.marcarCasas();
+			
+			// Marcar ator do jogador
 			tradutorJogadores.definirSombreado( ControladoraDoJogo.getInstance().obterJogadorDaVez() , true );
 			camera.setIsFixedOnTarget( false );
-		}
-		
-		public EstadoDoJogo.EtapaDaJogada obterEstadoDoJogo() {
-			return ControladoraDoJogo.getInstance().obterEstadoDaJogada();
+			
+			// Flag de aguardando movimentacao
+			this.estaAguardandoMovimentacao = true;
 		}
 		
 		public void confirmarMovimento() {
 			//caso o jogador esteja em um comodo, colocar ele numa posiçao random do comodo
 			deletarDados();
+			tradutorMovimentacao.desmarcarCasas();
 			tradutorJogadores.definirSombreado( ControladoraDoJogo.getInstance().obterJogadorDaVez() , false );
 			
 			Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
 			if(jogadorDaVez.obterPosicao().isRoom())
 			{
-				cameraMenu.definirModo(Modos.PALPITE);
-				TradutorMenus.getInstance().desenharMenuPalpite(cameraMenu.cenaPalpite);
-				tradutorJogadores.reposicionarJogador(jogadorDaVez, tabuleiro.obterUmaCasaLivreTipo(jogadorDaVez.obterPosicao().type).position);
+				Facade_Menus.getInstance().menuOpcoesJogada_realizarAcao( AcoesPossiveisType.PALPITE );
+				tradutorMovimentacao.reposicionarJogador(jogadorDaVez, tabuleiro.obterUmaCasaLivreTipo(jogadorDaVez.obterPosicao().type).position);
 			}
 
-			tradutorMovimentacao.desmarcarCasas();
+			// Reseta Flag
+			this.estaAguardandoMovimentacao = false;
 			
 			// Notificar controladores
 			ControladoraDoJogo.getInstance().confirmarMovimento();

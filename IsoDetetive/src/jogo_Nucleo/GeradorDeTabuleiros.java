@@ -1,4 +1,4 @@
-package jogo;
+package jogo_Nucleo;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import estruturas.*;
+import jogo_TiposEnumerados.CasaType;
 
 public class GeradorDeTabuleiros {
 	//Construtor de GeradorDeTabuleiros

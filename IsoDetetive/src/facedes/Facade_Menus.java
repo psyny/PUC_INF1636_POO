@@ -1,4 +1,4 @@
-package mediadores;
+package facedes;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -7,41 +7,25 @@ import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
 
-import animacao.Actor;
-import animacao.Scene;
-import atores.AtorBotaoMenuJogo;
-import atores.AtorCarta;
-import atores.AtorCarta.TipoMarcador;
+import animacao.*;
+import atores.*;
 import atores.CameraMenu.Modos;
-import atores.CenaAcusacao;
-import atores.CenaBlocoNotas;
-import atores.CenaReacaoAoPalpite;
-import atores.CenaVitoria;
-import atores.CenaFeedbackDoPalpite;
-import atores.CenaMao;
-import atores.CenaPalpite;
-import interfaceGrafica.JanelaPrincipal;
-import jogo.Baralho;
-import jogo.Carta;
-import jogo.CartaType;
-import jogo.ControladoraDoJogo;
-import jogo.EstadoDoJogo;
-import jogo.Jogador;
-import jogo.PersonagemEnum;
-import jogo.Jogador.Nota;
+import interfaceGrafica.*;
+import jogo_Nucleo.*;
+import jogo_TiposEnumerados.*;
 
-public class TradutorMenus {
+public class Facade_Menus {
 	
 	// Singleton com LazyHolder para tratar threads
 		private static class LazyHolder {
-			static TradutorMenus instance = new TradutorMenus();
+			static Facade_Menus instance = new Facade_Menus();
 			
 			private static void resetSingleton() {
-				LazyHolder.instance = new TradutorMenus();
+				LazyHolder.instance = new Facade_Menus();
 			}
 		}
 		
-		public static TradutorMenus getInstance() {
+		public static Facade_Menus getInstance() {
 			return LazyHolder.instance;
 		}
 		
@@ -143,7 +127,7 @@ public class TradutorMenus {
 	
 	public ArrayList<ReferenciaCartaAtor> referenciasCartasAtor = new ArrayList<ReferenciaCartaAtor>();
 		
-	public TradutorMenus()
+	public Facade_Menus()
 	{
 		
 	}
@@ -243,7 +227,7 @@ public class TradutorMenus {
 				ReferenciaCartaAtor referenciaCartaAtor = new ReferenciaCartaAtor( carta , new AtorCarta() );
 				referenciasCartasAtor.add( referenciaCartaAtor );
 				referenciaCartaAtor.atorCarta.definirCarta( carta.tipo );
-				referenciaCartaAtor.atorCarta.definirMarcador( TipoMarcador.VAZIO );
+				referenciaCartaAtor.atorCarta.definirMarcador( AtorCarta.TipoMarcador.VAZIO );
 				
 				// Adiciona o mouseListener para multipla seleção
 				referenciaCartaAtor.atorCarta.addMouseListener( new MouseListener_cartaSelecaoUnicaNaoTipada(referenciaCartaAtor, cena.getConfirma(), 1) );	
@@ -251,8 +235,8 @@ public class TradutorMenus {
 				cena.desenharCarta( referenciaCartaAtor.atorCarta );
 			}
 			
-			PersonagemEnum personagemEnum = ControladoraDoJogo.getInstance().obterJogadorReacao().obterPersonagem().obterEnum();
-			AtorBotaoMenuJogo.Tipo tipoBotao = TradutorJogadores.converterPersonagemEnumTipoBotao(personagemEnum);
+			PersonagemType personagemEnum = ControladoraDoJogo.getInstance().obterJogadorReacao().obterPersonagem().obterEnum();
+			AtorBotaoMenuJogo.Tipo tipoBotao = Facade_Jogadores.converterPersonagemEnumTipoBotao(personagemEnum);
 			AtorBotaoMenuJogo atorBotao = new AtorBotaoMenuJogo( tipoBotao );
 			cena.desenharPersonagem( atorBotao );
 		}
@@ -263,13 +247,13 @@ public class TradutorMenus {
 			AtorCarta atorCarta  = new AtorCarta();
 			atorCarta.definirCarta( carta.tipo );
 			atorCarta.definirSelecionado( true );
-			atorCarta.definirMarcador( TipoMarcador.VAZIO );
+			atorCarta.definirMarcador( AtorCarta.TipoMarcador.VAZIO );
 			atorCarta.temMouseOver(false);
 
 			cena.desenharCarta( atorCarta );
 			
-			PersonagemEnum personagemEnum = ControladoraDoJogo.getInstance().obterJogadorReacao().obterPersonagem().obterEnum();
-			AtorBotaoMenuJogo.Tipo tipoBotao = TradutorJogadores.converterPersonagemEnumTipoBotao(personagemEnum);
+			PersonagemType personagemEnum = ControladoraDoJogo.getInstance().obterJogadorReacao().obterPersonagem().obterEnum();
+			AtorBotaoMenuJogo.Tipo tipoBotao = Facade_Jogadores.converterPersonagemEnumTipoBotao(personagemEnum);
 			AtorBotaoMenuJogo atorBotao = new AtorBotaoMenuJogo( tipoBotao );
 			cena.desenharPersonagem( atorBotao );
 		}
@@ -288,8 +272,8 @@ public class TradutorMenus {
 				}
 			}
 			
-			MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.FEEDBACK);
-			desenharFeedback(MediadorFluxoDeJogo.getInstance().cameraMenu.cenaFeedback , carta);
+			Facade_FluxoDeJogo.getInstance().cameraMenu.definirModo( CameraMenu.Modos.FEEDBACK );
+			desenharFeedback(Facade_FluxoDeJogo.getInstance().cameraMenu.cenaFeedback , carta);
 		}
 	
 	// Menu: Acusação	
@@ -328,8 +312,8 @@ public class TradutorMenus {
 			
 			// Verifica se, depois da acusao feita, o jogo ainda pode continuar
 			if( ControladoraDoJogo.getInstance().jogoAcabou() == true ) {
-				MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.VITORIA);
-				desenharVitoria( MediadorFluxoDeJogo.getInstance().cameraMenu.cenaVitoria );
+				Facade_FluxoDeJogo.getInstance().cameraMenu.definirModo( CameraMenu.Modos.VITORIA );
+				desenharVitoria( Facade_FluxoDeJogo.getInstance().cameraMenu.cenaVitoria );
 				
 				String arquivo = "";
 				switch( ControladoraDoJogo.getInstance().obterPersonagemVitorioso() ) {
@@ -359,10 +343,10 @@ public class TradutorMenus {
 						break;
 				}
 				
-				MediadorFluxoDeJogo.getInstance().cameraMenu.cenaVitoria.desenharBG(arquivo);
+				Facade_FluxoDeJogo.getInstance().cameraMenu.cenaVitoria.desenharBG(arquivo);
 			}
 			else {
-				MediadorFluxoDeJogo.getInstance().iniciarJogadaDaVez();
+				Facade_FluxoDeJogo.getInstance().iniciarJogadaDaVez();
 			}
 		}
 		
@@ -393,8 +377,8 @@ public class TradutorMenus {
 			}
 			
 			ControladoraDoJogo.getInstance().validarPalpite(palpite);
-			MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.ESCOLHA_CARTA);
-			desenharEscolhaCarta(MediadorFluxoDeJogo.getInstance().cameraMenu.cenaEscolhaCarta);
+			Facade_FluxoDeJogo.getInstance().cameraMenu.definirModo( CameraMenu.Modos.ESCOLHA_CARTA );
+			desenharEscolhaCarta(Facade_FluxoDeJogo.getInstance().cameraMenu.cenaEscolhaCarta);
 		}
 
 	// Menu: Vitoria	
@@ -408,7 +392,7 @@ public class TradutorMenus {
 				AtorCarta atorCarta = new AtorCarta();
 				atorCarta.definirCarta( carta.tipo );
 				atorCarta.definirSelecionado( true );
-				atorCarta.definirMarcador( TipoMarcador.VAZIO );
+				atorCarta.definirMarcador( AtorCarta.TipoMarcador.VAZIO );
 				atorCarta.temMouseOver(false);
 				cena.desenharCarta(atorCarta);
 			}
@@ -541,5 +525,116 @@ public class TradutorMenus {
 			estadoDoJogo.carregarPartidaDoArquivo( fileChooser.getSelectedFile() );
 			
 			ControladoraDoJogo.getInstance().definirEstadoDoJogo(estadoDoJogo);
-		}		
+		}	
+		
+	// Menu de acoes
+		private CenaMenuPrincipal obterAtorMenuOpcoes() {
+			return Facade_FluxoDeJogo.getInstance().cameraMenu.menuPrincipal;
+		}
+		
+		public void menuOpcoesJogada_esconderBotoes() {
+			obterAtorMenuOpcoes().esconderBotoes();
+		}
+		
+		public void menuOpcoesJogada_atualizar() {
+			menuOpcoesJogada_esconderBotoes();
+			
+			// Criando o menu com as opções disponiveis para o jogador atual
+			Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
+			
+			// Icone do Jogador
+			PersonagemType personagemEnum = jogadorDaVez.obterPersonagem().obterEnum();
+			AtorBotaoMenuJogo.Tipo tipoBotao = Facade_Jogadores.converterPersonagemEnumTipoBotao(personagemEnum);
+			obterAtorMenuOpcoes().ativarBotao( tipoBotao );
+				
+			// Botões sempre disponiveis
+			ArrayList<AcoesPossiveisType> acoesPossiveis = ControladoraDoJogo.getInstance().obterAcoesPossiveis();
+			
+			for( AcoesPossiveisType opcao : acoesPossiveis ) {
+				switch( opcao ) {
+					case ACUSAR:
+						obterAtorMenuOpcoes().ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_ACUSAR );
+						break;
+						
+					case MOVER:
+						obterAtorMenuOpcoes().ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_MOVER );
+						break;
+						
+					case PASSAR_A_VEZ:
+						obterAtorMenuOpcoes().ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_PASSAR );
+						break;
+						
+					case ROLAR_DADOS:
+						obterAtorMenuOpcoes().ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_DADO );
+						break;
+						
+					case SALVAR:
+						obterAtorMenuOpcoes().ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_SALVAR );
+						break;
+						
+					case VER_MAO:
+						obterAtorMenuOpcoes().ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_MAO );
+						break;
+						
+					case VER_NOTAS:
+						obterAtorMenuOpcoes().ativarBotao( AtorBotaoMenuJogo.Tipo.BOTAO_NOTAS );
+						break;
+						
+					case NEGAR_PALPITE:
+					case PALPITE:
+						break;
+					}
+			}
+		}
+		
+		public void menuOpcoesJogada_realizarAcao( AcoesPossiveisType acao ) {
+			switch( acao ) {
+				case ACUSAR:
+					Facade_FluxoDeJogo.getInstance().cameraMenu.definirModo( CameraMenu.Modos.ACUSACAO );
+					desenharAcusacao(Facade_FluxoDeJogo.getInstance().cameraMenu.cenaAcusacao);					
+					break;
+					
+				case MOVER:
+					Facade_FluxoDeJogo.getInstance().confirmarMovimento();
+					menuOpcoesJogada_atualizar();
+					break;
+					
+				case NEGAR_PALPITE:
+					break;
+					
+				case PALPITE:
+					Facade_FluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.PALPITE);
+					desenharMenuPalpite(Facade_FluxoDeJogo.getInstance().cameraMenu.cenaPalpite);
+					break;
+					
+				case PASSAR_A_VEZ:
+					Facade_FluxoDeJogo.getInstance().finalizarJogada();
+					break;
+					
+				case ROLAR_DADOS:
+					Facade_FluxoDeJogo.getInstance().rolarDados();
+					obterAtorMenuOpcoes().esconderBotoes( true );
+					break;
+					
+				case SALVAR:
+					Facade_Menus.getInstance().salvarJogo();
+					break;
+					
+				case VER_MAO:
+					Facade_FluxoDeJogo.getInstance().cameraMenu.definirModo( CameraMenu.Modos.MAO );
+					desenharCartasNaMao(Facade_FluxoDeJogo.getInstance().cameraMenu.cenaMao);
+					break;
+					
+				case VER_NOTAS:
+					Facade_FluxoDeJogo.getInstance().cameraMenu.definirModo( CameraMenu.Modos.NOTAS );
+					Facade_Menus.getInstance().desenharBlocoDeNotas(Facade_FluxoDeJogo.getInstance().cameraMenu.cenaBlocoNotas);
+					break;
+					
+				default:
+					break;
+				
+				}
+		}
+		
+		
 }

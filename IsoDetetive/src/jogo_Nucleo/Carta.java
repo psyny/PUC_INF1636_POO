@@ -1,4 +1,8 @@
-package jogo;
+package jogo_Nucleo;
+
+import jogo_TiposEnumerados.CartaType;
+import jogo_TiposEnumerados.CasaType;
+import jogo_TiposEnumerados.PersonagemType;
 
 public class Carta {
 	
@@ -89,21 +93,21 @@ public class Carta {
 		}
 	}
 	
-	public static PersonagemEnum tipoCartaParaPersonagemEnum(CartaType cartaTipo)
+	public static PersonagemType tipoCartaParaPersonagemEnum(CartaType cartaTipo)
 	{
 		switch (cartaTipo) {
 			case L:
-				return PersonagemEnum.L;
+				return PersonagemType.L;
 			case SHERLOCK:
-				return PersonagemEnum.SHERLOCK;
+				return PersonagemType.SHERLOCK;
 			case CARMEN:
-				return PersonagemEnum.CARMEN;
+				return PersonagemType.CARMEN;
 			case PANTERA:
-				return PersonagemEnum.PANTERA;
+				return PersonagemType.PANTERA;
 			case EDMORT:
-				return PersonagemEnum.EDMORT;
+				return PersonagemType.EDMORT;
 			case BATMAN:
-				return PersonagemEnum.BATMAN;				
+				return PersonagemType.BATMAN;				
 				
 			default:
 				return null;

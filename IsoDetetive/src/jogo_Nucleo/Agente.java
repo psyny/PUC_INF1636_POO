@@ -1,8 +1,9 @@
-package jogo;
+package jogo_Nucleo;
 
 import java.util.ArrayList;
 
-import jogo.Jogador.Nota;
+import jogo_Nucleo.Jogador.Nota;
+import jogo_TiposEnumerados.CasaType;
 
 public class Agente {
 

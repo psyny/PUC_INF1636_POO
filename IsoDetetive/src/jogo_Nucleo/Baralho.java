@@ -1,7 +1,9 @@
-package jogo;
+package jogo_Nucleo;
 
 import java.util.ArrayList;
 import java.util.Random;
+
+import jogo_TiposEnumerados.CartaType;
 
 public class Baralho {
 	

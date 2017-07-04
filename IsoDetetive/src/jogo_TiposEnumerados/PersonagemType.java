@@ -1,6 +1,6 @@
-package jogo;
+package jogo_TiposEnumerados;
 
-public enum PersonagemEnum {
+public enum PersonagemType {
 	L,
 	SHERLOCK,
 	CARMEN,

@@ -4,7 +4,7 @@ import java.util.Random;
 
 import animacao.*;
 import estruturas.Vetor2D_int;
-import jogo.Tabuleiro;
+import jogo_Nucleo.Tabuleiro;
 
 public class AtorParede extends Actor {
 	protected TileSetSprite parede;

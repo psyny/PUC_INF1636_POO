@@ -1,14 +1,15 @@
-package mediadores;
+package facedes;
 
 import java.util.ArrayList;
 
 import atores.*;
 import estruturas.*;
-import jogo.*;
+import jogo_Nucleo.*;
+import jogo_TiposEnumerados.PersonagemType;
 import observers.Observer_JogadorReposicionado;
 
 
-public class TradutorJogadores implements Observer_JogadorReposicionado {
+public class Facade_Jogadores implements Observer_JogadorReposicionado {
 	public class AtoresDoJogador {
 		public Jogador 		jogador;
 		public AtorJogador 	atorJogador;
@@ -16,11 +17,11 @@ public class TradutorJogadores implements Observer_JogadorReposicionado {
 	
 	protected ArrayList<AtoresDoJogador> atoresDosJogadores;
 	
-	public TradutorJogadores( ) {
+	public Facade_Jogadores( ) {
 		// Checa se os objetos necessarios foram registrados no fluxo de jogo
-		MediadorFluxoDeJogo.getInstance().checarRegistroCenaAtores();
-		MediadorFluxoDeJogo.getInstance().checarRegistroTradutorTabuleiro();
-		MediadorFluxoDeJogo.getInstance().checarRegistroTabuleiro();
+		Facade_FluxoDeJogo.getInstance().checarRegistroCenaAtores();
+		Facade_FluxoDeJogo.getInstance().checarRegistroTradutorTabuleiro();
+		Facade_FluxoDeJogo.getInstance().checarRegistroTabuleiro();
 	}
 	
 	public void adicionarJogadores() {
@@ -32,13 +33,13 @@ public class TradutorJogadores implements Observer_JogadorReposicionado {
 			atores.jogador = jogador;
 			
 			atores.atorJogador = new AtorJogador( jogador.obterPersonagem().obterEnum() );
-			MediadorFluxoDeJogo.getInstance().cenaAtores.addActor( atores.atorJogador , 10 );
+			Facade_FluxoDeJogo.getInstance().cenaAtores.addActor( atores.atorJogador , 10 );
 
 			jogador.register_JogadorReposicionadoObserved( this );
 		
 			Casa casaAtual = jogador.obterPosicao();
 
-			Vetor2D_double posicao = MediadorFluxoDeJogo.getInstance().tradutorTabuleiro.obterCentroDaCasa( casaAtual.position.x , casaAtual.position.y );
+			Vetor2D_double posicao = Facade_FluxoDeJogo.getInstance().tradutorTabuleiro.obterCentroDaCasa( casaAtual.position.x , casaAtual.position.y );
 			atores.atorJogador.setVirtualPosition( posicao.x , posicao.y );
 			
 			atoresDosJogadores.add(atores);
@@ -55,7 +56,7 @@ public class TradutorJogadores implements Observer_JogadorReposicionado {
 		return null;
 	}
 	
-	private AtoresDoJogador obterAtoresDoJogador( PersonagemEnum personagemEnum ) {
+	private AtoresDoJogador obterAtoresDoJogador( PersonagemType personagemEnum ) {
 		for( AtoresDoJogador atoresJogador : atoresDosJogadores ) {
 			if( atoresJogador.jogador.obterPersonagem().obterEnum() == personagemEnum ) {
 				return atoresJogador;
@@ -65,21 +66,15 @@ public class TradutorJogadores implements Observer_JogadorReposicionado {
 		return null;
 	}	
 	
-	public void reposicionarJogador( Jogador jogador , Vetor2D_int novaCasa ) {
-		Casa casa = MediadorFluxoDeJogo.getInstance().tabuleiro.getCell( novaCasa.x , novaCasa.y );
-		
-		jogador.definirPosicao( casa ); // Essa chamada forca a chamada do observer
-	}
-	
-	public void ObserverNotify_JogadorReposicionado( PersonagemEnum personagem , Vetor2D_int novaPosicao ) {
+	public void ObserverNotify_JogadorReposicionado( PersonagemType personagem , Vetor2D_int novaPosicao ) {
 		AtoresDoJogador atoresJogador = obterAtoresDoJogador( personagem );
 		if( atoresJogador == null ) {
 			return;
 		}
 		
-		Casa casa = MediadorFluxoDeJogo.getInstance().tabuleiro.getCell( novaPosicao.x , novaPosicao.y );
+		Casa casa = Facade_FluxoDeJogo.getInstance().tabuleiro.getCell( novaPosicao.x , novaPosicao.y );
 		
-		Vetor2D_double novaPosicaoDouble = MediadorFluxoDeJogo.getInstance().tradutorTabuleiro.obterCentroDaCasa(casa);
+		Vetor2D_double novaPosicaoDouble = Facade_FluxoDeJogo.getInstance().tradutorTabuleiro.obterCentroDaCasa(casa);
 		atoresJogador.atorJogador.setVirtualPosition( novaPosicaoDouble.x , novaPosicaoDouble.y );
 	}
 	
@@ -103,7 +98,7 @@ public class TradutorJogadores implements Observer_JogadorReposicionado {
 		atoresDosJogadores = new ArrayList<AtoresDoJogador>();
 	}
 	
-	public static AtorBotaoMenuJogo.Tipo converterPersonagemEnumTipoBotao( PersonagemEnum personagemEnum ) {
+	public static AtorBotaoMenuJogo.Tipo converterPersonagemEnumTipoBotao( PersonagemType personagemEnum ) {
 		switch( personagemEnum ) {
 			case L:
 				return AtorBotaoMenuJogo.Tipo.PERSONAGEM_L;

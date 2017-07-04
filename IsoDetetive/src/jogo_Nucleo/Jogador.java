@@ -1,7 +1,10 @@
-package jogo;
+package jogo_Nucleo;
 
 import java.util.ArrayList;
 
+import jogo_TiposEnumerados.CartaType;
+import jogo_TiposEnumerados.CasaType;
+import jogo_TiposEnumerados.PersonagemType;
 import observers.Observed_JogadorReposicionado;
 import observers.Observer_JogadorReposicionado;
 
@@ -36,11 +39,11 @@ public class Jogador implements Observed_JogadorReposicionado  {
 	
 	private ArrayList<Observer_JogadorReposicionado> jogadorReposicionadoObserverList = new ArrayList<Observer_JogadorReposicionado>();
 	
-	public Jogador( PersonagemEnum personagem, boolean inteligenciaArtificial ) {
+	public Jogador( PersonagemType personagem, boolean inteligenciaArtificial ) {
 		this( personagem , "<SEM NOME>" , inteligenciaArtificial);
 	}
 	
-	public Jogador( PersonagemEnum personagem , String nomeJogador, boolean inteligenciaArtificial  ) {
+	public Jogador( PersonagemType personagem , String nomeJogador, boolean inteligenciaArtificial  ) {
 		this.personagem = PersonagemLista.getInstance().obterPersonagem( personagem );
 		
 		this.nome 		= nomeJogador;

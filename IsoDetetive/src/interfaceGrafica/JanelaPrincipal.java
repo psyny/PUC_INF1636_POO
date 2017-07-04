@@ -18,7 +18,7 @@ import javax.swing.JPanel;
 
 import animacao.Camera;
 import estruturas.Vetor2D_int;
-import jogo.ControladoraDoJogo;
+import jogo_Nucleo.ControladoraDoJogo;
 
 
 public class JanelaPrincipal extends JFrame {

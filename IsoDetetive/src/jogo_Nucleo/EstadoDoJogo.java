@@ -1,4 +1,4 @@
-package jogo;
+package jogo_Nucleo;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -6,45 +6,31 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
 
-import atores.AtorJogador;
-import estruturas.Vetor2D_double;
-import interfaceGrafica.JanelaPrincipal;
-import interfaceGrafica.QuadroJogo;
-import jogo.Jogador.Nota;
-import mediadores.MediadorFluxoDeJogo;
-import mediadores.TradutorJogadores.AtoresDoJogador;
-import sun.nio.cs.ext.Johab;
+import jogo_Nucleo.Jogador.Nota;
+import jogo_TiposEnumerados.*;
 
 public class EstadoDoJogo {
-	public enum EtapaDaJogada {
-		INICIO,
-		CONFIRMANDO_MOVIMENTO,
-		AGUARDANDO_MOVIMENTO,
-		PALPITE,
-		ACUSACAO
-	}
-	
 	public static class TipoNovoJogador
 	{
-		public PersonagemEnum personagemEnum;
+		public PersonagemType personagemEnum;
 		public boolean emJogo;
 		public boolean inteligenciaArtificial = false;
 	}
 	
 	// Dados de controle
-	protected Tabuleiro 	tabuleiro = null;
+	protected Tabuleiro 		tabuleiro = null;
 	protected Baralho 			baralho;	
+	protected boolean			opcoesDeJogadaCalculadas = false;
 	
 	// Dados a serem armazenados e caregados
 	protected String 			tabuleiroArquivoOrigem = "";
 	protected ArrayList<Jogador> listaDeJogadores;
-	protected EtapaDaJogada 	etapaDaJogada = EtapaDaJogada.INICIO; 
 	protected Jogador 			jogadorDaVez = null;
 	protected int				valorDoDado = 0;
 	protected ArrayList<Carta> 	crime;
 	
-	protected boolean			jogadorJaMoveu = false;
-	protected boolean			jogadorPodePassar = true;
+	protected ArrayList<AcoesPossiveisType>	acoesPossiveis = new ArrayList<AcoesPossiveisType>();
+	
 	
 	// ------------------------------------------------------------------------
 	
@@ -58,7 +44,7 @@ public class EstadoDoJogo {
 		
 		// Cria e posiciona os jogadores 
 		listaDeJogadores = new ArrayList<Jogador>();
-		for( PersonagemEnum personagemEnum : PersonagemEnum.values() ) {
+		for( PersonagemType personagemEnum : PersonagemType.values() ) {
 			TipoNovoJogador novoJogador = null;
 			
 			for (TipoNovoJogador tipoNovoJogador : listaDePersonagens) {
@@ -77,8 +63,7 @@ public class EstadoDoJogo {
 			this.listaDeJogadores.add( jogador );	
 		}	
 		
-		// Configuracoes iniciais de uma partida
-		etapaDaJogada 	= EtapaDaJogada.INICIO; 
+		// Configuracoes iniciais de uma jogada				
 		jogadorDaVez 	= this.obterProximoJogador();
 		valorDoDado 	= 0;
 
@@ -103,6 +88,8 @@ public class EstadoDoJogo {
 			}
 		}
 		
+		// Variaveis de estado
+		opcoesDeJogadaCalculadas = false;
 	}
 	
 	private void carregarTabuleiro( String arquivoTabuleiro ) {
@@ -246,11 +233,11 @@ public class EstadoDoJogo {
 			// Etapa da Jogada
 			fileWriter.write("\n");
 			fileWriter.write("EtapaDaJogada\n");
-			fileWriter.write( etapaDaJogada.toString() );
-			fileWriter.write("\n");
-			fileWriter.write( (jogadorJaMoveu) ? "1" : "0");
-			fileWriter.write("\n");
-			fileWriter.write( (jogadorPodePassar) ? "1" : "0");
+			//fileWriter.write( etapaDaJogada.toString() );
+			//fileWriter.write("\n");
+			//fileWriter.write( (jogadorJaMoveu) ? "1" : "0");
+			//fileWriter.write("\n");
+			//fileWriter.write( (jogadorPodePassar) ? "1" : "0");
 			
 			fileWriter.close();
 		}	
@@ -347,12 +334,7 @@ public class EstadoDoJogo {
 			
 			//Etapa da jogada
 			line = reader.readLine();
-			etapaDaJogada = obterEtapaDaJogada(reader.readLine()); 
-			jogadorJaMoveu = (reader.readLine().equals("1")) ? true : false;
-			jogadorPodePassar = (reader.readLine().equals("1")) ? true : false;
-			
-			System.out.println(jogadorJaMoveu);
-			System.out.println(jogadorPodePassar);
+			//etapaDaJogada = obterEtapaDaJogada(reader.readLine()); 
 			
 			// Outros dados
 			valorDoDado 	= 0;
@@ -364,43 +346,23 @@ public class EstadoDoJogo {
 		}
 	}	
 	
-	private EtapaDaJogada obterEtapaDaJogada(String nome)
-	{
-		switch (nome) 
-		{
-			case "INICIO":
-				return EtapaDaJogada.INICIO;
-			case "CONFIRMANDO_MOVIMENTO":
-				return EtapaDaJogada.CONFIRMANDO_MOVIMENTO;
-			case "AGUARDANDO_MOVIMENTO":
-				return EtapaDaJogada.AGUARDANDO_MOVIMENTO;
-			case "PALPITE":
-				return EtapaDaJogada.PALPITE;
-			case "ACUSACAO":
-				return EtapaDaJogada.ACUSACAO;
-
-			default:
-				return null;
-		}
-	}
-	
-	private PersonagemEnum obterPersonagem(String nome)
+	private PersonagemType obterPersonagem(String nome)
 	{
 		switch (nome) 
 		{
 		
 			case "L":
-				return PersonagemEnum.L;
+				return PersonagemType.L;
 			case "Sherlock Holmes":
-				return PersonagemEnum.SHERLOCK;
+				return PersonagemType.SHERLOCK;
 			case "Carmen San Diego":
-				return PersonagemEnum.CARMEN;
+				return PersonagemType.CARMEN;
 			case "Pantera Cor-de-Rosa":
-				return PersonagemEnum.PANTERA;
+				return PersonagemType.PANTERA;
 			case "Ed Mort":
-				return PersonagemEnum.EDMORT;
+				return PersonagemType.EDMORT;
 			case "Batman":
-				return PersonagemEnum.BATMAN;
+				return PersonagemType.BATMAN;
 
 			default:
 				return null;

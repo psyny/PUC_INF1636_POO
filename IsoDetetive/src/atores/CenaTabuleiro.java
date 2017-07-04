@@ -13,8 +13,8 @@ import javax.swing.SwingUtilities;
 import animacao.*;
 import estruturas.Vetor2D_double;
 import estruturas.Vetor2D_int;
+import facedes.*;
 import interfaceGrafica.JanelaPrincipal;
-import mediadores.*;
 import observers.Observed_CasaSelecionada;
 import observers.Observer_CasaSelecionada;
 

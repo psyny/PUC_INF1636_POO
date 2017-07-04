@@ -13,12 +13,11 @@ import javax.swing.JPanel;
 import animacao.*;
 import atores.*;
 import estruturas.*;
-import jogo.*;
-
-import mediadores.TradutorMovimentacao;
-import mediadores.MediadorFluxoDeJogo;
-import mediadores.TradutorJogadores;
-import mediadores.TradutorTabuleiro;
+import facedes.Facade_FluxoDeJogo;
+import facedes.Facade_Jogadores;
+import facedes.Facade_Movimentacao;
+import facedes.Facade_Tabuleiro;
+import jogo_Nucleo.*;
 
 
 
@@ -36,7 +35,7 @@ public class QuadroJogo extends JLayeredPane {
 	
 	public QuadroJogo() {
 		// Carregando arquivos pertinentes ao jogo
-		MediadorFluxoDeJogo.getInstance().carregarDadosDaControladora();
+		Facade_FluxoDeJogo.getInstance().carregarDadosDaControladora();
 				
 		// Configurações principais
 		JanelaPrincipal.getInstance().definirLayoutManager( null );
@@ -51,18 +50,18 @@ public class QuadroJogo extends JLayeredPane {
         
         // Cena do tabueiro ( piso ):
         CenaTabuleiro cenaTabuleiro = new CenaTabuleiro( 0 , 0 , 1 , 1 );
-        MediadorFluxoDeJogo.getInstance().cenaTabuleiro = cenaTabuleiro;
+        Facade_FluxoDeJogo.getInstance().cenaTabuleiro = cenaTabuleiro;
 		cenaTabuleiro.definirMargens( 100 , 100 , 100, 100);
 		
-        TradutorTabuleiro tradutorTabuleiro = new TradutorTabuleiro( 63 , 63 );
-        MediadorFluxoDeJogo.getInstance().tradutorTabuleiro = tradutorTabuleiro;
+        Facade_Tabuleiro tradutorTabuleiro = new Facade_Tabuleiro( 63 , 63 );
+        Facade_FluxoDeJogo.getInstance().tradutorTabuleiro = tradutorTabuleiro;
         tradutorTabuleiro.popularTabuleiroGrafico();
         
         cenaPrincipal.adicionarCena( cenaTabuleiro , 0);
         
         // Cena dos atores ( jogadores, dado, paredes, etc ):
         CenaAtores cenaAtores = new CenaAtores( 0 , 0 , (int)cenaTabuleiro.obterTamanhoVirtual().x , (int)cenaTabuleiro.obterTamanhoVirtual().y );
-        MediadorFluxoDeJogo.getInstance().cenaAtores = cenaAtores;
+        Facade_FluxoDeJogo.getInstance().cenaAtores = cenaAtores;
         cenaAtores.definirMargens( 100 , 100 , 100, 100);
         tradutorTabuleiro.compilarCelulas();
         
@@ -70,17 +69,17 @@ public class QuadroJogo extends JLayeredPane {
         cenaPrincipal.adicionarCena( cenaAtores , 1);
         
         // Mediadores
-        TradutorJogadores tradutorJogadores = new TradutorJogadores();
-        MediadorFluxoDeJogo.getInstance().tradutorJogadores = tradutorJogadores;
+        Facade_Jogadores tradutorJogadores = new Facade_Jogadores();
+        Facade_FluxoDeJogo.getInstance().tradutorJogadores = tradutorJogadores;
         tradutorJogadores.adicionarJogadores();
         
-        TradutorMovimentacao tradutorMovimentacao = new TradutorMovimentacao();
-        MediadorFluxoDeJogo.getInstance().tradutorMovimentacao = tradutorMovimentacao;
+        Facade_Movimentacao tradutorMovimentacao = new Facade_Movimentacao();
+        Facade_FluxoDeJogo.getInstance().tradutorMovimentacao = tradutorMovimentacao;
 
         
 		// Camera - Jogo
 		Camera gameCamera = new Camera( cenaPrincipal , 0 , 0 ); 
-		MediadorFluxoDeJogo.getInstance().camera = gameCamera;
+		Facade_FluxoDeJogo.getInstance().camera = gameCamera;
         gameCamera.setBounds(0, 0, 1020 , 735 );
         gameCamera.setTarget( 0 , 0 );
         gameCamera.setIsFixedOnTarget( false );
@@ -94,7 +93,7 @@ public class QuadroJogo extends JLayeredPane {
         CenaComposta menuCenaPrincipal = new CenaComposta(0,0);
         
         CameraMenu menuCamera = new CameraMenu( menuCenaPrincipal , 0 , 0 ); 
-        MediadorFluxoDeJogo.getInstance().cameraMenu = menuCamera;
+        Facade_FluxoDeJogo.getInstance().cameraMenu = menuCamera;
         add( menuCamera );
         setLayer( menuCamera , 20 );
         
@@ -135,9 +134,7 @@ public class QuadroJogo extends JLayeredPane {
         menuCamera.definirModo( CameraMenu.Modos.MENU_PRINCIPAL );
 		
 		//Inicia o primerio turno
-		MediadorFluxoDeJogo.getInstance().iniciarJogo();
-		MediadorFluxoDeJogo.getInstance().iniciarJogadaDaVez();
-		
+		Facade_FluxoDeJogo.getInstance().iniciarJogo();
 	}
 	
 }

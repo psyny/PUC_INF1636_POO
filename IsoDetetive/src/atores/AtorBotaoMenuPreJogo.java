@@ -5,7 +5,7 @@ import java.awt.event.MouseEvent;
 
 import animacao.*;
 import estruturas.Vetor2D_int;
-import mediadores.MediadorFluxoDeJogo;
+import facedes.Facade_FluxoDeJogo;
 
 @SuppressWarnings("serial")
 public class AtorBotaoMenuPreJogo extends Actor {

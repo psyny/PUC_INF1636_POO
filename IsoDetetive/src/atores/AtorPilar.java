@@ -2,8 +2,8 @@ package atores;
 
 import animacao.*;
 import estruturas.Vetor2D_int;
-import jogo.Tabuleiro;
-import mediadores.TradutorTabuleiro;
+import facedes.Facade_Tabuleiro;
+import jogo_Nucleo.Tabuleiro;
 
 public class AtorPilar extends Actor {
 	protected 	TileSetSprite 	spritePilar;

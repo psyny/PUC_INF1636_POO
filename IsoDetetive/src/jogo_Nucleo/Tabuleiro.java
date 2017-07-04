@@ -1,4 +1,4 @@
-package jogo;
+package jogo_Nucleo;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -7,6 +7,7 @@ import java.util.concurrent.Callable;
 
 import atores.AtorPiso;
 import estruturas.*;
+import jogo_TiposEnumerados.CasaType;
 
 
 public class Tabuleiro {
@@ -287,7 +288,7 @@ public class Tabuleiro {
 		}
 	
 	// Obtem casas acessiveis a partir da casa X
-		public ArrayList<Casa> obterCasasNaDistancia( Jogador jogador , int distancia ) {
+		public ArrayList<Casa> obterMovimentoNaDistancia( Jogador jogador , int distancia ) {
 			
 			ArrayList<Casa> casasDeOrigem = new ArrayList<Casa>();
 			ArrayList<Casa> casas;

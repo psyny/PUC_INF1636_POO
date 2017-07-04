@@ -1,8 +1,9 @@
-package jogo;
+package jogo_Nucleo;
 
 import java.util.ArrayList;
 
 import estruturas.*;
+import jogo_TiposEnumerados.CasaType;
 
 public class Casa {
 	// Apenas para Consulta

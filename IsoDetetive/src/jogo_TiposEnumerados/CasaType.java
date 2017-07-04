@@ -1,4 +1,4 @@
-package jogo;
+package jogo_TiposEnumerados;
 
 public enum CasaType {
 	CORREDOR,

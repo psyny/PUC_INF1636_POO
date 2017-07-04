@@ -25,11 +25,13 @@ import atores.AtorBotaoMenuPreJogo;
 import atores.AtorCarta;
 import atores.AtorEtiqueta;
 import estruturas.Vetor2D_int;
+import facedes.Facade_FluxoDeJogo;
+import facedes.Facade_Menus;
 import interfaceGrafica.QuadroInicial.actList_carregarJogo;
 import interfaceGrafica.QuadroInicial.actList_novoJogo;
-import jogo.*;
-import mediadores.MediadorFluxoDeJogo;
-import mediadores.TradutorMenus;
+import jogo_Nucleo.*;
+import jogo_TiposEnumerados.CartaType;
+import jogo_TiposEnumerados.PersonagemType;
 
 
 
@@ -219,27 +221,27 @@ public class QuadroSelecaoDeJogadores extends JPanel {
 			
 			switch( estadoCarta.atorCarta.obterTipo() ) {
 				case L:
-					novoJogador.personagemEnum = PersonagemEnum.L;
+					novoJogador.personagemEnum = PersonagemType.L;
 					break;
 					
 				case SHERLOCK:
-					novoJogador.personagemEnum = PersonagemEnum.SHERLOCK;
+					novoJogador.personagemEnum = PersonagemType.SHERLOCK;
 					break;
 					
 				case CARMEN:
-					novoJogador.personagemEnum = PersonagemEnum.CARMEN;
+					novoJogador.personagemEnum = PersonagemType.CARMEN;
 					break;
 					
 				case PANTERA:
-					novoJogador.personagemEnum = PersonagemEnum.PANTERA;
+					novoJogador.personagemEnum = PersonagemType.PANTERA;
 					break;
 					
 				case EDMORT:
-					novoJogador.personagemEnum = PersonagemEnum.EDMORT;
+					novoJogador.personagemEnum = PersonagemType.EDMORT;
 					break;
 					
 				case BATMAN:
-					novoJogador.personagemEnum = PersonagemEnum.BATMAN;
+					novoJogador.personagemEnum = PersonagemType.BATMAN;
 					break;
 					
 				default:

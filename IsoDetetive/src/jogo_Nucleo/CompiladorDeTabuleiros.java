@@ -1,6 +1,9 @@
-package jogo;
+package jogo_Nucleo;
 
 import java.util.ArrayList;
+
+import jogo_TiposEnumerados.CasaType;
+import jogo_TiposEnumerados.PersonagemType;
 
 public abstract class CompiladorDeTabuleiros {
 	
@@ -62,27 +65,27 @@ public abstract class CompiladorDeTabuleiros {
 	private static void checarPosicaoInicial( Tabuleiro tabuleiro , Casa casa ) {
 		switch( casa.type ) {
 			case INICIO_L:
-				PersonagemLista.getInstance().obterPersonagem(  PersonagemEnum.L ).definirCasaInicial( casa );
+				PersonagemLista.getInstance().obterPersonagem(  PersonagemType.L ).definirCasaInicial( casa );
 				break;
 			
 			case INICIO_SHERLOCK:
-				PersonagemLista.getInstance().obterPersonagem( PersonagemEnum.SHERLOCK ).definirCasaInicial( casa );
+				PersonagemLista.getInstance().obterPersonagem( PersonagemType.SHERLOCK ).definirCasaInicial( casa );
 				break;
 				
 			case INICIO_CARMEN:
-				PersonagemLista.getInstance().obterPersonagem( PersonagemEnum.CARMEN ).definirCasaInicial( casa );
+				PersonagemLista.getInstance().obterPersonagem( PersonagemType.CARMEN ).definirCasaInicial( casa );
 				break;
 				
 			case INICIO_PANTERA:
-				PersonagemLista.getInstance().obterPersonagem( PersonagemEnum.PANTERA ).definirCasaInicial(  casa );
+				PersonagemLista.getInstance().obterPersonagem( PersonagemType.PANTERA ).definirCasaInicial(  casa );
 				break;
 				
 			case INICIO_EDMORT:
-				PersonagemLista.getInstance().obterPersonagem( PersonagemEnum.EDMORT ).definirCasaInicial(  casa );
+				PersonagemLista.getInstance().obterPersonagem( PersonagemType.EDMORT ).definirCasaInicial(  casa );
 				break;
 				
 			case INICIO_BATMAN:
-				PersonagemLista.getInstance().obterPersonagem( PersonagemEnum.BATMAN ).definirCasaInicial( casa );
+				PersonagemLista.getInstance().obterPersonagem( PersonagemType.BATMAN ).definirCasaInicial( casa );
 				break;	
 				
 			default:

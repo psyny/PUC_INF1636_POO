@@ -5,7 +5,7 @@ import java.awt.event.MouseEvent;
 
 import animacao.*;
 import estruturas.Vetor2D_int;
-import mediadores.MediadorFluxoDeJogo;
+import facedes.Facade_FluxoDeJogo;
 
 @SuppressWarnings("serial")
 public class AtorBotaoMenuJogo extends Actor {
@@ -47,7 +47,7 @@ public class AtorBotaoMenuJogo extends Actor {
 	
 	private AnimatedSprite 	botao;
 	private boolean 		mouseOverChange = false;
-	private AtorBotaoMenuJogo.Tipo tipo = AtorBotaoMenuJogo.Tipo.DESCONHECIDO;
+	protected AtorBotaoMenuJogo.Tipo tipo = AtorBotaoMenuJogo.Tipo.DESCONHECIDO;
 
 	public AtorBotaoMenuJogo( AtorBotaoMenuJogo.Tipo tipo ) {
 		super(100,100);

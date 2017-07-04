@@ -1,100 +1,69 @@
 package atores;
 
-import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-import javax.swing.JFileChooser;
-
-import animacao.Actor;
-import animacao.Scene;
-import atores.CameraMenu.Modos;
-import estruturas.Vetor2D_int;
-import interfaceGrafica.JanelaPrincipal;
-import jogo.ControladoraDoJogo;
-import mediadores.MediadorFluxoDeJogo;
-import mediadores.TradutorMenus;
-import observers.Observed_CasaClicada;
-import observers.Observer_CasaClicada;
+import animacao.*;
+import estruturas.*;
+import facedes.*;
+import jogo_TiposEnumerados.AcoesPossiveisType;
+import observers.*;
 
 
 
 public class CenaMenuPrincipal extends Scene implements Observer_CasaClicada {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2855788907009836081L;
+
 	class mouseListener_dado extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent arg0)  {
-			MediadorFluxoDeJogo.getInstance().rolarDados();
-			
-			botao_mover.setVisible(false);
-			
-			botao_salvar.setVisible( false );
-			botao_dado.setVisible(false);			
-			botao_passar.setVisible(false);
-			botao_mao.setVisible(false);
-			botao_notas.setVisible(false);
-			botao_acusar.setVisible(false);
-			
-			revalidarPosicaoDosBotoes();
+			Facade_Menus.getInstance().menuOpcoesJogada_realizarAcao( AcoesPossiveisType.ROLAR_DADOS );
 		}
 	}	
 	
 	class mouseListener_mover extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent arg0)  {
-			MediadorFluxoDeJogo.getInstance().confirmarMovimento();
-			
-			botao_mover.setVisible(false);
-			
-			botao_passar.setVisible(true);
-			botao_mao.setVisible(true);
-			botao_notas.setVisible(true);
-			botao_acusar.setVisible(true);
-			
-			botao_salvar.setVisible(false);
-			
-			revalidarPosicaoDosBotoes();
+			Facade_Menus.getInstance().menuOpcoesJogada_realizarAcao( AcoesPossiveisType.MOVER );
 		}
 	}
 
 	class mouseListener_acusar extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent arg0)  {
-			MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.ACUSACAO);
-			TradutorMenus.getInstance().desenharAcusacao(MediadorFluxoDeJogo.getInstance().cameraMenu.cenaAcusacao);
+			Facade_Menus.getInstance().menuOpcoesJogada_realizarAcao( AcoesPossiveisType.ACUSAR );
 		}
 	}
 	
 	class mouseListener_salvar extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent arg0)  {
-			TradutorMenus.getInstance().salvarJogo();
+			Facade_Menus.getInstance().menuOpcoesJogada_realizarAcao( AcoesPossiveisType.SALVAR );
 		}
 	}	
 
 	class mouseListener_verCartas extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent arg0)  {
-			MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.MAO);
-			TradutorMenus.getInstance().desenharCartasNaMao(MediadorFluxoDeJogo.getInstance().cameraMenu.cenaMao);
+			Facade_Menus.getInstance().menuOpcoesJogada_realizarAcao( AcoesPossiveisType.VER_MAO );
 		}
 	}
 
 	class mouseListener_verBlocoNotas extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent arg0)  {
-			MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.NOTAS);
-			TradutorMenus.getInstance().desenharBlocoDeNotas(MediadorFluxoDeJogo.getInstance().cameraMenu.cenaBlocoNotas);
+			Facade_Menus.getInstance().menuOpcoesJogada_realizarAcao( AcoesPossiveisType.VER_NOTAS );
 		}
 	}
 
 	class mouseListener_passar extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent arg0)  {
-			MediadorFluxoDeJogo.getInstance().finalizarJogada();
+			Facade_Menus.getInstance().menuOpcoesJogada_realizarAcao( AcoesPossiveisType.PASSAR_A_VEZ );
 		}
 	}
 	
@@ -186,15 +155,51 @@ public class CenaMenuPrincipal extends Scene implements Observer_CasaClicada {
 		botao_passar.addMouseListener( new mouseListener_passar() );
 		this.addActor( botao_passar , 10 );				
 	}
+	
+	public void esconderBotoes( ) {
+		esconderBotoes( false );
+	}
+	
+	public void esconderBotoes( boolean deixarJogador ) {
+		if( deixarJogador == true ) {
+			esconderBotoes_opcoes();
+		}
+		else {
+			esconderBotoes_todos();
+		}
+		
+		resetarPosicaoInicial();
+		revalidarPosicaoDosBotoes();
+	}
 
-	public void esconderBotoes() {
+	private void esconderBotoes_todos() {
 		for( AtorBotaoMenuJogo botao : this.botoes ) {
 			botao.setVisible(false);
 			botao.setLocation(0, 0);
 		}
-		
-		resetarPosicaoInicial();
 	}
+	
+	private void esconderBotoes_opcoes() {
+		for( AtorBotaoMenuJogo botao : this.botoes ) {
+			switch( botao.tipo ) {
+				case PERSONAGEM_BATMAN:
+				case PERSONAGEM_CARMEN:
+				case PERSONAGEM_EDMORT:
+				case PERSONAGEM_L:
+				case PERSONAGEM_PANTERA:
+				case PERSONAGEM_SHERLOCK:
+					continue;
+					
+				default:
+					break;
+			}
+			
+			botao.setVisible(false);
+			botao.setLocation(0, 0);
+		}
+	}
+	
+	
 	
 	public void ativarBotao( AtorBotaoMenuJogo.Tipo tipo ) {
 		for( AtorBotaoMenuJogo botao : this.botoes ) {
@@ -218,7 +223,7 @@ public class CenaMenuPrincipal extends Scene implements Observer_CasaClicada {
 		revalidarPosicaoDosBotoes();
 	}
 	
-	private void revalidarPosicaoDosBotoes() {
+	public void revalidarPosicaoDosBotoes() {
 		resetarPosicaoInicial();
 		
 		for( AtorBotaoMenuJogo botao : this.botoes ) {

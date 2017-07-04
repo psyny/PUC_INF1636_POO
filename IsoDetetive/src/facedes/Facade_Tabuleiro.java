@@ -1,4 +1,4 @@
-package mediadores;
+package facedes;
 
 import java.util.ArrayList;
 
@@ -11,12 +11,12 @@ import atores.CenaTabuleiro;
 import atores.Marcador;
 import estruturas.Vetor2D_double;
 import estruturas.Vetor2D_int;
-import jogo.Casa;
-import jogo.CasaType;
-import jogo.ControladoraDoJogo;
-import jogo.Tabuleiro;
+import jogo_Nucleo.Casa;
+import jogo_Nucleo.ControladoraDoJogo;
+import jogo_Nucleo.Tabuleiro;
+import jogo_TiposEnumerados.CasaType;
 
-public class TradutorTabuleiro {
+public class Facade_Tabuleiro {
 	public class Celula {
 		public int x;
 		public int y;
@@ -49,10 +49,10 @@ public class TradutorTabuleiro {
 	protected ArrayList<Celula> 			paredesEscondidas = new ArrayList<Celula>();
 	
 	
-	public TradutorTabuleiro( int casa_largura , int casa_altura ) {
+	public Facade_Tabuleiro( int casa_largura , int casa_altura ) {
 		// Checa se os objetos necessarios foram registrados no fluxo de jogo
-		MediadorFluxoDeJogo.getInstance().checarRegistroCenaTabuleiro();
-		MediadorFluxoDeJogo.getInstance().checarRegistroTabuleiro();
+		Facade_FluxoDeJogo.getInstance().checarRegistroCenaTabuleiro();
+		Facade_FluxoDeJogo.getInstance().checarRegistroTabuleiro();
 		
 		this.casa_largura	= casa_largura;
 		this.casa_altura 	= casa_altura;
@@ -109,16 +109,16 @@ public class TradutorTabuleiro {
 	
 	public void popularTabuleiroGrafico() {
 		// Definir tamanho virtual da cena tabuleiro
-		int tamanho_x = MediadorFluxoDeJogo.getInstance().tabuleiro.objeterQtdColunas() * casa_largura;
-		int tamanho_y = MediadorFluxoDeJogo.getInstance().tabuleiro.objeterQtdLinhas() * casa_altura;
+		int tamanho_x = Facade_FluxoDeJogo.getInstance().tabuleiro.objeterQtdColunas() * casa_largura;
+		int tamanho_y = Facade_FluxoDeJogo.getInstance().tabuleiro.objeterQtdLinhas() * casa_altura;
 		Vetor2D_int tamanhoVirtualDoTabuleiro = new Vetor2D_int( tamanho_x , tamanho_y );
-		MediadorFluxoDeJogo.getInstance().cenaTabuleiro.definirTamanhoVirtual( tamanhoVirtualDoTabuleiro.x , tamanhoVirtualDoTabuleiro.y );
+		Facade_FluxoDeJogo.getInstance().cenaTabuleiro.definirTamanhoVirtual( tamanhoVirtualDoTabuleiro.x , tamanhoVirtualDoTabuleiro.y );
 		
 		// Popular cena com os atores ( tiles ) gráficos
-		for( ArrayList<Casa> linha : MediadorFluxoDeJogo.getInstance().tabuleiro.casas ) {
+		for( ArrayList<Casa> linha : Facade_FluxoDeJogo.getInstance().tabuleiro.casas ) {
 			for( Casa casa : linha ) {
 				AtorPiso piso = this.gerarPisoParaTipo( casa.type );
-				MediadorFluxoDeJogo.getInstance().cenaTabuleiro.addActor( piso , 0 );	
+				Facade_FluxoDeJogo.getInstance().cenaTabuleiro.addActor( piso , 0 );	
 				
 				Vetor2D_double atorPos = this.obterCentroDaCasa( casa );
 				
@@ -256,7 +256,7 @@ public class TradutorTabuleiro {
 	}
 	
 	public Vetor2D_double obterCentroDaCasa( int x , int y ) {
-		Casa casa = MediadorFluxoDeJogo.getInstance().tabuleiro.getCell(x, y);
+		Casa casa = Facade_FluxoDeJogo.getInstance().tabuleiro.getCell(x, y);
 	
 		return this.obterCentroDaCasa(casa);
 	}
@@ -496,7 +496,7 @@ public class TradutorTabuleiro {
 			Casa centro = celulaGrafica.casa;
 			
 			// Define o layer de acordo com a direcao
-			int layer = TradutorTabuleiro.wallBaseLayer;
+			int layer = Facade_Tabuleiro.wallBaseLayer;
 			if( direcao == Tabuleiro.DIRECOES.NORTE || direcao == Tabuleiro.DIRECOES.OESTE ) {
 				layer += 1;
 			}
@@ -510,7 +510,7 @@ public class TradutorTabuleiro {
 			
 			posicao = obterCentroDaCasa( centro.position.x , centro.position.y );
 			atorParede = new AtorParede( direcao , paredeFlag );
-			MediadorFluxoDeJogo.getInstance().cenaAtores.addActor( atorParede , layer );
+			Facade_FluxoDeJogo.getInstance().cenaAtores.addActor( atorParede , layer );
 			atorParede.setVirtualPosition( posicao.x , posicao.y , 0 );	
 			
 			celulaGrafica.atoresParedes.add( atorParede );
@@ -560,7 +560,7 @@ public class TradutorTabuleiro {
 				}
 				
 				// Define o layer
-				layer = TradutorTabuleiro.wallBaseLayer;
+				layer = Facade_Tabuleiro.wallBaseLayer;
 				
 				switch( flagsPilares[i] ){
 				case 1:
@@ -587,7 +587,7 @@ public class TradutorTabuleiro {
 				
 				posicao = obterCentroDaCasa( centro.position.x , centro.position.y );
 				atorPilar = new AtorPilar( flagsPilares[i] );
-				MediadorFluxoDeJogo.getInstance().cenaAtores.addActor( atorPilar , layer );
+				Facade_FluxoDeJogo.getInstance().cenaAtores.addActor( atorPilar , layer );
 				atorPilar.setVirtualPosition( posicao.x , posicao.y , 0 );	
 				
 				

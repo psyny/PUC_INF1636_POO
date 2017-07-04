@@ -3,8 +3,7 @@ package atores;
 import java.awt.Color;
 
 import animacao.*;
-import jogo.ControladoraDoJogo;
-import jogo.*;
+import jogo_Nucleo.*;
 
 public class CenaAtores extends CenaIsometrica {
 

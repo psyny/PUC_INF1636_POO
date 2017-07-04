@@ -9,10 +9,10 @@ import animacao.Actor;
 import animacao.Scene;
 import atores.CameraMenu.Modos;
 import estruturas.Vetor2D_int;
-import jogo.ControladoraDoJogo;
-import jogo.Jogador;
-import mediadores.MediadorFluxoDeJogo;
-import mediadores.TradutorMenus;
+import facedes.Facade_FluxoDeJogo;
+import facedes.Facade_Menus;
+import jogo_Nucleo.ControladoraDoJogo;
+import jogo_Nucleo.Jogador;
 
 public class CenaReacaoAoPalpite extends Scene {
 	
@@ -20,8 +20,8 @@ public class CenaReacaoAoPalpite extends Scene {
 		@Override
 		public void mouseClicked(MouseEvent arg0)  {
 			limparCena();
-			MediadorFluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.MENU_PRINCIPAL);
-			TradutorMenus.getInstance().registrarCartaEscolhida();
+			Facade_FluxoDeJogo.getInstance().cameraMenu.definirModo(Modos.MENU_PRINCIPAL);
+			Facade_Menus.getInstance().registrarCartaEscolhida();
 		}
 	}
 	

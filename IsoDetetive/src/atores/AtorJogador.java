@@ -2,13 +2,13 @@ package atores;
 
 import animacao.*;
 import estruturas.Vetor2D_int;
-import jogo.PersonagemEnum;
+import jogo_TiposEnumerados.PersonagemType;
 
 @SuppressWarnings("serial")
 public class AtorJogador extends Actor {
 	private AnimatedSprite spriteJogador;
 
-	public AtorJogador( PersonagemEnum personagem ) {
+	public AtorJogador( PersonagemType personagem ) {
 		super(512, 512);
 		
 		String fileName = "";
