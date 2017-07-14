@@ -106,7 +106,7 @@ public class QuadroSelecaoDeJogadores extends JPanel {
 					
 				case HUMANO:
 					// tipoJogador = TipoMarcador.IA;
-					tipoJogador = TipoMarcador.VAZIO;
+					tipoJogador = TipoMarcador.IA;
 					break;
 					
 				case IA:

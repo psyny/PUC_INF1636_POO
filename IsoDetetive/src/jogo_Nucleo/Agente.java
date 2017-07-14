@@ -9,7 +9,7 @@ public class Agente {
 
 	private Jogador personagem;
 	private ArrayList<CasaType> salasNaoVisitadas = new ArrayList<CasaType>(); 
-	private ArrayList<Carta> crime;
+	private ArrayList<Carta> crime = new ArrayList<Carta>(); 
 	
 	public Agente(Jogador personagem)
 	{
@@ -43,7 +43,7 @@ public class Agente {
 				
 				for(CasaType tipo : salasNaoVisitadas)
 				{
-					for(Casa candidato : ControladoraDoJogo.getInstance().obterTabuleiro().obterCasasEntradaDeComodo(Casa.tipoSalaParaTipoPorta(tipo)))
+					for(Casa candidato : ControladoraDoJogo.getInstance().obterTabuleiro().obterCasas_Portas(Casa.tipoSalaParaTipoPorta(tipo)))
 					{
 						if(casa.getManDistTo(candidato) < melhorDistantcia)
 						{
@@ -60,7 +60,7 @@ public class Agente {
 					return casa;
 				}
 				
-				for(Casa candidato : ControladoraDoJogo.getInstance().obterTabuleiro().obterCasasEntradaDeComodo())
+				for(Casa candidato : ControladoraDoJogo.getInstance().obterTabuleiro().obterCasas_Portas())
 				{
 					if(casa.getManDistTo(candidato) < melhorDistantcia)
 					{
@@ -92,16 +92,6 @@ public class Agente {
 			if(!cartasDaNotas.contains(suspeito))
 			{
 				palpite.add(suspeito);
-				break;
-			}
-		}
-		
-		//escolhe o comodo
-		for(Carta comodo : Baralho.pilhaComodos)
-		{
-			if(!cartasDaNotas.contains(comodo))
-			{
-				palpite.add(comodo);
 				break;
 			}
 		}

@@ -37,7 +37,7 @@ public class Casa {
 	//Retorna a distancia de manhattan entre duas Casa
 	public int getManDistTo( Casa cellTo ) {
 		int dist;
-		dist = Math.abs( this.position.x - cellTo.position.x ) + Math.abs( this.position.y + cellTo.position.y );
+		dist = Math.abs( this.position.x - cellTo.position.x ) + Math.abs( this.position.y - cellTo.position.y );
 		return dist;
 	}
 	

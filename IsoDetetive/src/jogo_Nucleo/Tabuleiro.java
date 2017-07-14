@@ -232,7 +232,19 @@ public class Tabuleiro {
 			
 			return casas;
 		}
-	
+		
+	// Retorna todas as casas que são portas de um tipo especifico
+		public ArrayList<Casa> obterCasas_Portas(CasaType tipo) {
+			ArrayList<Casa> casas = new ArrayList<Casa>();
+			
+			for( Casa casa : this.registroDeCasas ) {
+				if( casa.isDoor() && casa.type.equals(tipo) )
+				casas.add( casa );
+			}
+			
+			return casas;
+		}
+
 	// Obter todas as casas de um determinado tipo
 		public ArrayList<Casa> obterCasasDoTipo() {
 			return obterCasasDoTipo( CasaType.QUALQUER );

@@ -4,6 +4,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.JFileChooser;
 
@@ -220,42 +221,65 @@ public class Facade_Menus {
 		{
 			Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
 		
-			ArrayList<Carta> cartas = ControladoraDoJogo.getInstance().obterJogadorReacao().temCartasNaMao(ControladoraDoJogo.getInstance().obterPalpiteReacao());
-			referenciasCartasAtor.clear();
-			
-			for (Carta carta : cartas) {
-				ReferenciaCartaAtor referenciaCartaAtor = new ReferenciaCartaAtor( carta , new AtorCarta() );
-				referenciasCartasAtor.add( referenciaCartaAtor );
-				referenciaCartaAtor.atorCarta.definirCarta( carta.tipo );
-				referenciaCartaAtor.atorCarta.definirMarcador( AtorCarta.TipoMarcador.VAZIO );
+			if(jogadorDaVez.obeterInteligenciaArtificial() == null)
+			{
+				ArrayList<Carta> cartas = ControladoraDoJogo.getInstance().obterJogadorReacao().temCartasNaMao(ControladoraDoJogo.getInstance().obterPalpiteReacao());
+				referenciasCartasAtor.clear();
 				
-				// Adiciona o mouseListener para multipla seleção
-				referenciaCartaAtor.atorCarta.addMouseListener( new MouseListener_cartaSelecaoUnicaNaoTipada(referenciaCartaAtor, cena.getConfirma(), 1) );	
+				for (Carta carta : cartas) {
+					ReferenciaCartaAtor referenciaCartaAtor = new ReferenciaCartaAtor( carta , new AtorCarta() );
+					referenciasCartasAtor.add( referenciaCartaAtor );
+					referenciaCartaAtor.atorCarta.definirCarta( carta.tipo );
+					referenciaCartaAtor.atorCarta.definirMarcador( AtorCarta.TipoMarcador.VAZIO );
+					
+					// Adiciona o mouseListener para multipla seleção
+					referenciaCartaAtor.atorCarta.addMouseListener( new MouseListener_cartaSelecaoUnicaNaoTipada(referenciaCartaAtor, cena.getConfirma(), 1) );	
+					
+					cena.desenharCarta( referenciaCartaAtor.atorCarta );
+				}
 				
-				cena.desenharCarta( referenciaCartaAtor.atorCarta );
+				PersonagemType personagemEnum = ControladoraDoJogo.getInstance().obterJogadorReacao().obterPersonagem().obterEnum();
+				AtorBotaoMenuJogo.Tipo tipoBotao = Facade_Jogadores.converterPersonagemEnumTipoBotao(personagemEnum);
+				AtorBotaoMenuJogo atorBotao = new AtorBotaoMenuJogo( tipoBotao );
+				cena.desenharPersonagem( atorBotao );
 			}
-			
-			PersonagemType personagemEnum = ControladoraDoJogo.getInstance().obterJogadorReacao().obterPersonagem().obterEnum();
-			AtorBotaoMenuJogo.Tipo tipoBotao = Facade_Jogadores.converterPersonagemEnumTipoBotao(personagemEnum);
-			AtorBotaoMenuJogo atorBotao = new AtorBotaoMenuJogo( tipoBotao );
-			cena.desenharPersonagem( atorBotao );
+			else
+			{
+				Random random = new Random();
+				ArrayList<Carta> cartas = ControladoraDoJogo.getInstance().obterJogadorReacao().temCartasNaMao(ControladoraDoJogo.getInstance().obterPalpiteReacao());
+				
+				Carta carta = cartas.get(random.nextInt(cartas.size()));
+				
+				registrarCartaEscolhida(carta);
+			}
 		}
 		
 	// Menu: Feedback	
 		public void desenharFeedback(CenaFeedbackDoPalpite cena, Carta carta)
 		{
-			AtorCarta atorCarta  = new AtorCarta();
-			atorCarta.definirCarta( carta.tipo );
-			atorCarta.definirSelecionado( true );
-			atorCarta.definirMarcador( AtorCarta.TipoMarcador.VAZIO );
-			atorCarta.temMouseOver(false);
-
-			cena.desenharCarta( atorCarta );
+			Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
 			
-			PersonagemType personagemEnum = ControladoraDoJogo.getInstance().obterJogadorReacao().obterPersonagem().obterEnum();
-			AtorBotaoMenuJogo.Tipo tipoBotao = Facade_Jogadores.converterPersonagemEnumTipoBotao(personagemEnum);
-			AtorBotaoMenuJogo atorBotao = new AtorBotaoMenuJogo( tipoBotao );
-			cena.desenharPersonagem( atorBotao );
+			if(jogadorDaVez.obeterInteligenciaArtificial() == null)
+			{
+				AtorCarta atorCarta  = new AtorCarta();
+				atorCarta.definirCarta( carta.tipo );
+				atorCarta.definirSelecionado( true );
+				atorCarta.definirMarcador( AtorCarta.TipoMarcador.VAZIO );
+				atorCarta.temMouseOver(false);
+	
+				cena.desenharCarta( atorCarta );
+				
+				PersonagemType personagemEnum = ControladoraDoJogo.getInstance().obterJogadorReacao().obterPersonagem().obterEnum();
+				AtorBotaoMenuJogo.Tipo tipoBotao = Facade_Jogadores.converterPersonagemEnumTipoBotao(personagemEnum);
+				AtorBotaoMenuJogo atorBotao = new AtorBotaoMenuJogo( tipoBotao );
+				cena.desenharPersonagem( atorBotao );
+			}
+			else
+			{
+				jogadorDaVez.obeterInteligenciaArtificial().atualizarAgentePosPalpite(ControladoraDoJogo.getInstance().obterPalpiteReacao(), carta);
+				Facade_FluxoDeJogo.getInstance().cameraMenu.definirModo( CameraMenu.Modos.MENU_PRINCIPAL );
+				Facade_FluxoDeJogo.getInstance().terminarJogada_InteligenciaArtificial();
+			}
 		}
 
 		public void registrarCartaEscolhida()
@@ -271,6 +295,16 @@ public class Facade_Menus {
 					break;
 				}
 			}
+			
+			Facade_FluxoDeJogo.getInstance().cameraMenu.definirModo( CameraMenu.Modos.FEEDBACK );
+			desenharFeedback(Facade_FluxoDeJogo.getInstance().cameraMenu.cenaFeedback , carta);
+		}
+		
+		public void registrarCartaEscolhida(Carta carta)
+		{
+			Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
+			
+			jogadorDaVez.adicionarBlocoDeNotas(carta, true);
 			
 			Facade_FluxoDeJogo.getInstance().cameraMenu.definirModo( CameraMenu.Modos.FEEDBACK );
 			desenharFeedback(Facade_FluxoDeJogo.getInstance().cameraMenu.cenaFeedback , carta);
@@ -308,6 +342,50 @@ public class Facade_Menus {
 					acusacao.add(cartaAtor.carta);
 			}
 			
+			ControladoraDoJogo.getInstance().validarAcusacao(acusacao);
+			
+			// Verifica se, depois da acusao feita, o jogo ainda pode continuar
+			if( ControladoraDoJogo.getInstance().jogoAcabou() == true ) {
+				Facade_FluxoDeJogo.getInstance().cameraMenu.definirModo( CameraMenu.Modos.VITORIA );
+				desenharVitoria( Facade_FluxoDeJogo.getInstance().cameraMenu.cenaVitoria );
+				
+				String arquivo = "";
+				switch( ControladoraDoJogo.getInstance().obterPersonagemVitorioso() ) {
+				
+					case SHERLOCK:
+						arquivo = "vitoria_sherlock.txt";
+						break;
+						
+					case L:
+						arquivo = "vitoria_l.txt";
+						break;
+						
+					case CARMEN:
+						arquivo = "vitoria_carmen.txt";
+						break;
+						
+					case PANTERA:
+						arquivo = "vitoria_pantera.txt";
+						break;
+						
+					case EDMORT:
+						arquivo = "vitoria_edmort.txt";
+						break;
+						
+					case BATMAN:
+						arquivo = "vitoria_batman.txt";
+						break;
+				}
+				
+				Facade_FluxoDeJogo.getInstance().cameraMenu.cenaVitoria.desenharBG(arquivo);
+			}
+			else {
+				Facade_FluxoDeJogo.getInstance().iniciarJogadaDaVez();
+			}
+		}
+		
+		public void gerarAcusacao(ArrayList<Carta> acusacao)
+		{
 			ControladoraDoJogo.getInstance().validarAcusacao(acusacao);
 			
 			// Verifica se, depois da acusao feita, o jogo ainda pode continuar

@@ -159,7 +159,67 @@ public class Facade_FluxoDeJogo {
 		private void iniciarJogada_InteligenciaArtificial() {
 			// Esconde botoes do menu de opções de jogada
 			Facade_Menus.getInstance().menuOpcoesJogada_esconderBotoes();
-		}			
+			//pega o jogador da vez
+			Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
+			//rola os dados
+			rolarDados();
+			//pega todas as casas que pode ir
+			ArrayList<Casa> casasPossiveis = ControladoraDoJogo.getInstance().obterMovimentacaoPossivel();
+			//IA sugere a melhor casa para ir
+			Casa casaSugerida = jogadorDaVez.obeterInteligenciaArtificial().sugerirMovimento(casasPossiveis);
+			//vai para essa casa
+			jogadorDaVez.definirPosicao(casaSugerida);
+			//faz alterações de interface grafica
+			deletarDados();
+			tradutorMovimentacao.desmarcarCasas();
+			tradutorJogadores.definirSombreado( ControladoraDoJogo.getInstance().obterJogadorDaVez() , false );
+			// Reseta Flag
+			this.estaAguardandoMovimentacao = false;	
+			// Notificar controladores
+			ControladoraDoJogo.getInstance().confirmarMovimento();
+			
+			if(casaSugerida.isRoom())//se terminou o turno num quarto
+			{
+				//faz um palpite
+				ArrayList<Carta> palpite = jogadorDaVez.obeterInteligenciaArtificial().sugerirPalpite();
+				
+				palpite.add(jogadorDaVez.obterCartaPosicao());
+				
+				//debug palpite da IA
+				/*System.out.println();
+				System.out.println(jogadorDaVez.obterPersonagem().obterNome());
+				for (Carta carta : palpite) {
+					System.out.println(carta.tipo);
+				}*/
+				
+				ControladoraDoJogo.getInstance().validarPalpite(palpite);
+				
+				Facade_FluxoDeJogo.getInstance().cameraMenu.definirModo( CameraMenu.Modos.ESCOLHA_CARTA );
+				Facade_Menus.getInstance().desenharEscolhaCarta(Facade_FluxoDeJogo.getInstance().cameraMenu.cenaEscolhaCarta);
+			}
+			else//caso contrario
+			{
+				//termina a jogada
+				terminarJogada_InteligenciaArtificial();
+			}
+		}
+		
+		public void terminarJogada_InteligenciaArtificial()
+		{
+			Jogador jogadorDaVez = ControladoraDoJogo.getInstance().obterJogadorDaVez();
+			
+			//tentar acusar
+			ArrayList<Carta> acusacao = jogadorDaVez.obeterInteligenciaArtificial().sugerirAcusação();
+			if(acusacao != null)//se tem uma acusação valida
+			{
+				//acusa
+				Facade_Menus.getInstance().gerarAcusacao(acusacao);
+				//tendo acusado, ou vençe o jogo, ou sai dele. Logo não ha mais ações necessarias
+			}
+			//caso contrario termina o turno, não ha mais acões necessarias
+			
+			finalizarJogada();
+		}
 		
 	// Finalizar a jogada
 		public void finalizarJogada() {
